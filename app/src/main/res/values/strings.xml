@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AplikacjaGit</string>
+    <string name='login_button'>Zmien</string>
+</resources>
