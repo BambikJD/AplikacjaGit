@@ -8,13 +8,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : ComponentActivity() {
     private lateinit var ZalogujButton: Button
     private lateinit var EnterPassword: EditText
     private lateinit var EnterLogin: EditText
     private lateinit var LoginMessage: TextView
+    private lateinit var RejestracjaButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +24,7 @@ class LoginActivity : ComponentActivity() {
         EnterLogin = findViewById(R.id.EnterLogin)
         EnterPassword = findViewById(R.id.EnterPassword)
         LoginMessage = findViewById(R.id.LoginMessage)
+        RejestracjaButton = findViewById(R.id.RejestracjaButton)
 
         ZalogujButton.setOnClickListener {
             if(EnterLogin.text.toString() == "admin" && EnterPassword.text.toString() == "admin") {
@@ -34,6 +35,11 @@ class LoginActivity : ComponentActivity() {
                 LoginMessage.visibility = View.VISIBLE
                 LoginMessage.text = "Wprowadź prawidłowe dane"
             }
+        }
+
+        RejestracjaButton.setOnClickListener {
+            val intent = Intent(this@LoginActivity, RejestracjaActivity::class.java)
+            startActivity(intent)
         }
 
     }

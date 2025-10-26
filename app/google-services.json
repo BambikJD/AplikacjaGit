@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "720769936377",
+    "project_id": "bazadanychaplikacji",
+    "storage_bucket": "bazadanychaplikacji.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720769936377:android:0e3df252bab3bab3ee2b28",
+        "android_client_info": {
+          "package_name": "com.example.aplikacjagit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpC0Lp4hGG-rMpnL6qTgX1jftLibpWdF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

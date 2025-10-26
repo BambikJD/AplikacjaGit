@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-10-24T08:48:01.347258400Z">
+        <DropdownSelection timestamp="2025-10-24T12:19:37.236987500Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Bartek\.android\avd\Pixel.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=MN7HEILVMNNJ5H95" />
             </handle>
           </Target>
         </DropdownSelection>
