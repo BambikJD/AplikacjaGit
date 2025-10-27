@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.input.key.Key
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RejestracjaActivity : ComponentActivity() {
@@ -27,7 +26,7 @@ class RejestracjaActivity : ComponentActivity() {
 
         PowrotButton =  findViewById(R.id.PowrotButton)
         ZarejestrujButton =  findViewById(R.id.ZarejestrujButton)
-        WprowadzLogin =  findViewById(R.id.EnterLogin)
+        WprowadzLogin =  findViewById(R.id.WprowadzLogin)
         WprowadzHaslo =  findViewById(R.id.WprowadzHaslo)
 
         PowrotButton.setOnClickListener {

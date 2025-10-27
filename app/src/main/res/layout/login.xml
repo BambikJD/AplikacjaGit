@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toStartOf="@+id/RejestracjaButton"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EnterPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/WprowadzHaslo" />
 
     <Button
         android:id="@+id/RejestracjaButton"
@@ -25,21 +25,21 @@
         android:layout_marginEnd="84dp"
         android:layout_marginBottom="128dp"
         android:text="Rejestracja"
-        app:layout_constraintBottom_toTopOf="@+id/LoginMessage"
+        app:layout_constraintBottom_toTopOf="@+id/WiadomoscLogowania"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:layout_constraintBottom_toTopOf="@+id/EnterLogin"
+        app:layout_constraintBottom_toTopOf="@+id/WprowadzLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/LoginMessage"
+        android:id="@+id/WiadomoscLogowania"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="120dp"
@@ -52,20 +52,20 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/EnterLogin"
+        android:id="@+id/WprowadzLogin"
         android:layout_width="220dp"
         android:layout_height="50dp"
         android:layout_marginBottom="12dp"
         android:ems="10"
         android:hint="Wprowadź login"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/EnterPassword"
+        app:layout_constraintBottom_toTopOf="@+id/WprowadzHaslo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/EnterPassword"
+        android:id="@+id/WprowadzHaslo"
         android:layout_width="220dp"
         android:layout_height="50dp"
         android:layout_marginBottom="32dp"

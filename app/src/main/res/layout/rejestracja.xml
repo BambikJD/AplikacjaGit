@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/EnterLogin"
+        android:id="@+id/WprowadzLogin"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:ems="10"
@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EnterLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/WprowadzLogin" />
 
     <Button
         android:id="@+id/ZarejestrujButton"
