@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.input.key.Key
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RejestracjaActivity : ComponentActivity() {
@@ -18,7 +19,7 @@ class RejestracjaActivity : ComponentActivity() {
     private lateinit var WprowadzHaslo: EditText
 
     private val KEY_LOGIN = "login"
-    private val KEY_HASLO = "password"
+    private val KEY_HASLO = "haslo"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +42,47 @@ class RejestracjaActivity : ComponentActivity() {
 
     }
     private fun zarejestruj(){
+
         val login = WprowadzLogin.text.toString()
         val haslo = WprowadzHaslo.text.toString()
+        var czyZajety = 0
 
-        val note = mutableMapOf<String, Any>()
-        note.put(KEY_LOGIN, login)
-        note.put(KEY_HASLO, haslo)
 
-        db.collection("Loginy").document("Dane logowania ${login}").set(note)
-            .addOnSuccessListener {
-                Toast.makeText(this@RejestracjaActivity, "dziala", Toast.LENGTH_SHORT).show()
-            }.addOnFailureListener {
-                Toast.makeText(this@RejestracjaActivity, "nie dziala", Toast.LENGTH_SHORT).show()
+        db.collection("Loginy").get().addOnSuccessListener { result ->
+            for (document in result) {
+                if (login == document.getString(KEY_LOGIN)) {
+                    Toast.makeText(
+                        this@RejestracjaActivity,
+                        "Ten login jest zajęty",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    czyZajety = 1
+                }
             }
+            if (czyZajety == 0) {
+                val note = mutableMapOf<String, Any>()
+                note.put(KEY_LOGIN, login)
+                note.put(KEY_HASLO, haslo)
+                db.collection("Loginy").document("Dane logowania ${login}").set(note)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            this@RejestracjaActivity,
+                            "Konto założone",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val intent = Intent(this@RejestracjaActivity, LoginActivity::class.java)
+                        startActivity(intent)
+                    }.addOnFailureListener {
+                        Toast.makeText(
+                            this@RejestracjaActivity,
+                            "Spróbuj ponownie, coś nie działą",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }
+        }
+
+
     }
 }
 
