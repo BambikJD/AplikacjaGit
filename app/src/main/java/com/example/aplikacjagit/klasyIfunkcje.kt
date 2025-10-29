@@ -3,8 +3,8 @@ package com.example.aplikacjagit
 import android.app.Application
 
 data class Uzytkownik(
-    val login: String,
-    val haslo: String,
+    val login: String?,
+    val haslo: String?,
 )
 
 class DaneGlobalne : Application() {

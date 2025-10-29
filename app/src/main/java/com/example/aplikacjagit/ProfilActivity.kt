@@ -1,5 +1,6 @@
 package com.example.aplikacjagit
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -34,6 +35,13 @@ class ProfilActivity : ComponentActivity() {
         }
 
         WylogujButton.setOnClickListener {
+            val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
+            val edycjaPreferencji = danePreferencje.edit()
+            edycjaPreferencji.apply {
+                putInt("ZALOGOWANY_KEY", 0)
+                putString("LOGIN_KEY", null)
+                putString("HASLO_KEY", null)
+            }.apply()
             app.wyczysc()
             val intent = Intent(this@ProfilActivity, LoginActivity::class.java)
             startActivity(intent)
