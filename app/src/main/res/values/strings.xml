@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">AplikacjaGit</string>
     <string name='login_button'>Zmien</string>
+    <string name="KEY_LOGIN_STRING">login</string>
+    <string name="KEY_HASLO_STRING">haslo</string>
+    <string name="KEY_IS_LOGGED_STRING">islogged</string>
+    <string name="KEY_EMAIL_STRING">email</string>
+    <string name="KEY_TELEFON_STRING">telefon</string>
+    <string name="KEY_ADRES_STRING">adres</string>
 </resources>

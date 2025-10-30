@@ -6,55 +6,70 @@
     android:background="@color/purple_200"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/ProfilButton"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:text="Profil"
-        android:textSize="14sp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/DietaButton"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:text="Dieta"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/ProfilButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/ProfilButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_700"
+            android:text="Profil"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/TreningButton"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:text="Trening"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/DietaButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/DietaButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_700"
+            android:text="Dieta"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/LodowkaButton"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:text="Lodówka"
-        android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/TreningButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/TreningButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_700"
+            android:text="Trening"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/StatystykiButton"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:text="Statystyki i znajomi"
-        android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/LodowkaButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/LodowkaButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_700"
+            android:text="Lodówka"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/StatystykiButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_700"
+            android:text="Statystyki"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

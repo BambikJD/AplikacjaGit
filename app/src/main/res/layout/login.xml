@@ -23,26 +23,26 @@
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_marginEnd="84dp"
-        android:layout_marginBottom="128dp"
+        android:layout_marginBottom="60dp"
         android:text="Rejestracja"
         app:layout_constraintBottom_toTopOf="@+id/WiadomoscLogowania"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toTopOf="@+id/WprowadzLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:src="@drawable/loginicon" />
 
     <TextView
         android:id="@+id/WiadomoscLogowania"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="80dp"
         android:text="TextView"
         android:textColor="@android:color/holo_red_dark"
         android:visibility="invisible"
@@ -55,7 +55,7 @@
         android:id="@+id/WprowadzLogin"
         android:layout_width="220dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="0dp"
         android:ems="10"
         android:hint="Wprowadź login"
         android:inputType="text"

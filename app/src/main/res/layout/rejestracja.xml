@@ -3,52 +3,91 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/purple_200"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/PowrotButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Powrót"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/WprowadzLogin"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:hint="Utwórz login"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        android:gravity="center"
+        tools:layout_editor_absoluteX="89dp">
 
-    <EditText
-        android:id="@+id/WprowadzHaslo"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:hint="Utwórz hasło"
-        android:inputType="text"
-        android:password="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/WprowadzLogin" />
+        <Button
+            android:id="@+id/PowrotButton"
+            android:layout_width="wrap_content"
+            android:background="@color/teal_700"
+            android:layout_height="wrap_content"
+            android:text="Powrót" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/ZarejestrujButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Zajerestruj"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/WprowadzHaslo"
-        app:layout_constraintVertical_bias="0.077" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <EditText
+            android:id="@+id/WprowadzLogin"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Utwórz login"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/WprowadzHaslo"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:hint="Utwórz hasło"
+            android:inputType="text"
+            android:password="true" />
+
+        <EditText
+            android:id="@+id/WprowadzEmail"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Wprowadź email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/WprowadzTelefon"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Wprowadz Telefon"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/WprowadzAdres"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Wprowadź adres"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/ZarejestrujButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="240dp"
+            android:padding="3dp"
+            android:background="@color/teal_700"
+            android:text="Zajerestruj" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

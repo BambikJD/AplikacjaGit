@@ -2,6 +2,7 @@ package com.example.aplikacjagit
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -16,9 +17,11 @@ class RejestracjaActivity : ComponentActivity() {
     private lateinit var ZarejestrujButton: Button
     private lateinit var WprowadzLogin: EditText
     private lateinit var WprowadzHaslo: EditText
+    private lateinit var WprowadzEmail: EditText
+    private lateinit var WprowadzTelefon: EditText
+    private lateinit var WprowadzAdres: EditText
 
-    private val KEY_LOGIN = "login"
-    private val KEY_HASLO = "haslo"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +31,9 @@ class RejestracjaActivity : ComponentActivity() {
         ZarejestrujButton =  findViewById(R.id.ZarejestrujButton)
         WprowadzLogin =  findViewById(R.id.WprowadzLogin)
         WprowadzHaslo =  findViewById(R.id.WprowadzHaslo)
+        WprowadzEmail =  findViewById(R.id.WprowadzEmail)
+        WprowadzTelefon =  findViewById(R.id.WprowadzTelefon)
+        WprowadzAdres =  findViewById(R.id.WprowadzAdres)
 
         PowrotButton.setOnClickListener {
             val intent = Intent(this@RejestracjaActivity, LoginActivity::class.java)
@@ -42,8 +48,17 @@ class RejestracjaActivity : ComponentActivity() {
     }
     private fun zarejestruj(){
 
+        val KEY_LOGIN = getString(R.string.KEY_LOGIN_STRING)
+        val KEY_HASLO = getString(R.string.KEY_HASLO_STRING)
+        val KEY_ADRES = getString(R.string.KEY_ADRES_STRING)
+        val KEY_EMAIL = getString(R.string.KEY_EMAIL_STRING)
+        val KEY_TELEFON = getString(R.string.KEY_TELEFON_STRING)
+
         val login = WprowadzLogin.text.toString()
         val haslo = WprowadzHaslo.text.toString()
+        val email = WprowadzHaslo.text.toString()
+        val telefon = WprowadzHaslo.text.toString()
+        val adres = WprowadzHaslo.text.toString()
         var czyZajety = 0
 
 
@@ -62,6 +77,10 @@ class RejestracjaActivity : ComponentActivity() {
                 val note = mutableMapOf<String, Any>()
                 note.put(KEY_LOGIN, login)
                 note.put(KEY_HASLO, haslo)
+                note.put(KEY_EMAIL, email)
+                note.put(KEY_TELEFON, telefon)
+                note.put(KEY_ADRES, adres)
+
                 db.collection("Loginy").document("Dane logowania ${login}").set(note)
                     .addOnSuccessListener {
                         Toast.makeText(

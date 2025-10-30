@@ -19,19 +19,27 @@ class LoginActivity : ComponentActivity() {
     private lateinit var WiadomoscLogowania: TextView
     private lateinit var RejestracjaButton: Button
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val KEY_LOGIN = "login" // klucze do danych chwilowych lokalnych z klasiIFunkcje
-    private val KEY_HASLO = "haslo"
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
+
+        val KEY_LOGIN = getString(R.string.KEY_LOGIN_STRING) // klucze do danych chwilowych lokalnych z klasiIFunkcje
+        val KEY_HASLO = getString(R.string.KEY_HASLO_STRING)
+        val KEY_IS_LOGGED = getString(R.string.KEY_IS_LOGGED_STRING)
+        val KEY_ADRES = getString(R.string.KEY_ADRES_STRING)
+        val KEY_EMAIL = getString(R.string.KEY_EMAIL_STRING)
+        val KEY_TELEFON = getString(R.string.KEY_TELEFON_STRING)
         val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE) // nazwa preferencji, gdzie są zapisane dane preferencji
-        if (danePreferencje.getInt("ZALOGOWANY_KEY", 0) == 1){
+
+        if (danePreferencje.getInt(KEY_IS_LOGGED, 0) == 1){
             val app = application as DaneGlobalne
-            val login = danePreferencje.getString("LOGIN_KEY", null) // klucze pod którymi zapisane są dane w preferencji
-            val haslo = danePreferencje.getString("HASLO_KEY", null)
-            val uzytkownik = Uzytkownik(login = login, haslo = haslo)
+            val login = danePreferencje.getString(KEY_LOGIN, null) // klucze pod którymi zapisane są dane w preferencji
+            val haslo = danePreferencje.getString(KEY_HASLO, null)
+            val email = danePreferencje.getString(KEY_EMAIL, null)
+            val adres = danePreferencje.getString(KEY_ADRES, null)
+            val telefon = danePreferencje.getString(KEY_TELEFON, null)
+            val uzytkownik = Uzytkownik(login = login, haslo = haslo, email = email, adres = adres, telefon = telefon)
             app.aktualnyUzytkownik = uzytkownik
             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
             startActivity(intent)
@@ -42,8 +50,6 @@ class LoginActivity : ComponentActivity() {
         WprowadzHaslo = findViewById(R.id.WprowadzHaslo)
         WiadomoscLogowania = findViewById(R.id.WiadomoscLogowania)
         RejestracjaButton = findViewById(R.id.RejestracjaButton)
-
-
 
         ZalogujButton.setOnClickListener { // listenery elementów
            Logowanie()
@@ -56,6 +62,12 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun Logowanie(){ // funkcja logowania
+        val KEY_LOGIN = getString(R.string.KEY_LOGIN_STRING) // klucze do danych chwilowych lokalnych z klasiIFunkcje
+        val KEY_HASLO = getString(R.string.KEY_HASLO_STRING)
+        val KEY_ADRES = getString(R.string.KEY_ADRES_STRING)
+        val KEY_EMAIL = getString(R.string.KEY_EMAIL_STRING)
+        val KEY_TELEFON = getString(R.string.KEY_TELEFON_STRING)
+        val KEY_IS_LOGGED = getString(R.string.KEY_IS_LOGGED_STRING)
         val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
         val edycjaPreferencji = danePreferencje.edit()
         db.collection("Loginy").get().addOnSuccessListener { result ->
@@ -69,14 +81,20 @@ class LoginActivity : ComponentActivity() {
                         "Zalogowano",
                         Toast.LENGTH_LONG
                     ).show()
+                    val email = document.getString(KEY_EMAIL)
+                    val adres = document.getString(KEY_ADRES)
+                    val telefon = document.getString(KEY_TELEFON)
                     czyZalogowano = 1
                     edycjaPreferencji.apply {
-                        putInt("ZALOGOWANY_KEY", 1)
-                        putString("LOGIN_KEY", login)
-                        putString("HASLO_KEY", haslo)
+                        putInt(KEY_IS_LOGGED, 1)
+                        putString(KEY_LOGIN, login)
+                        putString(KEY_HASLO, haslo)
+                        putString(KEY_EMAIL, email)
+                        putString(KEY_ADRES, adres)
+                        putString(KEY_TELEFON, telefon)
                     }.apply()
                     val app = application as DaneGlobalne
-                    val uzytkownik = Uzytkownik(login = login, haslo = haslo)
+                    val uzytkownik = Uzytkownik(login = login, haslo = haslo, email = email, adres = adres, telefon = telefon)
                     app.aktualnyUzytkownik = uzytkownik
                     val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                     startActivity(intent)
