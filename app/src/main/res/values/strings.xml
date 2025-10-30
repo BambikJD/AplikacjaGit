@@ -7,4 +7,6 @@
     <string name="KEY_EMAIL_STRING">email</string>
     <string name="KEY_TELEFON_STRING">telefon</string>
     <string name="KEY_ADRES_STRING">adres</string>
+    <string name="KEY_IMIE_STRING">imie</string>
+    <string name="KEY_NAZWISKO_STRING">nazwisko</string>
 </resources>

@@ -20,6 +20,8 @@ class RejestracjaActivity : ComponentActivity() {
     private lateinit var WprowadzEmail: EditText
     private lateinit var WprowadzTelefon: EditText
     private lateinit var WprowadzAdres: EditText
+    private lateinit var WprowadzImie: EditText
+    private lateinit var WprowadzNazwisko: EditText
 
 
 
@@ -34,6 +36,8 @@ class RejestracjaActivity : ComponentActivity() {
         WprowadzEmail =  findViewById(R.id.WprowadzEmail)
         WprowadzTelefon =  findViewById(R.id.WprowadzTelefon)
         WprowadzAdres =  findViewById(R.id.WprowadzAdres)
+        WprowadzImie =  findViewById(R.id.WprowadzImie)
+        WprowadzNazwisko =  findViewById(R.id.WprowadzNazwisko)
 
         PowrotButton.setOnClickListener {
             val intent = Intent(this@RejestracjaActivity, LoginActivity::class.java)
@@ -53,12 +57,16 @@ class RejestracjaActivity : ComponentActivity() {
         val KEY_ADRES = getString(R.string.KEY_ADRES_STRING)
         val KEY_EMAIL = getString(R.string.KEY_EMAIL_STRING)
         val KEY_TELEFON = getString(R.string.KEY_TELEFON_STRING)
+        val KEY_IMIE = getString(R.string.KEY_IMIE_STRING)
+        val KEY_NAZWISKO = getString(R.string.KEY_NAZWISKO_STRING)
 
         val login = WprowadzLogin.text.toString()
         val haslo = WprowadzHaslo.text.toString()
-        val email = WprowadzHaslo.text.toString()
-        val telefon = WprowadzHaslo.text.toString()
-        val adres = WprowadzHaslo.text.toString()
+        val email = WprowadzEmail.text.toString()
+        val telefon = WprowadzTelefon.text.toString()
+        val adres = WprowadzAdres.text.toString()
+        val imie = WprowadzImie.text.toString()
+        val nazwisko = WprowadzNazwisko.text.toString()
         var czyZajety = 0
 
 
@@ -77,6 +85,8 @@ class RejestracjaActivity : ComponentActivity() {
                 val note = mutableMapOf<String, Any>()
                 note.put(KEY_LOGIN, login)
                 note.put(KEY_HASLO, haslo)
+                note.put(KEY_IMIE, imie)
+                note.put(KEY_NAZWISKO, nazwisko)
                 note.put(KEY_EMAIL, email)
                 note.put(KEY_TELEFON, telefon)
                 note.put(KEY_ADRES, adres)

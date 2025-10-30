@@ -29,9 +29,8 @@
         android:layout_marginTop="1dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="100dp"
+        android:paddingTop="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
@@ -39,6 +38,7 @@
             android:id="@+id/WprowadzLogin"
             android:layout_width="200dp"
             android:layout_height="50dp"
+            android:layout_marginTop="60dp"
             android:layout_marginBottom="20dp"
             android:ems="10"
             android:hint="Utwórz login"
@@ -52,6 +52,24 @@
             android:hint="Utwórz hasło"
             android:inputType="text"
             android:password="true" />
+
+        <EditText
+            android:id="@+id/WprowadzImie"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Wprowadź imie"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/WprowadzNazwisko"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Wprowadź nazwisko"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/WprowadzEmail"
@@ -84,9 +102,9 @@
             android:id="@+id/ZarejestrujButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="240dp"
-            android:padding="3dp"
+            android:layout_marginBottom="20dp"
             android:background="@color/teal_700"
+            android:padding="3dp"
             android:text="Zajerestruj" />
     </LinearLayout>
 
