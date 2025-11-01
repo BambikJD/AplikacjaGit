@@ -99,6 +99,8 @@ class ProfilActivity : ComponentActivity() {
         }
 
     }
+
+
     fun zmienDane(){
         val app = application as DaneGlobalne
         var aktualnyUzytkownik = app.aktualnyUzytkownik
@@ -145,6 +147,7 @@ class ProfilActivity : ComponentActivity() {
             aktualnyUzytkownik.email = email
             aktualnyUzytkownik.telefon = telefon
             aktualnyUzytkownik.adres = adres
+            DaneLogowania.text = "Zalogowano jako: ${aktualnyUzytkownik.imie}"
 
             Toast.makeText(this@ProfilActivity, "zmieniono", Toast.LENGTH_SHORT).show()
 

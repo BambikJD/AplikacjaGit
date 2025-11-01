@@ -25,7 +25,6 @@
         </activity>
         <activity android:name=".HomeActivity" />
         <activity android:name=".ProfilActivity" />
-        <activity android:name=".SpolecznoscActivity" />
         <activity android:name=".LodowkaActivity" />
         <activity android:name=".TreningActivity" />
         <activity android:name=".DietaActivity" />

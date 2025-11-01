@@ -3,76 +3,72 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/purple_200"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/purple_200">
 
-    <Button
-        android:id="@+id/ZalogujButton"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="1dp"
-        android:text="Zaloguj"
-        app:layout_constraintEnd_toStartOf="@+id/RejestracjaButton"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/WprowadzHaslo" />
-
-    <Button
-        android:id="@+id/RejestracjaButton"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="60dp"
-        android:text="Rejestracja"
-        app:layout_constraintBottom_toTopOf="@+id/WiadomoscLogowania"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:layout_constraintBottom_toTopOf="@+id/WprowadzLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="729dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/loginicon" />
+        tools:layout_editor_absoluteX="1dp">
 
-    <TextView
-        android:id="@+id/WiadomoscLogowania"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:text="TextView"
-        android:textColor="@android:color/holo_red_dark"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginBottom="30dp"
+            android:src="@drawable/loginicon" />
 
-    <EditText
-        android:id="@+id/WprowadzLogin"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="0dp"
-        android:ems="10"
-        android:hint="Wprowadź login"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/WprowadzHaslo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/WprowadzLogin"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:hint="Wprowadź login"
+            android:inputType="text"
+            android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/WprowadzHaslo"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="32dp"
-        android:ems="10"
-        android:hint="Wprowadź hasło"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/RejestracjaButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/WprowadzHaslo"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Wprowadź hasło"
+            android:inputType="textPassword"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/ZalogujButton"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="1dp"
+                android:text="Zaloguj" />
+
+            <Button
+                android:id="@+id/RejestracjaButton"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:text="Rejestracja" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/WiadomoscLogowania"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:text="TextView"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="invisible" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

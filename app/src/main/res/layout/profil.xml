@@ -120,6 +120,7 @@
             android:id="@+id/ZatwierdzButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="Zatwierdź" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/teal_700"
+            android:background="@color/green_700"
             android:text="Profil"
             android:textAlignment="center"
             android:textColor="#000000"
@@ -31,8 +31,19 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/teal_700"
+            android:background="@color/green_700"
             android:text="Dieta"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/HomeButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/green_50"
+            android:text="Home"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="12sp" />
@@ -42,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/teal_700"
+            android:background="@color/green_700"
             android:text="Trening"
             android:textAlignment="center"
             android:textColor="#000000"
@@ -53,22 +64,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/teal_700"
+            android:background="@color/green_700"
             android:text="Lodówka"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/StatystykiButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/teal_700"
-            android:text="Statystyki"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="10sp" />
 
     </LinearLayout>
 

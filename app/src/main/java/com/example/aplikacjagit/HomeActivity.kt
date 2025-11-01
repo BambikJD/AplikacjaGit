@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class HomeActivity : ComponentActivity() {
     private lateinit var ProfilButton: Button
-    private lateinit var StatystykiButton: Button
+    private lateinit var HomeButton: Button
     private lateinit var LodowkaButton: Button
     private lateinit var TreningButton: Button
     private lateinit var DietaButton: Button
@@ -20,7 +20,7 @@ class HomeActivity : ComponentActivity() {
         setContentView(R.layout.home)
 
         ProfilButton =  findViewById(R.id.ProfilButton)
-        StatystykiButton =  findViewById(R.id.StatystykiButton)
+        HomeButton =  findViewById(R.id.HomeButton)
         LodowkaButton =  findViewById(R.id.LodowkaButton)
         TreningButton =  findViewById(R.id.TreningButton)
         DietaButton =  findViewById(R.id.DietaButton)
@@ -31,8 +31,8 @@ class HomeActivity : ComponentActivity() {
             // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
         }
 
-        StatystykiButton.setOnClickListener {
-            val intent = Intent(this@HomeActivity, SpolecznoscActivity::class.java)
+        HomeButton.setOnClickListener {
+            val intent = Intent(this@HomeActivity, HomeActivity::class.java)
             startActivity(intent)
             // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
         }
