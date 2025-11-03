@@ -22,7 +22,7 @@ data class ProduktyDodaneWynik(
     val weglowodany: Int?,
     val tluszcze: Int?,
     val ilosc: Int?,
-    val data: Date?,
+    val data: String?,
 )
 
 @Entity(tableName = "ListaProduktow")
@@ -40,8 +40,13 @@ data class Produkt(
 @Entity(tableName = "ProduktyDodane")
 data class Dodane(
     val idProduktu: Int?,
+    val nazwa: String?,
     val ilosc: Int?,
-    val data: Date?
+    val data: String?,
+    val sumaKalorii: Int?,
+    val sumaBialek: Int?,
+    val sumaWeglowodanow: Int?,
+    val sumaTluszczy: Int?,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id = 0

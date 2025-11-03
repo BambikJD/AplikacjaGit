@@ -51,6 +51,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")   // kotlin extensions (suspend, Flow)
     kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
     var lifecycle_version = "2.9.4"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}")
     implementation(libs.androidx.core.ktx)

@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 class Repozytorium(private val DAO: DAO){
     val wszystkieProdukty : LiveData<MutableList<Produkt>> = DAO.wyswietlProdukty()
     val nazwyProduktow : LiveData<MutableList<String>> = DAO.nazwyProduktow()
-    val wyswietlDodane : LiveData<MutableList<ProduktyDodaneWynik>> = DAO.wyswietlDodane()
+    val wyswietlDodane : LiveData<MutableList<Dodane>> = DAO.wyswietlDodane()
+    val zczytajDodane : LiveData<MutableList<ProduktyDodaneWynik>> = DAO.zczytajDodane()
 
     suspend fun insertProdukt(produkt: Produkt){
         DAO.insertProdukt(produkt)
@@ -29,5 +30,9 @@ class Repozytorium(private val DAO: DAO){
 
     suspend fun updateDodane(dodane: Dodane){
         DAO.updateDodane(dodane)
+    }
+
+    fun szukajProdukty(query: String): LiveData<MutableList<Produkt>> {
+        return DAO.szukajProdukty(query)
     }
 }

@@ -7,19 +7,6 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/WyswietlDodaneLayout"
-        android:layout_width="409dp"
-        android:layout_height="689dp"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NawigacjaLayout">
-
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/NawigacjaLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -87,11 +74,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/DodajProduktLayout"
+        android:id="@+id/ProduktyLayout"
         android:layout_width="409dp"
         android:layout_height="689dp"
         android:orientation="vertical"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NawigacjaLayout">
@@ -102,47 +88,107 @@
             android:background="@color/green_200"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/button"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                android:src="@drawable/cofnij40px" />
-
-            <TextView
-                android:id="@+id/DataDnia"
+            <Button
+                android:id="@+id/WstawioneButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="2025-07-25"
-                android:textSize="23sp" />
+                android:enabled="false"
+                android:text="Wstawione"
+                android:textSize="9sp" />
 
-            <ImageButton
-                android:id="@+id/button2"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80dp"
-                android:src="@drawable/cofnij40pxprawo"
-                android:text="Button" />
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                >
+                <LinearLayout
+                    android:id="@+id/DataLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:id="@+id/button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@color/green_200"
+                        android:src="@drawable/strzalka" />
+
+                    <TextView
+                        android:id="@+id/DataDnia"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="2025-07-25"
+                        android:textSize="23sp" />
+
+                    <ImageButton
+                        android:id="@+id/button2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/green_200"
+                        android:rotation="180"
+                        android:src="@drawable/strzalka"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="invisible"
+                    android:id="@+id/WyszukiwanieLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/Wyszukiwanie"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="match_parent">
+                    </EditText>
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/szukaj"
+                        android:layout_weight="1">
+                    </ImageView>
+                </LinearLayout>
+            </RelativeLayout>
+            <Button
+                android:id="@+id/WstawButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="wstaw"
+                android:textSize="10sp" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/widokProdukty"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/produkt_item" />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"></LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/widokDodane"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/dodane_item" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"></LinearLayout>
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/widokProdukty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/produkt_item" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

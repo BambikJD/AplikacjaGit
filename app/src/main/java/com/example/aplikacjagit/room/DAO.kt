@@ -26,6 +26,8 @@ interface DAO{
     @Query("SELECT nazwa from ListaProduktow")
     fun nazwyProduktow() : LiveData<MutableList<String>>
 
+    @Query("SELECT * FROM ListaProduktow WHERE nazwa LIKE :query")
+    fun szukajProdukty(query: String): LiveData<MutableList<Produkt>>
 
     // Dodane
     @Insert
@@ -38,6 +40,10 @@ interface DAO{
     suspend fun updateDodane(dodane: Dodane)
 
     @Query("SELECT  ListaProduktow.nazwa, ListaProduktow.kalorycznosc, ListaProduktow.bialka, ListaProduktow.weglowodany, ListaProduktow.tluszcze, ProduktyDodane.ilosc, ProduktyDodane.data from ListaProduktow, ProduktyDodane where ListaProduktow.id == ProduktyDodane.id")
-    fun wyswietlDodane() : LiveData<MutableList<ProduktyDodaneWynik>>
+    fun zczytajDodane() : LiveData<MutableList<ProduktyDodaneWynik>>
+
+    @Query("SELECT  * from ProduktyDodane")
+    fun wyswietlDodane() : LiveData<MutableList<Dodane>>
+
 
 }
