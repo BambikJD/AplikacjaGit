@@ -9,16 +9,48 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 
 class TreningActivity : ComponentActivity() {
-    private lateinit var PowrotButton: Button
+    private lateinit var ProfilButton: Button
+    private lateinit var HomeButton: Button
+    private lateinit var LodowkaButton: Button
+    private lateinit var TreningButton: Button
+    private lateinit var DietaButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.trening)
 
-        PowrotButton =  findViewById(R.id.PowrotButton)
+        ProfilButton =  findViewById(R.id.ProfilButton)
+        HomeButton =  findViewById(R.id.HomeButton)
+        LodowkaButton =  findViewById(R.id.LodowkaButton)
+        TreningButton =  findViewById(R.id.TreningButton)
+        DietaButton =  findViewById(R.id.DietaButton)
 
-        PowrotButton.setOnClickListener {
+        ProfilButton.setOnClickListener {
+            val intent = Intent(this@TreningActivity, ProfilActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        HomeButton.setOnClickListener {
             val intent = Intent(this@TreningActivity, HomeActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        LodowkaButton.setOnClickListener {
+            val intent = Intent(this@TreningActivity, LodowkaActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        TreningButton.setOnClickListener {
+            val intent = Intent(this@TreningActivity, TreningActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        DietaButton.setOnClickListener {
+            val intent = Intent(this@TreningActivity, DietaActivity::class.java)
             startActivity(intent)
             // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
         }

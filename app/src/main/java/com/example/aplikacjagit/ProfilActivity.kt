@@ -3,13 +3,12 @@ package com.example.aplikacjagit
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
+import com.example.aplikacjagit.room.DaneGlobalne
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfilActivity : ComponentActivity() {

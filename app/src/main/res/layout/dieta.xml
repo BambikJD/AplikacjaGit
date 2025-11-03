@@ -7,7 +7,20 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/WyswietlDodaneLayout"
+        android:layout_width="409dp"
+        android:layout_height="689dp"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/NawigacjaLayout">
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/NawigacjaLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center_vertical"
@@ -71,16 +84,17 @@
             android:textColor="#000000"
             android:textSize="12sp" />
 
-
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/DodajProduktLayout"
         android:layout_width="409dp"
         android:layout_height="689dp"
         android:orientation="vertical"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/NawigacjaLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,23 +105,45 @@
             <ImageButton
                 android:id="@+id/button"
                 android:layout_width="40dp"
-                android:src="@drawable/cofnij40px"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:src="@drawable/cofnij40px" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/DataDnia"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:text="TextView" />
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="2025-07-25"
+                android:textSize="23sp" />
 
             <ImageButton
                 android:id="@+id/button2"
                 android:layout_width="40dp"
-                android:src="@drawable/cofnij40pxprawo"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="80dp"
+                android:src="@drawable/cofnij40pxprawo"
                 android:text="Button" />
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/widokProdukty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/produkt_item" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"></LinearLayout>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

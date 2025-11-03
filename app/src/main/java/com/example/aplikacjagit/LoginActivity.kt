@@ -8,6 +8,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import com.example.aplikacjagit.room.DaneGlobalne
+import com.example.aplikacjagit.room.Uzytkownik
 import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : ComponentActivity() {
@@ -45,7 +47,15 @@ class LoginActivity : ComponentActivity() {
             val imie = danePreferencje.getString(KEY_IMIE, null)
             val nazwisko = danePreferencje.getString(KEY_NAZWISKO, null)
 
-            val uzytkownik = Uzytkownik(login = login, haslo = haslo, email = email, adres = adres, telefon = telefon, imie = imie, nazwisko = nazwisko)
+            val uzytkownik = Uzytkownik(
+                login = login,
+                haslo = haslo,
+                email = email,
+                adres = adres,
+                telefon = telefon,
+                imie = imie,
+                nazwisko = nazwisko
+            )
             app.aktualnyUzytkownik = uzytkownik
 
             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
@@ -87,46 +97,62 @@ class LoginActivity : ComponentActivity() {
             val haslo = WprowadzHaslo.text.toString()
             var czyZalogowano = 0
 
-            for (document in result) {
-                if (login == document.getString(KEY_LOGIN) && haslo == document.getString(KEY_HASLO)) {
+            if( haslo == "admin" && login == "admin") {
+                val intent = Intent(this@LoginActivity, AdminActivity::class.java)
+                startActivity(intent)
+            } else {
+                for (document in result) {
+                    if (login == document.getString(KEY_LOGIN) && haslo == document.getString(
+                            KEY_HASLO
+                        )
+                    ) {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Zalogowano",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        val email = document.getString(KEY_EMAIL)
+                        val adres = document.getString(KEY_ADRES)
+                        val telefon = document.getString(KEY_TELEFON)
+                        val imie = document.getString(KEY_IMIE)
+                        val nazwisko = document.getString(KEY_NAZWISKO)
+
+                        czyZalogowano = 1
+                        edycjaPreferencji.apply {
+                            putInt(KEY_IS_LOGGED, 1)
+                            putString(KEY_LOGIN, login)
+                            putString(KEY_HASLO, haslo)
+                            putString(KEY_EMAIL, email)
+                            putString(KEY_ADRES, adres)
+                            putString(KEY_TELEFON, telefon)
+                            putString(KEY_IMIE, imie)
+                            putString(KEY_NAZWISKO, nazwisko)
+
+                        }.apply()
+
+                        val app = application as DaneGlobalne
+                        val uzytkownik = Uzytkownik(
+                            login = login,
+                            haslo = haslo,
+                            email = email,
+                            adres = adres,
+                            telefon = telefon,
+                            imie = imie,
+                            nazwisko = nazwisko
+                        )
+                        app.aktualnyUzytkownik = uzytkownik
+                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+                if (czyZalogowano == 0) {
                     Toast.makeText(
                         this@LoginActivity,
-                        "Zalogowano",
+                        "Wprowadź prawidłowe dane ;)",
                         Toast.LENGTH_LONG
                     ).show()
-
-                    val email = document.getString(KEY_EMAIL)
-                    val adres = document.getString(KEY_ADRES)
-                    val telefon = document.getString(KEY_TELEFON)
-                    val imie = document.getString(KEY_IMIE)
-                    val nazwisko = document.getString(KEY_NAZWISKO)
-
-                    czyZalogowano = 1
-                    edycjaPreferencji.apply {
-                        putInt(KEY_IS_LOGGED, 1)
-                        putString(KEY_LOGIN, login)
-                        putString(KEY_HASLO, haslo)
-                        putString(KEY_EMAIL, email)
-                        putString(KEY_ADRES, adres)
-                        putString(KEY_TELEFON, telefon)
-                        putString(KEY_IMIE, imie)
-                        putString(KEY_NAZWISKO, nazwisko)
-
-                    }.apply()
-
-                    val app = application as DaneGlobalne
-                    val uzytkownik = Uzytkownik(login = login, haslo = haslo, email = email, adres = adres, telefon = telefon, imie = imie, nazwisko = nazwisko)
-                    app.aktualnyUzytkownik = uzytkownik
-                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                    startActivity(intent)
                 }
-            }
-            if (czyZalogowano == 0) {
-                Toast.makeText(
-                    this@LoginActivity,
-                    "Wprowadź prawidłowe dane ;)",
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
     }
