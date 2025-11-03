@@ -128,7 +128,6 @@ class LoginActivity : ComponentActivity() {
                             putString(KEY_TELEFON, telefon)
                             putString(KEY_IMIE, imie)
                             putString(KEY_NAZWISKO, nazwisko)
-
                         }.apply()
 
                         val app = application as DaneGlobalne

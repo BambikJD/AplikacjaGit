@@ -3,7 +3,16 @@ package com.example.aplikacjagit.room
 import android.app.Application
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
 import java.util.Date
+
+class Converters {
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
+
+    @TypeConverter
+    fun dateToTimestamp(date: Date?): Long? = date?.time
+}
 
 data class Uzytkownik(
     val login: String?,
@@ -22,7 +31,7 @@ data class ProduktyDodaneWynik(
     val weglowodany: Int?,
     val tluszcze: Int?,
     val ilosc: Int?,
-    val data: String?,
+    val data: Date?,
 )
 
 @Entity(tableName = "ListaProduktow")
@@ -42,7 +51,7 @@ data class Dodane(
     val idProduktu: Int?,
     val nazwa: String?,
     val ilosc: Int?,
-    val data: String?,
+    val data: Date?,
     val sumaKalorii: Int?,
     val sumaBialek: Int?,
     val sumaWeglowodanow: Int?,

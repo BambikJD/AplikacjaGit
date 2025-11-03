@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -20,6 +21,7 @@ import com.example.aplikacjagit.adaptery.ProduktAdapter
 import com.example.aplikacjagit.room.DaneViewModel
 import com.example.aplikacjagit.room.Dodane
 import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 import kotlin.math.round
 
@@ -34,6 +36,8 @@ class DietaActivity : ComponentActivity() {
     private lateinit var Wyszukaj: EditText
     private lateinit var DataLayout: LinearLayout
     private lateinit var WyszukiwanieLayout: LinearLayout
+    private lateinit var DataWLewo: ImageButton
+    private lateinit var DataWPrawo: ImageButton
 
     private lateinit var WstawButton: Button
     private lateinit var WstawioneButton: Button
@@ -44,6 +48,9 @@ class DietaActivity : ComponentActivity() {
     private lateinit var dodaneAdapter: DodaneAdapter
 
     private lateinit var daneViewModel: DaneViewModel
+
+    // pole przechowujące aktualnie wybraną datę (LocalDate dla wygody liczenia dni)
+    private var selectedLocalDate: LocalDate = LocalDate.now()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,10 +68,15 @@ class DietaActivity : ComponentActivity() {
         WyszukiwanieLayout = findViewById(R.id.WyszukiwanieLayout)
         DataLayout = findViewById(R.id.DataLayout)
         WstawButton = findViewById(R.id.WstawButton)
+        DataWLewo = findViewById(R.id.DataWLewo)
+        DataWPrawo = findViewById(R.id.DataWPrawo)
         WstawioneButton = findViewById(R.id.WstawioneButton)
 
         widokProdukty = findViewById(R.id.widokProdukty)
         widokDodane = findViewById(R.id.widokDodane)
+
+        // ustawiamy początkową datę i powiadamiamy ViewModel (konwersja w updateSelectedDate)
+        updateSelectedDate(selectedLocalDate)
 
         produktAdapter = ProduktAdapter { produkt, gramy ->
             val produktId = produkt.id
@@ -78,6 +90,11 @@ class DietaActivity : ComponentActivity() {
             val sumaTluszczy = kotlin.math.round((produkt.tluszcze ?: 0).toDouble() * gramy / 100.0).toInt()
             val sumaWeglowodanow = kotlin.math.round((produkt.weglowodany ?: 0).toDouble() * gramy / 100.0).toInt()
 
+            // używamy selectedLocalDate (to jest data wybrana przez użytkownika)
+            val dateForRoom: Date = Date.from(
+                selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+            )
+
             val dodane = Dodane(
                 idProduktu = produktId,
                 nazwa = produkt.nazwa,
@@ -86,7 +103,7 @@ class DietaActivity : ComponentActivity() {
                 sumaBialek = sumaBialek,
                 sumaTluszczy = sumaTluszczy,
                 sumaWeglowodanow = sumaWeglowodanow,
-                data = java.time.LocalDate.now().toString()
+                data = dateForRoom
             )
 
             daneViewModel.insertDodane(dodane)
@@ -111,7 +128,8 @@ class DietaActivity : ComponentActivity() {
             dodaneAdapter.stworzDodane(lista)
         }
 
-        DataDnia.text = java.time.LocalDate.now().toString()
+        // pokaż aktualną datę (uaktualniane też w updateSelectedDate)
+        DataDnia.text = selectedLocalDate.toString()
 
         WstawButton.setOnClickListener {
             widokDodane.visibility = View.GONE
@@ -122,12 +140,22 @@ class DietaActivity : ComponentActivity() {
             WstawioneButton.isEnabled = true
         }
         WstawioneButton.setOnClickListener {
+            // kiedy przechodzimy do "wstawione", upewnij się, że ViewModel ma aktualną datę
+            updateSelectedDate(selectedLocalDate)
             widokDodane.visibility = View.VISIBLE
             DataLayout.visibility = View.VISIBLE
             WyszukiwanieLayout.visibility = View.GONE
             widokProdukty.visibility = View.GONE
             WstawButton.isEnabled = true
             WstawioneButton.isEnabled = false
+        }
+
+        // przyciski przesuwające datę
+        DataWLewo.setOnClickListener {
+            updateSelectedDate(selectedLocalDate.minusDays(1))
+        }
+        DataWPrawo.setOnClickListener {
+            updateSelectedDate(selectedLocalDate.plusDays(1))
         }
 
         Wyszukaj.addTextChangedListener{ text ->
@@ -151,6 +179,16 @@ class DietaActivity : ComponentActivity() {
         }
     }
 
-
+    // pomocnicza funkcja aktualizująca widok i ViewModel po zmianie daty
+    private fun updateSelectedDate(newDate: LocalDate) {
+        selectedLocalDate = newDate
+        // aktualizujemy tekst
+        DataDnia.text = selectedLocalDate.toString()
+        // konwertujemy LocalDate -> Date (start of day)
+        val dateForRoom: Date = Date.from(
+            selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+        )
+        // ustawiamy query w ViewModelie
+        daneViewModel.setDateQuery(dateForRoom)
+    }
 }
-

@@ -108,7 +108,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
                     <ImageButton
-                        android:id="@+id/button"
+                        android:id="@+id/DataWLewo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -126,7 +126,7 @@
                         android:textSize="23sp" />
 
                     <ImageButton
-                        android:id="@+id/button2"
+                        android:id="@+id/DataWPrawo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

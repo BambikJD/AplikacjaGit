@@ -1,11 +1,11 @@
 package com.example.aplikacjagit.room
 
 import androidx.lifecycle.LiveData
+import java.util.Date
 
 class Repozytorium(private val DAO: DAO){
     val wszystkieProdukty : LiveData<MutableList<Produkt>> = DAO.wyswietlProdukty()
     val nazwyProduktow : LiveData<MutableList<String>> = DAO.nazwyProduktow()
-    val wyswietlDodane : LiveData<MutableList<Dodane>> = DAO.wyswietlDodane()
     val zczytajDodane : LiveData<MutableList<ProduktyDodaneWynik>> = DAO.zczytajDodane()
 
     suspend fun insertProdukt(produkt: Produkt){
@@ -34,5 +34,9 @@ class Repozytorium(private val DAO: DAO){
 
     fun szukajProdukty(query: String): LiveData<MutableList<Produkt>> {
         return DAO.szukajProdukty(query)
+    }
+
+    fun wyswietlDodane(data: Date): LiveData<MutableList<Dodane>> {
+        return DAO.wyswietlDodane(data)
     }
 }

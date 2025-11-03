@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import java.util.Date
 
 @Dao
 interface DAO{
@@ -42,8 +43,7 @@ interface DAO{
     @Query("SELECT  ListaProduktow.nazwa, ListaProduktow.kalorycznosc, ListaProduktow.bialka, ListaProduktow.weglowodany, ListaProduktow.tluszcze, ProduktyDodane.ilosc, ProduktyDodane.data from ListaProduktow, ProduktyDodane where ListaProduktow.id == ProduktyDodane.id")
     fun zczytajDodane() : LiveData<MutableList<ProduktyDodaneWynik>>
 
-    @Query("SELECT  * from ProduktyDodane")
-    fun wyswietlDodane() : LiveData<MutableList<Dodane>>
-
+    @Query("SELECT  * from ProduktyDodane where data == :data")
+    fun wyswietlDodane(data: Date) : LiveData<MutableList<Dodane>>
 
 }
