@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
@@ -14,11 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeActivity : ComponentActivity() {
-    private lateinit var ProfilButton: Button
-    private lateinit var HomeButton: Button
-    private lateinit var LodowkaButton: Button
-    private lateinit var TreningButton: Button
-    private lateinit var DietaButton: Button
+    private lateinit var ProfilButton: ImageButton
+    private lateinit var HomeButton: ImageButton
+    private lateinit var LodowkaButton: ImageButton
+    private lateinit var TreningButton: ImageButton
+    private lateinit var DietaButton: ImageButton
     private val dbOnline: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +109,7 @@ class HomeActivity : ComponentActivity() {
                                 )
                             }
                         }
+
                     } else {
                         Log.d("HomeActivity", "Produkt już istnieje lokalnie: $nazwa")
                     }

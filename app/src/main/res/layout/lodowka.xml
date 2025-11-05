@@ -3,73 +3,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/purple_200"
+    android:background="@color/background_color"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/NawigacjaLayout"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
+        <ImageButton
             android:id="@+id/ProfilButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Profil"
+            android:background="@color/button_color"
+            android:src="@drawable/profil"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:textColor="#000000"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/DietaButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Dieta"
+            android:background="@color/button_color"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:src="@drawable/dieta"
+            android:textColor="#000000" />
 
-        <Button
+        <ImageButton
             android:id="@+id/HomeButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Home"
+            android:background="@color/button_color"
+            android:src="@drawable/home"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:textColor="#000000" />
 
-        <Button
+        <ImageButton
             android:id="@+id/TreningButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Trening"
+            android:background="@color/button_color"
+            android:src="@drawable/trening"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:textColor="#000000"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/LodowkaButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_50"
-            android:text="Lodówka"
+            android:background="@color/button_color"
+            android:src="@drawable/lodowka"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
-
+            android:textColor="#000000" />
 
     </LinearLayout>
 

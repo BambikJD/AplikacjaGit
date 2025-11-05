@@ -3,17 +3,18 @@ package com.example.aplikacjagit
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 
 class TreningActivity : ComponentActivity() {
-    private lateinit var ProfilButton: Button
-    private lateinit var HomeButton: Button
-    private lateinit var LodowkaButton: Button
-    private lateinit var TreningButton: Button
-    private lateinit var DietaButton: Button
+    private lateinit var ProfilButton: ImageButton
+    private lateinit var HomeButton: ImageButton
+    private lateinit var LodowkaButton: ImageButton
+    private lateinit var TreningButton: ImageButton
+    private lateinit var DietaButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -3,80 +3,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/purple_200"
+    android:background="@color/background_color"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/NawigacjaLayout"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
+        <ImageButton
             android:id="@+id/ProfilButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Profil"
+            android:background="@color/button_color"
+            android:src="@drawable/profil"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:textColor="#000000"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/DietaButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_50"
-            android:text="Dieta"
+            android:background="@color/button_color"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:src="@drawable/dieta"
+            android:textColor="#000000" />
 
-        <Button
+        <ImageButton
             android:id="@+id/HomeButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Home"
+            android:background="@color/button_color"
+            android:src="@drawable/home"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:textColor="#000000" />
 
-        <Button
+        <ImageButton
             android:id="@+id/TreningButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Trening"
+            android:background="@color/button_color"
+            android:src="@drawable/trening"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:textColor="#000000"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/LodowkaButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green_700"
-            android:text="Lodówka"
+            android:background="@color/button_color"
+            android:src="@drawable/lodowka"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="12sp" />
+            android:textColor="#000000" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ProduktyLayout"
-        android:layout_width="409dp"
-        android:layout_height="689dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,8 +85,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/green_200"
+            android:layout_height="35dp"
+            android:background="@color/green_400"
             android:orientation="horizontal">
 
             <Button
@@ -93,6 +94,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/green_400"
                 android:enabled="false"
                 android:text="Wstawione"
                 android:textSize="9sp" />
@@ -113,7 +115,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:background="@color/green_200"
+                        android:background="@color/green_400"
                         android:src="@drawable/strzalka" />
 
                     <TextView
@@ -130,7 +132,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@color/green_200"
+                        android:background="@color/green_400"
                         android:rotation="180"
                         android:src="@drawable/strzalka"
                         />
@@ -164,6 +166,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="wstaw"
+                android:background="@color/green_400"
                 android:textSize="10sp" />
         </LinearLayout>
 
@@ -171,25 +174,72 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokDodane"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/dodane_item" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/widokDodane"
+                    android:layout_marginTop="1dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/dodane_item" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokProdukty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/produkt_item" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="1dp"
+                    android:id="@+id/widokProdukty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/produkt_item" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/podsumowanie"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/grey_700"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/sumaKaloriiText"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="Kcal:" />
+
+        <TextView
+            android:id="@+id/sumaBialekText"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="B:" />
+
+        <TextView
+            android:id="@+id/sumaWeglowodanowText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="W:" />
+
+        <TextView
+            android:id="@+id/sumaTluszczyText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="T:" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

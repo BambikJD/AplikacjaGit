@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [Produkt::class, Dodane::class /*,...*/], version = 2)
+@Database(entities = [Produkt::class, Dodane::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class BazaDanych : RoomDatabase() {
     abstract fun DAO(): DAO
@@ -18,7 +18,6 @@ abstract class BazaDanych : RoomDatabase() {
 
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                // Tutaj SQL dodający nową kolumnę `data` typu INTEGER (Room przechowuje Date jako Long)
                 database.execSQL("ALTER TABLE Dodane ADD COLUMN data INTEGER")
             }
         }

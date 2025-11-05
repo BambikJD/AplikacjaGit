@@ -17,12 +17,12 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repozytorium: Repozytorium
 
-    private val _query = MutableLiveData<String>("")
-    val query: LiveData<String> get() = _query
+    private val _szukajProduktyQuery = MutableLiveData<String>("")
+    val ProduktyQuery: LiveData<String> get() = _szukajProduktyQuery
     val szukajProdukty: LiveData<MutableList<Produkt>>
 
-    private val _dateQuery = MutableLiveData<java.util.Date?>(null)
-    val dateQuery: LiveData<java.util.Date?> get() = _dateQuery
+    private val _dataQuery = MutableLiveData<java.util.Date?>(null)
+    val dataQuery: LiveData<java.util.Date?> get() = _dataQuery
     val wyswietlDodane: LiveData<MutableList<Dodane>>
 
     init {
@@ -33,7 +33,7 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
         nazwyProduktow = repozytorium.nazwyProduktow
         zczytajDodane = repozytorium.zczytajDodane
 
-        szukajProdukty = _query.switchMap { q ->
+        szukajProdukty = _szukajProduktyQuery.switchMap { q ->
             val text = q ?: ""
             if (text.isBlank()) {
                 wszystkieProdukty
@@ -43,7 +43,7 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         // switchMap dla listy "Dodane" według daty
-        wyswietlDodane = _dateQuery.switchMap { date ->
+        wyswietlDodane = _dataQuery.switchMap { date ->
             if (date == null) {
                 // domyślnie pusta lista (żeby nie obserwować niepotrzebnie DB)
                 MutableLiveData(mutableListOf())
@@ -56,12 +56,12 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
 
     // ustaw query tekstowe
     fun setQuery(q: String) {
-        _query.value = q
+        _szukajProduktyQuery.value = q
     }
 
     // ustaw query daty (przekaż startOfDay Date)
     fun setDateQuery(date: java.util.Date?) {
-        _dateQuery.value = date
+        _dataQuery.value = date
     }
 
     // operacje DB (przez repozytorium)

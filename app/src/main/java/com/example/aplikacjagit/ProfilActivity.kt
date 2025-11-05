@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -25,6 +26,12 @@ class ProfilActivity : ComponentActivity() {
     private lateinit var EdytujTelefon: EditText
     private lateinit var EdytujAdres: EditText
 
+    private lateinit var ProfilButton: ImageButton
+    private lateinit var HomeButton: ImageButton
+    private lateinit var LodowkaButton: ImageButton
+    private lateinit var TreningButton: ImageButton
+    private lateinit var DietaButton: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -38,6 +45,12 @@ class ProfilActivity : ComponentActivity() {
         val KEY_IMIE = getString(R.string.KEY_IMIE_STRING)
         val KEY_NAZWISKO = getString(R.string.KEY_NAZWISKO_STRING)
         val KEY_IS_LOGGED = getString(R.string.KEY_IS_LOGGED_STRING)
+
+        ProfilButton =  findViewById(R.id.ProfilButton)
+        HomeButton =  findViewById(R.id.HomeButton)
+        LodowkaButton =  findViewById(R.id.LodowkaButton)
+        TreningButton =  findViewById(R.id.TreningButton)
+        DietaButton =  findViewById(R.id.DietaButton)
 
         PowrotButton =  findViewById(R.id.PowrotButton)
         DaneLogowania = findViewById(R.id.DaneLogowania)
@@ -79,6 +92,36 @@ class ProfilActivity : ComponentActivity() {
 
         PowrotButton.setOnClickListener {
             val intent = Intent(this@ProfilActivity, HomeActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        ProfilButton.setOnClickListener {
+            val intent = Intent(this@ProfilActivity, ProfilActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        HomeButton.setOnClickListener {
+            val intent = Intent(this@ProfilActivity, HomeActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        LodowkaButton.setOnClickListener {
+            val intent = Intent(this@ProfilActivity, LodowkaActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        TreningButton.setOnClickListener {
+            val intent = Intent(this@ProfilActivity, TreningActivity::class.java)
+            startActivity(intent)
+            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
+        }
+
+        DietaButton.setOnClickListener {
+            val intent = Intent(this@ProfilActivity, DietaActivity::class.java)
             startActivity(intent)
             // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
         }

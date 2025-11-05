@@ -27,17 +27,23 @@ import kotlin.math.round
 
 class DietaActivity : ComponentActivity() {
 
-    private lateinit var ProfilButton: Button
-    private lateinit var HomeButton: Button
-    private lateinit var LodowkaButton: Button
-    private lateinit var TreningButton: Button
-    private lateinit var DietaButton: Button
+    private lateinit var ProfilButton: ImageButton
+    private lateinit var HomeButton: ImageButton
+    private lateinit var LodowkaButton: ImageButton
+    private lateinit var TreningButton: ImageButton
+    private lateinit var DietaButton: ImageButton
+
     private lateinit var DataDnia: TextView
     private lateinit var Wyszukaj: EditText
     private lateinit var DataLayout: LinearLayout
     private lateinit var WyszukiwanieLayout: LinearLayout
     private lateinit var DataWLewo: ImageButton
     private lateinit var DataWPrawo: ImageButton
+
+    private lateinit var sumaKaloriiText: TextView
+    private lateinit var sumaBialekText: TextView
+    private lateinit var sumaWeglowodanowText: TextView
+    private lateinit var sumaTluszczyText: TextView
 
     private lateinit var WstawButton: Button
     private lateinit var WstawioneButton: Button
@@ -71,6 +77,11 @@ class DietaActivity : ComponentActivity() {
         DataWLewo = findViewById(R.id.DataWLewo)
         DataWPrawo = findViewById(R.id.DataWPrawo)
         WstawioneButton = findViewById(R.id.WstawioneButton)
+
+        sumaKaloriiText = findViewById(R.id.sumaKaloriiText)
+        sumaBialekText = findViewById(R.id.sumaBialekText)
+        sumaWeglowodanowText = findViewById(R.id.sumaWeglowodanowText)
+        sumaTluszczyText = findViewById(R.id.sumaTluszczyText)
 
         widokProdukty = findViewById(R.id.widokProdukty)
         widokDodane = findViewById(R.id.widokDodane)
@@ -124,8 +135,33 @@ class DietaActivity : ComponentActivity() {
             produktAdapter.stworzProdukt(lista)
         }
 
+        var sumakalorii = 0
+        var sumabialek = 0
+        var sumaweglowodanow = 0
+        var sumatluszczy = 0
+        sumaKaloriiText.text = "Kalorie\n${sumakalorii}"
+        sumaBialekText.text = "B\n${sumabialek}"
+        sumaWeglowodanowText.text = "W\n${sumaweglowodanow}"
+        sumaTluszczyText.text = "T\n${sumatluszczy}"
+
         daneViewModel.wyswietlDodane.observe(this) { lista ->
+            sumakalorii = 0
+            sumabialek = 0
+            sumaweglowodanow = 0
+            sumatluszczy = 0
             dodaneAdapter.stworzDodane(lista)
+            for(produkt in lista){
+                if(produkt.sumaKalorii != null && produkt.sumaBialek != null  && produkt.sumaTluszczy != null && produkt.sumaWeglowodanow != null) {
+                    sumakalorii += produkt.sumaKalorii
+                    sumabialek += produkt.sumaBialek
+                    sumatluszczy += produkt.sumaTluszczy
+                    sumaweglowodanow += produkt.sumaWeglowodanow
+                    sumaKaloriiText.text = "Kalorie\n${sumakalorii}"
+                    sumaBialekText.text = "B\n${sumabialek}"
+                    sumaWeglowodanowText.text = "W\n${sumaweglowodanow}"
+                    sumaTluszczyText.text = "T\n${sumatluszczy}"
+                }
+            }
         }
 
         // pokaż aktualną datę (uaktualniane też w updateSelectedDate)
