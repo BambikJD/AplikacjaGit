@@ -3,6 +3,7 @@ package com.example.aplikacjagit
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -11,6 +12,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.aplikacjagit.room.DaneGlobalne
 import com.google.firebase.firestore.FirebaseFirestore
+import android.widget.*
+import androidx.core.view.isVisible
 
 class ProfilActivity : ComponentActivity() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -64,8 +67,144 @@ class ProfilActivity : ComponentActivity() {
         EdytujTelefon = findViewById(R.id.EdytujTelefon)
         EdytujAdres = findViewById(R.id.EdytujAdres)
 
+        val waga = findViewById<EditText>(R.id.waga)
+        val wzrost = findViewById<EditText>(R.id.wzrost)
+        val wiek = findViewById<EditText>(R.id.wiek)
+        val plec = findViewById<RadioGroup>(R.id.plec)
+        val aktywnosc = findViewById<Spinner>(R.id.aktywnosc)
+        val cel = findViewById<Spinner>(R.id.cel)
+        val obliczButton = findViewById<Button>(R.id.zatwierdz)
+
+        val opcjaWPrawo = findViewById<ImageButton>(R.id.OpcjaWPrawo)
+        val opcjaWLewo = findViewById<ImageButton>(R.id.OpcjaWLewo)
+        val opcjaWybrana = findViewById<TextView>(R.id.OpcjaWybrana)
+        val dane = findViewById<LinearLayout>(R.id.Dane)
+        val preferencje = findViewById<LinearLayout>(R.id.Preferencje)
+
+        val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
+        val edycjaPreferencji = danePreferencje.edit()
+
         val app = application as DaneGlobalne
         var aktualnyUzytkownik = app.aktualnyUzytkownik
+
+        // przykładowe wypełnienie spinnerów (tylko jeśli nie masz ich w XML)
+        if (aktywnosc.adapter == null) {
+            aktywnosc.adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                listOf("Siedzący", "Lekko aktywny", "Umiarkowany", "Aktywny", "Bardzo aktywny")
+            )
+        }
+        if (cel.adapter == null) {
+            cel.adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                listOf("Szybko schudnąć", "Schudnąć", "Utrzymać", "Przytyć", "Szybko przytyć")
+            )
+        }
+
+        aktywnosc.setSelection(2)
+        cel.setSelection(2)
+
+        obliczButton.setOnClickListener {
+            // 1) walidacja i parsowanie wejścia
+            val waga = waga.text.toString().replace(',', '.').toDoubleOrNull()
+            val wzrost = wzrost.text.toString().replace(',', '.').toDoubleOrNull()
+            val wiek = wiek.text.toString().toIntOrNull()
+
+            if (waga == null || wzrost == null || wiek == null) {
+                Toast.makeText(this, "Wypełnij poprawnie wagę, wzrost i wiek", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
+
+            // płeć
+            val plecIsMezczyzna = when (plec.checkedRadioButtonId) {
+                R.id.mezczyzna -> true
+                R.id.kobieta -> false
+                else -> true // domyślnie mężczyzna jeśli brak wyboru
+            }
+
+            // aktywność -> współczynniki
+            val aktywnoscIndex = aktywnosc.selectedItemPosition
+            val wspolczynnikAktywnosci = when (aktywnoscIndex) {
+                0 -> 1.2   // Siedzący
+                1 -> 1.375 // Lekko aktywny
+                2 -> 1.55  // Umiarkowany
+                3 -> 1.725 // Aktywny
+                4 -> 1.9   // Bardzo aktywny
+                else -> 1.2
+            }
+
+            // cel -> delta kalorii
+            val celIndex = cel.selectedItemPosition
+            val deltaKcal = when (celIndex) {
+                0 -> -1000.0  // Szybko schudnąć
+                1 -> -500.0   // Schudnąć
+                2 -> 0.0      // Utrzymać
+                3 -> 300.0    // Przytyć
+                4 -> 700.0    // Szybko przytyć
+                else -> 0.0
+            }
+
+            // 2) obliczenie BMR (Mifflin-St Jeor)
+            val s = if (plecIsMezczyzna) 5.0 else -161.0
+            val bmr = 10.0 * waga + 6.25 * wzrost - 5.0 * wiek + s
+
+            // 3) TDEE
+            val tdee = bmr * wspolczynnikAktywnosci
+
+            // 4) docelowe kalorie z zabezpieczeniem minimalnym
+            val minKalorie = if (plecIsMezczyzna) 1500.0 else 1200.0
+            var doceloweKalorie = tdee + deltaKcal
+            if (doceloweKalorie < minKalorie) doceloweKalorie = minKalorie
+
+            // 5) estymacja zmiany masy (kg/tydz) przybliżeniem 7700 kcal/kg
+            val kcalPerKg = 7700.0
+            val estKgWeek = (doceloweKalorie - tdee) * 7.0 / kcalPerKg
+
+            // 6) makroskładniki:
+            // białko g/kg w zależności od celu (upraszczone)
+            val bialkoNaKg = when (celIndex) {
+                0 -> 2.0
+                1 -> 1.8
+                2 -> 1.4
+                3 -> 1.6
+                4 -> 1.6
+                else -> 1.4
+            }
+            val bialkoGram = bialkoNaKg * waga
+            val bialkoKcal = bialkoGram * 4.0
+
+            // tłuszcz % kalorii
+            val fatRatio = when (celIndex) {
+                0 -> 0.25
+                1 -> 0.27
+                2 -> 0.30
+                3 -> 0.30
+                4 -> 0.32
+                else -> 0.30
+            }
+            val fatKcal = doceloweKalorie * fatRatio
+            val fatGram = fatKcal / 9.0
+
+            // węglowodany reszta kalorii
+            val pozostaleKcal = doceloweKalorie - (bialkoKcal + fatKcal)
+            val carbsGram = if (pozostaleKcal > 0) pozostaleKcal / 4.0 else 0.0
+
+            edycjaPreferencji.apply {
+                putInt("celBialek", bialkoGram.toInt())
+                putInt("celWeglowodanow", carbsGram.toInt())
+                putInt("celTluszczy", fatGram.toInt())
+                putInt("celKalorii", doceloweKalorie.toInt())
+            }.apply()
+
+            app.celBialek = danePreferencje.getInt("celBialek", 0)
+            app.celWeglowodanow = danePreferencje.getInt("celWeglowodanow", 0)
+            app.celTluszczy = danePreferencje.getInt("celTluszczy", 0)
+            app.celKalorii = danePreferencje.getInt("celKalorii", 0)
+        }
+
 
         if(aktualnyUzytkownik != null) {
             DaneLogowania.text = "Zalogowano jako: ${aktualnyUzytkownik.imie}"
@@ -88,6 +227,18 @@ class ProfilActivity : ComponentActivity() {
 
         ZatwierdzButton.setOnClickListener {
             zmienDane()
+        }
+
+        opcjaWLewo.setOnClickListener {
+            opcjaWybrana.text = "D A N E"
+            preferencje.visibility = View.GONE
+            dane.visibility = View.VISIBLE
+        }
+
+        opcjaWPrawo.setOnClickListener {
+            opcjaWybrana.text = "P R E F E R E N C J E"
+            preferencje.visibility = View.VISIBLE
+            dane.visibility = View.GONE
         }
 
         PowrotButton.setOnClickListener {

@@ -5,6 +5,261 @@
     android:layout_width="match_parent"
     android:background="@color/background_color"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/opcje"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+
+        <Button
+            android:id="@+id/PowrotButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_700"
+            android:text="Powrót"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:id="@+id/DataLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/OpcjaWLewo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/green_400"
+                    android:src="@drawable/strzalka" />
+
+                <TextView
+                    android:id="@+id/OpcjaWybrana"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="D A N E"
+                    android:textSize="23sp" />
+
+                <ImageButton
+                    android:id="@+id/OpcjaWPrawo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/green_400"
+                    android:rotation="180"
+                    android:src="@drawable/strzalka" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/WylogujButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/teal_700"
+            android:text="Wyloguj"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/DaneLogowania"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="35dp"
+        android:layout_weight="3"
+        android:background="@color/black_26"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="17sp"
+        app:layout_constraintTop_toBottomOf="@id/opcje" />
+
+    <LinearLayout
+        android:id="@+id/Dane"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DaneLogowania">
+
+        <EditText
+            android:id="@+id/EdytujImie"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/white_50"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Zmień imię"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <EditText
+            android:id="@+id/EdytujNazwisko"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/white_50"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Zmień Nazwisko"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <EditText
+            android:id="@+id/EdytujEmail"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/white_50"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Zmień email"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <EditText
+            android:id="@+id/EdytujTelefon"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/white_50"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Zmień numer telefonu"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <EditText
+            android:id="@+id/EdytujAdres"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/white_50"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Zmień adres"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <Button
+            android:id="@+id/EdytujButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Edytuj" />
+
+        <Button
+            android:id="@+id/ZatwierdzButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Zatwierdź" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Preferencje"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DaneLogowania">
+        
+        <EditText
+            android:id="@+id/waga"
+            android:layout_width="200dp"
+            android:backgroundTint="@color/white"
+            android:layout_height="50dp">
+        </EditText>
+
+        <EditText
+            android:id="@+id/wzrost"
+            android:backgroundTint="@color/white"
+            android:layout_width="200dp"
+            android:layout_height="50dp">
+        </EditText>
+
+        <EditText
+            android:id="@+id/wiek"
+            android:backgroundTint="@color/white"
+            android:layout_width="200dp"
+            android:layout_height="50dp">
+        </EditText>
+
+        <RadioGroup
+            android:id="@+id/plec"
+            android:layout_width="200dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_height="50dp" >
+
+            <RadioButton
+                android:id="@+id/mezczyzna"
+                android:textColor="@color/white"
+                android:layout_width="100dp"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:layout_height="50dp"
+                android:text="Mężczyzna" />
+
+            <RadioButton
+                android:id="@+id/kobieta"
+                android:layout_width="100dp"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:layout_height="50dp"
+                android:text="Kobieta"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <Spinner
+            android:id="@+id/aktywnosc"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:spinnerMode="dropdown"
+            android:prompt="@string/WybierzAktywnosc" />
+
+        <Spinner
+            android:id="@+id/cel"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:spinnerMode="dropdown"
+            android:prompt="@string/WybierzCel" />
+
+        <Button
+            android:id="@+id/zatwierdz"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:text="Zatwierdź" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/NawigacjaLayout"
         style="?android:attr/buttonBarStyle"
@@ -14,7 +269,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
             android:id="@+id/ProfilButton"
@@ -72,133 +327,27 @@
             android:textColor="#000000" />
 
     </LinearLayout>
+
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:gravity="center"
+        android:id="@+id/gornyNapis"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="35dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/PowrotButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/teal_700"
-            android:text="Powrót"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
-            android:id="@+id/DaneLogowania"
-            android:layout_width="0dp"
-            android:textColor="@color/white"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@color/black_26"
-            android:gravity="center_horizontal|center_vertical"
-            android:textSize="17sp"
-            app:layout_constraintEnd_toStartOf="@+id/WylogujButton"
-            app:layout_constraintStart_toEndOf="@+id/PowrotButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@color/green_400"
+            android:text="P R O F I L"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textColor="@color/black">
+        </TextView>
 
-        <Button
-            android:id="@+id/WylogujButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/teal_700"
-            android:text="Wyloguj"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="689dp"
-        android:layout_marginTop="1dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" >
-
-        <EditText
-            android:id="@+id/EdytujImie"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:enabled="false"
-            android:hint="Zmień imię"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/EdytujNazwisko"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:enabled="false"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:ems="10"
-            android:hint="Zmień Nazwisko"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/EdytujEmail"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:enabled="false"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:ems="10"
-            android:hint="Zmień email"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/EdytujTelefon"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:enabled="false"
-            android:ems="10"
-            android:hint="Zmień numer telefonu"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/EdytujAdres"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:enabled="false"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:ems="10"
-            android:hint="Zmień adres"
-            android:inputType="text" />
-
-        <Button
-            android:id="@+id/EdytujButton"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Edytuj" />
-
-        <Button
-            android:id="@+id/ZatwierdzButton"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Zatwierdź" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

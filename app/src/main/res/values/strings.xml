@@ -9,4 +9,14 @@
     <string name="KEY_ADRES_STRING">adres</string>
     <string name="KEY_IMIE_STRING">imie</string>
     <string name="KEY_NAZWISKO_STRING">nazwisko</string>
+    <string name="WybierzCel">Wybierz Cel</string>
+    <string name="WybierzAktywnosc">Wybierz Aktywność</string>
+
+    <string-array name="poziomy_aktywnosci">
+        <item>Siedzący</item>
+        <item>Lekko aktywny</item>
+        <item>Umiarkowany</item>
+        <item>Aktywny</item>
+        <item>Bardzo aktywny</item>
+    </string-array>
 </resources>

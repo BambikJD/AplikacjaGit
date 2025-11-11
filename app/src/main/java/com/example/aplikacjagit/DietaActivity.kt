@@ -1,5 +1,6 @@
 package com.example.aplikacjagit
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikacjagit.adaptery.DodaneAdapter
 import com.example.aplikacjagit.adaptery.ProduktAdapter
+import com.example.aplikacjagit.room.DaneGlobalne
 import com.example.aplikacjagit.room.DaneViewModel
 import com.example.aplikacjagit.room.Dodane
 import java.time.LocalDate
@@ -61,6 +63,16 @@ class DietaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dieta)
+
+        val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
+
+        val app = application as DaneGlobalne
+        var aktualnyUzytkownik = app.aktualnyUzytkownik
+
+        app.celBialek = danePreferencje.getInt("celBialek", 0)
+        app.celWeglowodanow = danePreferencje.getInt("celWeglowodanow", 0)
+        app.celTluszczy = danePreferencje.getInt("celTluszczy", 0)
+        app.celKalorii = danePreferencje.getInt("celKalorii", 0)
 
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
 
@@ -135,14 +147,15 @@ class DietaActivity : ComponentActivity() {
             produktAdapter.stworzProdukt(lista)
         }
 
+        // TEN KODZIK WYSZUKUJE DODANE PRODUKTY I LICZY KALORIE
         var sumakalorii = 0
         var sumabialek = 0
         var sumaweglowodanow = 0
         var sumatluszczy = 0
-        sumaKaloriiText.text = "Kalorie\n${sumakalorii}"
-        sumaBialekText.text = "B\n${sumabialek}"
-        sumaWeglowodanowText.text = "W\n${sumaweglowodanow}"
-        sumaTluszczyText.text = "T\n${sumatluszczy}"
+        sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
+        sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
+        sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
+        sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
 
         daneViewModel.wyswietlDodane.observe(this) { lista ->
             sumakalorii = 0
@@ -156,10 +169,10 @@ class DietaActivity : ComponentActivity() {
                     sumabialek += produkt.sumaBialek
                     sumatluszczy += produkt.sumaTluszczy
                     sumaweglowodanow += produkt.sumaWeglowodanow
-                    sumaKaloriiText.text = "Kalorie\n${sumakalorii}"
-                    sumaBialekText.text = "B\n${sumabialek}"
-                    sumaWeglowodanowText.text = "W\n${sumaweglowodanow}"
-                    sumaTluszczyText.text = "T\n${sumatluszczy}"
+                    sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
+                    sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
+                    sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
+                    sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
                 }
             }
         }
@@ -199,18 +212,25 @@ class DietaActivity : ComponentActivity() {
         }
 
         ProfilButton.setOnClickListener {
+            DataDnia.text = selectedLocalDate.toString()
             startActivity(Intent(this@DietaActivity, ProfilActivity::class.java))
         }
+
         HomeButton.setOnClickListener {
+            DataDnia.text = selectedLocalDate.toString()
             startActivity(Intent(this@DietaActivity, HomeActivity::class.java))
         }
         LodowkaButton.setOnClickListener {
+            DataDnia.text = selectedLocalDate.toString()
             startActivity(Intent(this@DietaActivity, LodowkaActivity::class.java))
         }
         TreningButton.setOnClickListener {
+            DataDnia.text = selectedLocalDate.toString()
             startActivity(Intent(this@DietaActivity, TreningActivity::class.java))
         }
+        DietaButton.isEnabled = false
         DietaButton.setOnClickListener {
+            DataDnia.text = selectedLocalDate.toString()
             startActivity(Intent(this@DietaActivity, DietaActivity::class.java))
         }
     }

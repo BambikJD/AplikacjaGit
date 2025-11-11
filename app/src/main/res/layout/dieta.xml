@@ -7,6 +7,134 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/ProduktyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/green_400"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/WstawioneButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/green_400"
+                android:enabled="false"
+                android:text="Wstawione"
+                android:textSize="9sp" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <LinearLayout
+                    android:id="@+id/DataLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/DataWLewo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@color/green_400"
+                        android:src="@drawable/strzalka" />
+
+                    <TextView
+                        android:id="@+id/DataDnia"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="2025-07-25"
+                        android:textSize="23sp" />
+
+                    <ImageButton
+                        android:id="@+id/DataWPrawo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/green_400"
+                        android:rotation="180"
+                        android:src="@drawable/strzalka" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/WyszukiwanieLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <EditText
+                        android:id="@+id/Wyszukiwanie"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3">
+
+                    </EditText>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/szukaj">
+
+                    </ImageView>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/WstawButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/green_400"
+                android:text="wstaw"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/widokDodane"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/dodane_item" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/widokProdukty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/produkt_item" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/NawigacjaLayout"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
@@ -15,7 +143,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
             android:id="@+id/ProfilButton"
@@ -75,126 +203,24 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ProduktyLayout"
+        android:gravity="center"
+        android:id="@+id/gornyNapis"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NawigacjaLayout">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="match_parent"
             android:background="@color/green_400"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/WstawioneButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/green_400"
-                android:enabled="false"
-                android:text="Wstawione"
-                android:textSize="9sp" />
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                >
-                <LinearLayout
-                    android:id="@+id/DataLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                    <ImageButton
-                        android:id="@+id/DataWLewo"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@color/green_400"
-                        android:src="@drawable/strzalka" />
-
-                    <TextView
-                        android:id="@+id/DataDnia"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:text="2025-07-25"
-                        android:textSize="23sp" />
-
-                    <ImageButton
-                        android:id="@+id/DataWPrawo"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/green_400"
-                        android:rotation="180"
-                        android:src="@drawable/strzalka"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:visibility="invisible"
-                    android:id="@+id/WyszukiwanieLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    >
-                    <EditText
-                        android:id="@+id/Wyszukiwanie"
-                        android:layout_width="0dp"
-                        android:layout_weight="3"
-                        android:layout_height="match_parent">
-                    </EditText>
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/szukaj"
-                        android:layout_weight="1">
-                    </ImageView>
-                </LinearLayout>
-            </RelativeLayout>
-            <Button
-                android:id="@+id/WstawButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="wstaw"
-                android:background="@color/green_400"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/widokDodane"
-                    android:layout_marginTop="1dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/dodane_item" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginTop="1dp"
-                    android:id="@+id/widokProdukty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/produkt_item" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="D I E T A"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textColor="@color/black">
+        </TextView>
 
     </LinearLayout>
 
@@ -202,39 +228,43 @@
         android:id="@+id/podsumowanie"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/grey_700"
+        android:background="@color/grey_850"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/sumaKaloriiText"
             android:layout_width="0dp"
-            android:gravity="center"
-            android:textSize="14sp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="Kcal:" />
+            android:textColor="@color/white_50"
+            android:gravity="center"
+            android:text="Kcal:"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/sumaBialekText"
             android:layout_width="0dp"
-            android:gravity="center"
             android:layout_height="match_parent"
+            android:textColor="@color/white_50"
             android:layout_weight="2"
+            android:gravity="center"
             android:text="B:" />
 
         <TextView
             android:id="@+id/sumaWeglowodanowText"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:textColor="@color/white_50"
             android:layout_weight="2"
             android:gravity="center"
             android:text="W:" />
 
         <TextView
             android:id="@+id/sumaTluszczyText"
+            android:textColor="@color/white_50"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"

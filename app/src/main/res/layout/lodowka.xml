@@ -15,7 +15,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
             android:id="@+id/ProfilButton"
@@ -72,6 +72,76 @@
             android:textAlignment="center"
             android:textColor="#000000" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:id="@+id/gornyNapis"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:text="L O D O W K A"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textColor="@color/black">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/podsumowanie"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/grey_850"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/sumaKaloriiText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:textColor="@color/white_50"
+            android:gravity="center"
+            android:text="Kcal:"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/sumaBialekText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColor="@color/white_50"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="B:" />
+
+        <TextView
+            android:id="@+id/sumaWeglowodanowText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColor="@color/white_50"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="W:" />
+
+        <TextView
+            android:id="@+id/sumaTluszczyText"
+            android:textColor="@color/white_50"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="T:" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -64,6 +64,16 @@ data class Dodane(
 class DaneGlobalne : Application() {
     var aktualnyUzytkownik: Uzytkownik? = null
 
+    var data: Date? = null
+    var sumaKalorii: Int = 0
+    var sumaBialek: Int = 0
+    var sumaTluszczy: Int = 0
+    var sumaWeglowodanow: Int = 0
+    var celBialek: Int = 0
+    var celWeglowodanow: Int = 0
+    var celTluszczy: Int = 0
+    var celKalorii: Int = 0
+
     fun wyczysc(){
         aktualnyUzytkownik = null
     }
