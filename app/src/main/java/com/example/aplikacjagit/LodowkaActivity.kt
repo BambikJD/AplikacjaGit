@@ -1,5 +1,6 @@
 package com.example.aplikacjagit
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -40,11 +41,6 @@ class LodowkaActivity : ComponentActivity() {
 
         val app = application as DaneGlobalne
         var aktualnyUzytkownik = app.aktualnyUzytkownik
-
-        app.celBialek = danePreferencje.getInt("celBialek", 0)
-        app.celWeglowodanow = danePreferencje.getInt("celWeglowodanow", 0)
-        app.celTluszczy = danePreferencje.getInt("celTluszczy", 0)
-        app.celKalorii = danePreferencje.getInt("celKalorii", 0)
 
         ProfilButton =  findViewById(R.id.ProfilButton)
         HomeButton =  findViewById(R.id.HomeButton)
@@ -93,35 +89,11 @@ class LodowkaActivity : ComponentActivity() {
             }
         }
 
-        ProfilButton.setOnClickListener {
-            val intent = Intent(this@LodowkaActivity, ProfilActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        HomeButton.setOnClickListener {
-            val intent = Intent(this@LodowkaActivity, HomeActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        LodowkaButton.setOnClickListener {
-            val intent = Intent(this@LodowkaActivity, LodowkaActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        TreningButton.setOnClickListener {
-            val intent = Intent(this@LodowkaActivity, TreningActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        DietaButton.setOnClickListener {
-            val intent = Intent(this@LodowkaActivity, DietaActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
+        ProfilButton.setOnClickListener { przenies(ProfilActivity::class.java)}
+        HomeButton.setOnClickListener { przenies(HomeActivity::class.java)}
+        LodowkaButton.setOnClickListener { przenies(LodowkaActivity::class.java)}
+        TreningButton.setOnClickListener { przenies(TreningActivity::class.java)}
+        DietaButton.setOnClickListener { przenies(DietaActivity::class.java)}
 
     }
 
@@ -135,5 +107,9 @@ class LodowkaActivity : ComponentActivity() {
         daneViewModel.setDateQuery(dateForRoom)
     }
 
+    fun przenies(Cel : Class<out Activity>){
+        val intent = Intent(this@LodowkaActivity, Cel)
+        startActivity(intent)
+    }
 }
 

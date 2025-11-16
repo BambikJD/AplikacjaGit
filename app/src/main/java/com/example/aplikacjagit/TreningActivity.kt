@@ -1,5 +1,6 @@
 package com.example.aplikacjagit
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -41,11 +42,6 @@ class TreningActivity : ComponentActivity() {
         val app = application as DaneGlobalne
         var aktualnyUzytkownik = app.aktualnyUzytkownik
 
-        app.celBialek = danePreferencje.getInt("celBialek", 0)
-        app.celWeglowodanow = danePreferencje.getInt("celWeglowodanow", 0)
-        app.celTluszczy = danePreferencje.getInt("celTluszczy", 0)
-        app.celKalorii = danePreferencje.getInt("celKalorii", 0)
-
         ProfilButton =  findViewById(R.id.ProfilButton)
         HomeButton =  findViewById(R.id.HomeButton)
         LodowkaButton =  findViewById(R.id.LodowkaButton)
@@ -71,7 +67,6 @@ class TreningActivity : ComponentActivity() {
         sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
         sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
 
-
         daneViewModel.wyswietlDodane.observe(this) { lista ->
             sumakalorii = 0
             sumabialek = 0
@@ -93,38 +88,11 @@ class TreningActivity : ComponentActivity() {
             }
         }
 
-
-
-
-        ProfilButton.setOnClickListener {
-            val intent = Intent(this@TreningActivity, ProfilActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        HomeButton.setOnClickListener {
-            val intent = Intent(this@TreningActivity, HomeActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        LodowkaButton.setOnClickListener {
-            val intent = Intent(this@TreningActivity, LodowkaActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        TreningButton.setOnClickListener {
-            val intent = Intent(this@TreningActivity, TreningActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
-
-        DietaButton.setOnClickListener {
-            val intent = Intent(this@TreningActivity, DietaActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this@HomeActivity, "nacisnieto", Toast.LENGTH_SHORT).show()
-        }
+        ProfilButton.setOnClickListener { przenies(ProfilActivity::class.java)}
+        HomeButton.setOnClickListener { przenies(HomeActivity::class.java)}
+        LodowkaButton.setOnClickListener { przenies(LodowkaActivity::class.java)}
+        TreningButton.setOnClickListener { przenies(TreningActivity::class.java)}
+        DietaButton.setOnClickListener { przenies(DietaActivity::class.java)}
 
     }
     private fun updateSelectedDate(newDate: LocalDate) {
@@ -135,6 +103,11 @@ class TreningActivity : ComponentActivity() {
         )
         // ustawiamy query w ViewModelie
         daneViewModel.setDateQuery(dateForRoom)
+    }
+
+    fun przenies(Cel : Class<out Activity>){
+        val intent = Intent(this@TreningActivity, Cel)
+        startActivity(intent)
     }
 }
 

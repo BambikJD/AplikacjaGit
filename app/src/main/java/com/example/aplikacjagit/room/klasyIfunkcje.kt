@@ -1,7 +1,9 @@
 package com.example.aplikacjagit.room
 
 import android.app.Application
+import androidx.core.app.ComponentActivity
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import java.util.Date
@@ -52,6 +54,7 @@ data class Dodane(
     val nazwa: String?,
     val ilosc: Int?,
     val data: Date?,
+    val poraDnia: Int?,
     val sumaKalorii: Int?,
     val sumaBialek: Int?,
     val sumaWeglowodanow: Int?,
@@ -73,6 +76,12 @@ class DaneGlobalne : Application() {
     var celWeglowodanow: Int = 0
     var celTluszczy: Int = 0
     var celKalorii: Int = 0
+    var waga: Float = 0.0F
+    var wzrost: Float = 0.0F
+    var wiek: Int = 0
+    var cel: Int = 2
+    var aktywnosc: Int = 2
+    var plec: Boolean = true
 
     fun wyczysc(){
         aktualnyUzytkownik = null

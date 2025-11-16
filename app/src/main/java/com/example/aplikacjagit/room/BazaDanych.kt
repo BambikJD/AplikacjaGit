@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [Produkt::class, Dodane::class], version = 2)
+@Database(entities = [Produkt::class, Dodane::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class BazaDanych : RoomDatabase() {
     abstract fun DAO(): DAO
@@ -17,8 +17,14 @@ abstract class BazaDanych : RoomDatabase() {
         @Volatile private var INSTANCE: BazaDanych? = null
 
         val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE Dodane ADD COLUMN data INTEGER")
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE ProduktyDodane ADD COLUMN data INTEGER")
+            }
+        }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE ProduktyDodane ADD COLUMN poraDnia INTEGER")
             }
         }
 
@@ -26,11 +32,13 @@ abstract class BazaDanych : RoomDatabase() {
         fun getInstance(context: Context): BazaDanych {
             return INSTANCE ?: synchronized(this) {
                 val inst = Room.databaseBuilder(
-                    context.applicationContext,
-                    BazaDanych::class.java,
-                    "baza_danych"
-                )
-                    .addMigrations(MIGRATION_1_2) // <-- usuwa starą DB gdy brak migracji
+                                context.applicationContext,
+                                BazaDanych::class.java,
+                                "baza_danych"
+                            )
+                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_2_3)
+                    .fallbackToDestructiveMigration(true)
                     .build()
                 INSTANCE = inst
                 inst

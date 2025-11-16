@@ -109,16 +109,111 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokDodane"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/widokDodane"
                 android:layout_marginTop="1dp"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/dodane_item" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/sniadanieLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="6"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="20sp"
+                        android:gravity="center_vertical"
+                        android:text="Śniadanie">
+                    </TextView>
+                    <ImageButton
+                        android:id="@+id/sniadanieDodaj"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
+                        android:background="@color/grey_950"
+                        android:src="@drawable/ikonadodajbiala"
+                        android:layout_weight="1">
+                    </ImageButton>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/sniadanie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/dodane_item" />
+
+                <LinearLayout
+                    android:id="@+id/obiadLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="6"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="20sp"
+                        android:gravity="center_vertical"
+                        android:text="Obiad">
+                    </TextView>
+                    <ImageButton
+                        android:id="@+id/obiadDodaj"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
+                        android:background="@color/grey_950"
+                        android:src="@drawable/ikonadodajbiala"
+                        android:layout_weight="1">
+                    </ImageButton>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/obiad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/dodane_item" />
+
+                <LinearLayout
+                    android:id="@+id/kolacjaLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="6"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="10dp"
+                        android:textSize="20sp"
+                        android:gravity="center_vertical"
+                        android:text="Kolacja">
+                    </TextView>
+                    <ImageButton
+                        android:id="@+id/kolacjaDodaj"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="2dp"
+                        android:background="@color/grey_950"
+                        android:src="@drawable/ikonadodajbiala"
+                        android:layout_weight="1">
+                    </ImageButton>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/kolacja"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/dodane_item" />
+
+            </LinearLayout>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/widokProdukty"

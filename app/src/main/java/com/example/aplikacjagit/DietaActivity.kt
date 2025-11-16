@@ -1,5 +1,6 @@
 package com.example.aplikacjagit
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -51,7 +52,14 @@ class DietaActivity : ComponentActivity() {
     private lateinit var WstawioneButton: Button
 
     private lateinit var widokProdukty: RecyclerView
-    private lateinit var widokDodane: RecyclerView
+    private lateinit var widokDodane: LinearLayout
+    private lateinit var sniadanie : RecyclerView
+    private lateinit var obiad : RecyclerView
+    private lateinit var kolacja : RecyclerView
+    private lateinit var sniadanieDodaj : ImageButton
+    private lateinit var obiadDodaj :  ImageButton
+    private lateinit var kolacjaDodaj :  ImageButton
+
     private lateinit var produktAdapter: ProduktAdapter
     private lateinit var dodaneAdapter: DodaneAdapter
 
@@ -68,11 +76,6 @@ class DietaActivity : ComponentActivity() {
 
         val app = application as DaneGlobalne
         var aktualnyUzytkownik = app.aktualnyUzytkownik
-
-        app.celBialek = danePreferencje.getInt("celBialek", 0)
-        app.celWeglowodanow = danePreferencje.getInt("celWeglowodanow", 0)
-        app.celTluszczy = danePreferencje.getInt("celTluszczy", 0)
-        app.celKalorii = danePreferencje.getInt("celKalorii", 0)
 
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
 
@@ -97,8 +100,18 @@ class DietaActivity : ComponentActivity() {
 
         widokProdukty = findViewById(R.id.widokProdukty)
         widokDodane = findViewById(R.id.widokDodane)
+        sniadanie = findViewById(R.id.sniadanie)
+        obiad = findViewById(R.id.obiad)
+        kolacja = findViewById(R.id.kolacja)
+        sniadanieDodaj = findViewById(R.id.sniadanieDodaj)
+        obiadDodaj = findViewById(R.id.obiadDodaj)
+        kolacjaDodaj = findViewById(R.id.kolacjaDodaj)
 
-        // ustawiamy początkową datę i powiadamiamy ViewModel (konwersja w updateSelectedDate)
+        val adapterSniadanie = DodaneAdapter { dodane -> daneViewModel.deleteDodane(dodane) }
+        val adapterObiad = DodaneAdapter { dodane -> daneViewModel.deleteDodane(dodane) }
+        val adapterKolacja = DodaneAdapter { dodane -> daneViewModel.deleteDodane(dodane) }
+
+        var obecnaPora = 1
         updateSelectedDate(selectedLocalDate)
 
         produktAdapter = ProduktAdapter { produkt, gramy ->
@@ -126,7 +139,8 @@ class DietaActivity : ComponentActivity() {
                 sumaBialek = sumaBialek,
                 sumaTluszczy = sumaTluszczy,
                 sumaWeglowodanow = sumaWeglowodanow,
-                data = dateForRoom
+                data = dateForRoom,
+                poraDnia = obecnaPora
             )
 
             daneViewModel.insertDodane(dodane)
@@ -140,8 +154,14 @@ class DietaActivity : ComponentActivity() {
         widokProdukty.adapter = produktAdapter
         widokProdukty.layoutManager = LinearLayoutManager(this)
 
-        widokDodane.adapter = dodaneAdapter
-        widokDodane.layoutManager = LinearLayoutManager(this)
+        sniadanie.adapter = adapterSniadanie
+        sniadanie.layoutManager = LinearLayoutManager(this)
+
+        obiad.adapter = adapterKolacja
+        obiad.layoutManager = LinearLayoutManager(this)
+
+        kolacja.adapter = adapterKolacja
+        kolacja.layoutManager = LinearLayoutManager(this)
 
         daneViewModel.szukajProdukty.observe(this) { lista ->
             produktAdapter.stworzProdukt(lista)
@@ -158,11 +178,22 @@ class DietaActivity : ComponentActivity() {
         sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
 
         daneViewModel.wyswietlDodane.observe(this) { lista ->
+            val sniadanieList = lista.filter { it.poraDnia == 1 }.toMutableList()
+            val obiadList = lista.filter { it.poraDnia == 2 }.toMutableList()
+            val kolacjaList = lista.filter { it.poraDnia == 3 }.toMutableList()
+
             sumakalorii = 0
             sumabialek = 0
             sumaweglowodanow = 0
             sumatluszczy = 0
-            dodaneAdapter.stworzDodane(lista)
+            sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
+            sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
+            sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
+            sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
+            adapterSniadanie.stworzDodane(sniadanieList)
+            adapterObiad.stworzDodane(obiadList)
+            adapterKolacja.stworzDodane(kolacjaList)
+
             for(produkt in lista){
                 if(produkt.sumaKalorii != null && produkt.sumaBialek != null  && produkt.sumaTluszczy != null && produkt.sumaWeglowodanow != null) {
                     sumakalorii += produkt.sumaKalorii
@@ -177,7 +208,6 @@ class DietaActivity : ComponentActivity() {
             }
         }
 
-        // pokaż aktualną datę (uaktualniane też w updateSelectedDate)
         DataDnia.text = selectedLocalDate.toString()
 
         WstawButton.setOnClickListener {
@@ -189,7 +219,6 @@ class DietaActivity : ComponentActivity() {
             WstawioneButton.isEnabled = true
         }
         WstawioneButton.setOnClickListener {
-            // kiedy przechodzimy do "wstawione", upewnij się, że ViewModel ma aktualną datę
             updateSelectedDate(selectedLocalDate)
             widokDodane.visibility = View.VISIBLE
             DataLayout.visibility = View.VISIBLE
@@ -197,6 +226,36 @@ class DietaActivity : ComponentActivity() {
             widokProdukty.visibility = View.GONE
             WstawButton.isEnabled = true
             WstawioneButton.isEnabled = false
+        }
+
+        sniadanieDodaj.setOnClickListener {
+            obecnaPora = 1
+            widokDodane.visibility = View.GONE
+            widokProdukty.visibility = View.VISIBLE
+            WyszukiwanieLayout.visibility = View.VISIBLE
+            DataLayout.visibility = View.GONE
+            WstawButton.isEnabled = false
+            WstawioneButton.isEnabled = true
+        }
+
+        obiadDodaj.setOnClickListener {
+            obecnaPora = 2
+            widokDodane.visibility = View.GONE
+            widokProdukty.visibility = View.VISIBLE
+            WyszukiwanieLayout.visibility = View.VISIBLE
+            DataLayout.visibility = View.GONE
+            WstawButton.isEnabled = false
+            WstawioneButton.isEnabled = true
+        }
+
+        kolacjaDodaj.setOnClickListener {
+            obecnaPora = 3
+            widokDodane.visibility = View.GONE
+            widokProdukty.visibility = View.VISIBLE
+            WyszukiwanieLayout.visibility = View.VISIBLE
+            DataLayout.visibility = View.GONE
+            WstawButton.isEnabled = false
+            WstawioneButton.isEnabled = true
         }
 
         // przyciski przesuwające datę
@@ -211,28 +270,11 @@ class DietaActivity : ComponentActivity() {
             daneViewModel.setQuery(text?.toString() ?: "")
         }
 
-        ProfilButton.setOnClickListener {
-            DataDnia.text = selectedLocalDate.toString()
-            startActivity(Intent(this@DietaActivity, ProfilActivity::class.java))
-        }
-
-        HomeButton.setOnClickListener {
-            DataDnia.text = selectedLocalDate.toString()
-            startActivity(Intent(this@DietaActivity, HomeActivity::class.java))
-        }
-        LodowkaButton.setOnClickListener {
-            DataDnia.text = selectedLocalDate.toString()
-            startActivity(Intent(this@DietaActivity, LodowkaActivity::class.java))
-        }
-        TreningButton.setOnClickListener {
-            DataDnia.text = selectedLocalDate.toString()
-            startActivity(Intent(this@DietaActivity, TreningActivity::class.java))
-        }
-        DietaButton.isEnabled = false
-        DietaButton.setOnClickListener {
-            DataDnia.text = selectedLocalDate.toString()
-            startActivity(Intent(this@DietaActivity, DietaActivity::class.java))
-        }
+        ProfilButton.setOnClickListener { przenies(ProfilActivity::class.java)}
+        HomeButton.setOnClickListener { przenies(HomeActivity::class.java)}
+        LodowkaButton.setOnClickListener { przenies(LodowkaActivity::class.java)}
+        TreningButton.setOnClickListener { przenies(TreningActivity::class.java)}
+        DietaButton.setOnClickListener { przenies(DietaActivity::class.java)}
     }
 
     // pomocnicza funkcja aktualizująca widok i ViewModel po zmianie daty
@@ -246,5 +288,10 @@ class DietaActivity : ComponentActivity() {
         )
         // ustawiamy query w ViewModelie
         daneViewModel.setDateQuery(dateForRoom)
+    }
+
+    fun przenies(Cel : Class<out Activity>){
+        val intent = Intent(this@DietaActivity, Cel)
+        startActivity(intent)
     }
 }
