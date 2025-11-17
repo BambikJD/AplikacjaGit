@@ -20,7 +20,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:textSize="18sp"
+            android:textSize="13sp"
+            android:maxWidth="130dp"
             android:layout_marginLeft="6dp"
             android:gravity="center_vertical"
             android:text="Nazwa" />
@@ -56,6 +57,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
+                    android:textSize="13sp"
                     android:text="B" />
 
                 <TextView
@@ -63,6 +65,7 @@
                     android:layout_width="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent"
+                    android:textSize="13sp"
                     android:layout_weight="1"
                     android:text="W" />
 
@@ -71,6 +74,7 @@
                     android:layout_width="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent"
+                    android:textSize="13sp"
                     android:layout_weight="1"
                     android:text="T" />
             </LinearLayout>

@@ -40,9 +40,10 @@ data class ProduktyDodaneWynik(
 data class Produkt(
     val nazwa: String?,
     val kalorycznosc: Int?,
-    val bialka: Int?,
-    val tluszcze: Int?,
-    val weglowodany: Int?,
+    val bialka: Double?,
+    val tluszcze: Double?,
+    val weglowodany: Double?,
+    val kodKreskowy: String?,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id = 0

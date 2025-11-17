@@ -3,16 +3,21 @@ package com.example.aplikacjagit
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
+import androidx.room.withTransaction
 import com.example.aplikacjagit.room.BazaDanych
+import com.example.aplikacjagit.room.DAO
 import com.example.aplikacjagit.room.DaneGlobalne
 import com.example.aplikacjagit.room.DaneViewModel
 import com.example.aplikacjagit.room.Produkt
@@ -22,7 +27,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
-
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 class HomeActivity : ComponentActivity() {
     private lateinit var ProfilButton: ImageButton
     private lateinit var HomeButton: ImageButton
@@ -108,7 +116,26 @@ class HomeActivity : ComponentActivity() {
             }
         }
 
-        aktualizacjaDanych()
+        lifecycleScope.launch {
+            try {
+                // pobierz instancję DB (jeśli masz singleton)
+                val db = BazaDanych.getInstance(applicationContext)
+
+                // wykonaj synchronizację w tle (funkcja jest suspend)
+                aktualizacjaDanychZPlikuOptymalnie(applicationContext, db)
+
+                // po powrocie do UI (jesteśmy nadal w coroutine): powiadom usera
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@HomeActivity, "Synchronizacja danych zakończona", Toast.LENGTH_SHORT).show()
+                    Log.d("HomeActivity", "Sync: wykonano pomyślnie")
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@HomeActivity, "Błąd synchronizacji: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                    Log.e("HomeActivity", "Błąd synchronizacji", e)
+                }
+            }
+        }
 
         ProfilButton.setOnClickListener { przenies(ProfilActivity::class.java)}
         HomeButton.setOnClickListener { przenies(HomeActivity::class.java)}
@@ -118,60 +145,116 @@ class HomeActivity : ComponentActivity() {
 
     }
 
-    fun aktualizacjaDanych(){
-        val KEY_NAZWA = "nazwa"
-        val KEY_KALORYCZNOSC = "kalorycznosc"
-        val KEY_BIALKA = "bialka"
-        val KEY_TLUSZCZE = "tluszcze"
-        val KEY_WEGLOWODANY = "weglowodany"
+    suspend fun aktualizacjaDanychZPlikuOptymalnie(
+        context: Context,
+        db: BazaDanych  // instancja RoomDatabase
+    ) {
+        val TAG = "SyncFromFileOpt"
+        val PREFS = "preferencje"
+        val PREF_DB_VER = "db_version"
+        val assetName = "output.jsonl"
 
-        val dbLocal = Room.databaseBuilder(
-            applicationContext,
-            BazaDanych::class.java, "baza_danych"
-        ).build()
+        val sharedPref: SharedPreferences =
+            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val currentVersion = sharedPref.getInt(PREF_DB_VER, 0)
 
-        val ListaProduktowDAO = dbLocal.DAO()
-        val produkty = ListaProduktowDAO.nazwyProduktow()
-        produkty.observe(this){ produkty ->
-            dbOnline.collection("Produkty").get().addOnSuccessListener { result ->
-                for (document in result) {
-                    val nazwa = document.getString(KEY_NAZWA)
-                    if (!produkty.contains(nazwa)) {
-                        val kalorycznosc = document.getDouble(KEY_KALORYCZNOSC)?.toInt()
-                        val bialka = document.getDouble(KEY_BIALKA)?.toInt()
-                        val tluszcze = document.getDouble(KEY_TLUSZCZE)?.toInt()
-                        val weglowodany = document.getDouble(KEY_WEGLOWODANY)?.toInt()
-
-                        val nowyProdukt = Produkt(
-                            nazwa = nazwa,
-                            kalorycznosc = kalorycznosc,
-                            bialka = bialka,
-                            tluszcze = tluszcze,
-                            weglowodany = weglowodany
-                        )
-
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            try {
-                                ListaProduktowDAO.insertProdukt(nowyProdukt)
-                                Log.d("HomeActivity", "Wstawiono produkt: $nazwa")
-                            } catch (e: Exception) {
-                                Log.e(
-                                    "HomeActivity",
-                                    "Błąd podczas insert: ${e.localizedMessage}",
-                                    e
-                                )
-                            }
+        withContext(Dispatchers.IO) {
+            try {
+                context.assets.open(assetName).use { inputStream ->
+                    BufferedReader(InputStreamReader(inputStream)).use { reader ->
+                        // 1) pierwsza linia = numer wersji (int)
+                        val firstLine = reader.readLine()
+                        if (firstLine == null) {
+                            Log.w(TAG, "Plik $assetName jest pusty.")
+                            return@withContext
                         }
 
-                    } else {
-                        Log.d("HomeActivity", "Produkt już istnieje lokalnie: $nazwa")
-                    }
-                }
-            }.addOnFailureListener { e ->
-                Log.e("HomeActivity", "Błąd pobierania z Firestore: ${e.localizedMessage}", e)
-            }
-        }
+                        val fileVersion = firstLine.trim().toIntOrNull()
+                        if (fileVersion == null) {
+                            Log.e(TAG, "Nieprawidłowy numer wersji w pierwszej linii: '$firstLine'")
+                            return@withContext
+                        }
 
+                        if (fileVersion <= currentVersion) {
+                            Log.i(TAG, "Brak aktualizacji — wersja pliku ($fileVersion) nie jest nowsza niż lokalna ($currentVersion).")
+                            return@withContext
+                        }
+
+                        // 2) parsuj linie i synchronizuj ATOMOWO w transakcji
+                        val dao = db.DAO()
+                        var inserted = 0
+                        var updated = 0
+                        var skipped = 0
+                        var lineNo = 1
+
+                        // wykonujemy całą synchronizację w jednej transakcji Room
+                        db.withTransaction {
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                lineNo++
+                                val raw = line!!.trim()
+                                if (raw.isEmpty()) continue
+
+                                try {
+                                    // zakładamy że żadne pole nie jest null — parsujemy bez sprawdzeń
+                                    val obj = JSONObject(raw)
+
+                                    val nazwa = obj.getString("nazwa")
+                                    // kalorycznosc w pliku może być double, a w entity Int?
+                                    val kalorycznosc = obj.getDouble("kalorycznosc").toInt()
+                                    val bialka = obj.getDouble("bialka")      // entity: Double?
+                                    val tluszcze = obj.getDouble("tluszcze")  // entity: Double?
+                                    val weglowodany = obj.getDouble("weglowodany") // entity: Double?
+                                    val kodKreskowy = obj.getString("kodKreskowy")
+
+                                    // mapowanie literówki: JSON "kodKreskowy" -> entity.kodKrekowy
+                                    val kodDlaBazy = kodKreskowy
+
+                                    // sprawdź istnienie po kodzie
+                                    val existing = dao.getProduktByBarcode(kodDlaBazy)
+
+                                    if (existing != null) {
+                                        // update — zachowaj id
+                                        val updatedProd = Produkt(
+                                            nazwa = nazwa,
+                                            kalorycznosc = kalorycznosc,
+                                            bialka = bialka,
+                                            tluszcze = tluszcze,
+                                            weglowodany = weglowodany,
+                                            kodKreskowy = kodDlaBazy
+                                        ).also { it.id = existing.id }
+                                        dao.updateProdukt(updatedProd)
+                                        updated++
+                                    } else {
+                                        val newProd = Produkt(
+                                            nazwa = nazwa,
+                                            kalorycznosc = kalorycznosc,
+                                            bialka = bialka,
+                                            tluszcze = tluszcze,
+                                            weglowodany = weglowodany,
+                                            kodKreskowy = kodDlaBazy
+                                        )
+                                        dao.insertProdukt(newProd)
+                                        inserted++
+                                    }
+                                } catch (e: Exception) {
+                                    // w try/catch tylko zapisujemy info i kontynuujemy, ale nie sprawdzamy nulli
+                                    Log.e(TAG, "Linia $lineNo - błąd parsowania/insertu (pomijam): ${e.localizedMessage}")
+                                    skipped++
+                                }
+                            } // koniec pętli linii
+                        } // koniec transakcji
+
+                        // 3) zapisz nową wersję
+                        sharedPref.edit().putInt(PREF_DB_VER, fileVersion).apply()
+
+                        Log.i(TAG, "Synchronizacja zakończona. Insert: $inserted, Update: $updated, Skipped: $skipped, Nowa wersja: $fileVersion")
+                    } // reader.use
+                } // inputStream.use
+            } catch (e: Exception) {
+                Log.e(TAG, "Błąd przetwarzania pliku $assetName", e)
+            }
+        } // withContext
     }
 
     private fun updateSelectedDate(newDate: LocalDate) {

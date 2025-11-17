@@ -31,6 +31,10 @@ interface DAO{
     @Query("SELECT * FROM ListaProduktow WHERE nazwa LIKE :query")
     fun szukajProdukty(query: String): LiveData<MutableList<Produkt>>
 
+    @Query("SELECT * FROM ListaProduktow WHERE kodKreskowy = :kod LIMIT 1")
+    suspend fun getProduktByBarcode(kod: String): Produkt?
+
+
     // Dodane
     @Insert
     suspend fun insertDodane(dodane: Dodane)

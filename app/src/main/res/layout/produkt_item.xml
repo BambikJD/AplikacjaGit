@@ -20,8 +20,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:layout_marginLeft="6dp"
+            android:maxWidth="130dp"
             android:gravity="center_vertical"
             android:text="Nazwa" />
 
@@ -56,6 +57,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
+                    android:textSize="13sp"
                     android:text="B" />
 
                 <TextView
@@ -63,13 +65,13 @@
                     android:layout_width="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1" android:textSize="13sp"
                     android:text="W" />
 
                 <TextView
                     android:id="@+id/tluszcze"
                     android:layout_width="wrap_content"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical" android:textSize="13sp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="T" />

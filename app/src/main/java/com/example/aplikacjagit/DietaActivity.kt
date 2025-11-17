@@ -146,18 +146,19 @@ class DietaActivity : ComponentActivity() {
             daneViewModel.insertDodane(dodane)
             android.widget.Toast.makeText(this, "Dodano ${produkt.nazwa} — ${gramy}g (${sumaKalorii} kcal)", android.widget.Toast.LENGTH_SHORT).show()
         }
-
+        // adapter który dodaje każdemu polu listener do usuwania
         dodaneAdapter = DodaneAdapter { produkt ->
             daneViewModel.deleteDodane(produkt)
         }
 
+        // Adaptery do wyświetlania listy produktów
         widokProdukty.adapter = produktAdapter
         widokProdukty.layoutManager = LinearLayoutManager(this)
 
         sniadanie.adapter = adapterSniadanie
         sniadanie.layoutManager = LinearLayoutManager(this)
 
-        obiad.adapter = adapterKolacja
+        obiad.adapter = adapterObiad
         obiad.layoutManager = LinearLayoutManager(this)
 
         kolacja.adapter = adapterKolacja
