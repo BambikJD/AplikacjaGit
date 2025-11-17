@@ -57,9 +57,9 @@ data class Dodane(
     val data: Date?,
     val poraDnia: Int?,
     val sumaKalorii: Int?,
-    val sumaBialek: Int?,
-    val sumaWeglowodanow: Int?,
-    val sumaTluszczy: Int?,
+    val sumaBialek: Double?,
+    val sumaWeglowodanow: Double?,
+    val sumaTluszczy: Double?,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id = 0
@@ -69,10 +69,10 @@ class DaneGlobalne : Application() {
     var aktualnyUzytkownik: Uzytkownik? = null
 
     var data: Date? = null
-    var sumaKalorii: Int = 0
-    var sumaBialek: Int = 0
-    var sumaTluszczy: Int = 0
-    var sumaWeglowodanow: Int = 0
+    var sumaKalorii: Double = 0.0
+    var sumaBialek: Double = 0.0
+    var sumaTluszczy: Double = 0.0
+    var sumaWeglowodanow: Double = 0.0
     var celBialek: Int = 0
     var celWeglowodanow: Int = 0
     var celTluszczy: Int = 0

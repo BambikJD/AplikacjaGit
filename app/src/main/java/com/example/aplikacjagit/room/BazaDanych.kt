@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [Produkt::class, Dodane::class], version = 4)
+@Database(entities = [Produkt::class, Dodane::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class BazaDanych : RoomDatabase() {
     abstract fun DAO(): DAO
@@ -35,7 +35,7 @@ abstract class BazaDanych : RoomDatabase() {
             CREATE TABLE IF NOT EXISTS ListaProduktow_new (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 nazwa TEXT,
-                kalorycznosc INTEGER,
+                kalorycznosc INT,
                 bialka REAL,
                 tluszcze REAL,
                 weglowodany REAL,
@@ -93,6 +93,60 @@ abstract class BazaDanych : RoomDatabase() {
             }
         }
 
+        val MIGRATION_4_5 = object : Migration(4, 5) { //
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // 0) utwórz nową tabelę z poprawnymi typami
+                db.execSQL("""
+            CREATE TABLE IF NOT EXISTS ProduktyDodane_new (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                idProduktu INTEGER,
+                nazwa TEXT,
+                ilosc INTEGER,
+                data INTEGER,
+                poraDnia INTEGER,
+                sumaKalorii INTEGER,
+                sumaBialek REAL,
+                sumaWeglowodanow REAL,
+                sumaTluszczy REAL
+            )
+        """.trimIndent())
+
+                // 1) sprawdź, które kolumny istnieją w starej tabeli
+                val existingCols = mutableSetOf<String>()
+                db.query("PRAGMA table_info('ProduktyDodane')").use { cursor ->
+                    val nameIdx = cursor.getColumnIndex("name")
+                    while (cursor.moveToNext()) {
+                        existingCols.add(cursor.getString(nameIdx))
+                    }
+                }
+
+                // 2) przygotuj fragmenty SELECT z CAST lub wartością domyślną
+                val sumaKaloriiExpr = if (existingCols.contains("sumaKalorii")) "CAST(sumaKalorii AS REAL)" else "0.0"
+                val sumaBialekExpr = if (existingCols.contains("sumaBialek")) "CAST(sumaBialek AS REAL)" else "0.0"
+                val sumaTluszczyExpr = if (existingCols.contains("sumaTluszczy")) "CAST(sumaTluszczy AS REAL)" else "0.0"
+                val sumaWeglowodanowExpr = if (existingCols.contains("sumaWeglowodanow")) "CAST(sumaWeglowodanow AS REAL)" else "0.0"
+
+                // 3) wykonaj INSERT ... SELECT
+                val insertSql = """
+            INSERT INTO ProduktyDodane_new (
+                id, idProduktu, nazwa, ilosc, data, poraDnia,
+                sumaKalorii, sumaBialek, sumaWeglowodanow, sumaTluszczy
+            )
+            SELECT 
+                id, idProduktu, nazwa, ilosc, data, poraDnia,
+                $sumaKaloriiExpr, $sumaBialekExpr, $sumaWeglowodanowExpr, $sumaTluszczyExpr
+            FROM ProduktyDodane
+        """.trimIndent()
+                db.execSQL(insertSql)
+
+                // 4) usuń starą tabelę
+                db.execSQL("DROP TABLE IF EXISTS ProduktyDodane")
+
+                // 5) zmień nazwę nowej tabeli
+                db.execSQL("ALTER TABLE ProduktyDodane_new RENAME TO ProduktyDodane")
+            }
+        }
+
 
         fun getInstance(context: Context): BazaDanych {
             return INSTANCE ?: synchronized(this) {
@@ -104,7 +158,8 @@ abstract class BazaDanych : RoomDatabase() {
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
                     .addMigrations(MIGRATION_3_4)
-                    .fallbackToDestructiveMigration(true)
+                    .addMigrations(MIGRATION_4_5)
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = inst
                 inst

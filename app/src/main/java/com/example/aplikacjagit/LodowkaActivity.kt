@@ -57,10 +57,10 @@ class LodowkaActivity : ComponentActivity() {
 
         updateSelectedDate(selectedLocalDate)
 
-        var sumakalorii = 0
-        var sumabialek = 0
-        var sumaweglowodanow = 0
-        var sumatluszczy = 0
+        var sumakalorii = 0.0
+        var sumabialek = 0.0
+        var sumaweglowodanow = 0.0
+        var sumatluszczy = 0.0
 
         sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
         sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
@@ -69,10 +69,10 @@ class LodowkaActivity : ComponentActivity() {
 
 
         daneViewModel.wyswietlDodane.observe(this) { lista ->
-            sumakalorii = 0
-            sumabialek = 0
-            sumaweglowodanow = 0
-            sumatluszczy = 0
+            sumakalorii = 0.0
+            sumabialek = 0.0
+            sumaweglowodanow = 0.0
+            sumatluszczy = 0.0
             for(produkt in lista){
                 if(produkt.sumaKalorii != null && produkt.sumaBialek != null  && produkt.sumaTluszczy != null && produkt.sumaWeglowodanow != null) {
                     sumakalorii += produkt.sumaKalorii

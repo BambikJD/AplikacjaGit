@@ -122,9 +122,9 @@ class DietaActivity : ComponentActivity() {
             }
 
             val sumaKalorii = kotlin.math.round((produkt.kalorycznosc ?: 0).toDouble() * gramy / 100.0).toInt()
-            val sumaBialek = kotlin.math.round((produkt.bialka ?: 0).toDouble() * gramy / 100.0).toInt()
-            val sumaTluszczy = kotlin.math.round((produkt.tluszcze ?: 0).toDouble() * gramy / 100.0).toInt()
-            val sumaWeglowodanow = kotlin.math.round((produkt.weglowodany ?: 0).toDouble() * gramy / 100.0).toInt()
+            val sumaBialek = kotlin.math.round((produkt.bialka ?: 0).toDouble() * gramy / 100.0)
+            val sumaTluszczy = kotlin.math.round((produkt.tluszcze ?: 0).toDouble() * gramy / 100.0)
+            val sumaWeglowodanow = kotlin.math.round((produkt.weglowodany ?: 0).toDouble() * gramy / 100.0)
 
             // używamy selectedLocalDate (to jest data wybrana przez użytkownika)
             val dateForRoom: Date = Date.from(
@@ -169,10 +169,10 @@ class DietaActivity : ComponentActivity() {
         }
 
         // TEN KODZIK WYSZUKUJE DODANE PRODUKTY I LICZY KALORIE
-        var sumakalorii = 0
-        var sumabialek = 0
-        var sumaweglowodanow = 0
-        var sumatluszczy = 0
+        var sumakalorii = 0.0
+        var sumabialek = 0.0
+        var sumaweglowodanow = 0.0
+        var sumatluszczy = 0.0
         sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
         sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
         sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
@@ -183,10 +183,10 @@ class DietaActivity : ComponentActivity() {
             val obiadList = lista.filter { it.poraDnia == 2 }.toMutableList()
             val kolacjaList = lista.filter { it.poraDnia == 3 }.toMutableList()
 
-            sumakalorii = 0
-            sumabialek = 0
-            sumaweglowodanow = 0
-            sumatluszczy = 0
+            sumakalorii = 0.0
+            sumabialek = 0.0
+            sumaweglowodanow = 0.0
+            sumatluszczy = 0.0
             sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
             sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
             sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
