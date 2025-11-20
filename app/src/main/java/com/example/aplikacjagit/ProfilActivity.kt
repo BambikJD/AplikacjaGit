@@ -20,7 +20,6 @@ class ProfilActivity : ComponentActivity() {
     // Baza danych
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     // tworzenie zmiennych elemntow na stronie
-    private lateinit var PowrotButton: Button
     private lateinit var DaneLogowania: TextView
     private lateinit var WylogujButton: Button
     private lateinit var ZatwierdzButton: Button
@@ -57,7 +56,6 @@ class ProfilActivity : ComponentActivity() {
         TreningButton =  findViewById(R.id.TreningButton)
         DietaButton =  findViewById(R.id.DietaButton)
 
-        PowrotButton =  findViewById(R.id.PowrotButton)
         DaneLogowania = findViewById(R.id.DaneLogowania)
         WylogujButton = findViewById(R.id.WylogujButton)
         EdytujButton = findViewById(R.id.EdytujButton)
@@ -151,7 +149,6 @@ class ProfilActivity : ComponentActivity() {
             dane.visibility = View.GONE
         }
         // Basic Listenery
-        PowrotButton.setOnClickListener { przenies(HomeActivity::class.java)}
         ProfilButton.setOnClickListener { przenies(ProfilActivity::class.java)}
         HomeButton.setOnClickListener { przenies(HomeActivity::class.java)}
         LodowkaButton.setOnClickListener { przenies(LodowkaActivity::class.java)}
