@@ -95,6 +95,9 @@ class ProfilActivity : ComponentActivity() {
         // funkcja zmiany danych, po prostu dużo kodu ale nic trudnego, zapytania do bazy danych i przklikanie wsyzstkich nowych danych
         ZatwierdzButton.setOnClickListener { zmienDane() }
 
+        aktywnosc.setSelection(2)
+        cel.setSelection(2)
+
         // wepelnianie danych z zakladki Preferencje twoimi danymi profilu
         if(app.celKalorii != null && app.celKalorii != 0) {
             aktywnosc.setSelection(app.aktywnosc)
@@ -356,6 +359,7 @@ class ProfilActivity : ComponentActivity() {
         app.cel = danePreferencje.getInt("cel", 0)
         app.aktywnosc = danePreferencje.getInt("aktywnosc", 0)
 
+        Toast.makeText(this, "Zmieniono Cel kaloryczny - ${doceloweKalorie}kcal", Toast.LENGTH_SHORT).show()
     }
 
     fun przenies(Cel : Class<out Activity>){

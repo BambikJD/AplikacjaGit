@@ -21,16 +21,6 @@
             android:background="@color/green_400"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/WstawioneButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/green_400"
-                android:enabled="false"
-                android:text="Wstawione"
-                android:textSize="9sp" />
-
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -78,6 +68,15 @@
                     android:orientation="horizontal"
                     android:visibility="invisible">
 
+                    <ImageButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:rotationY="180"
+                        android:src="@drawable/strzalka">
+
+                    </ImageButton>
+
                     <EditText
                         android:id="@+id/Wyszukiwanie"
                         android:layout_width="0dp"
@@ -96,14 +95,6 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/WstawButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/green_400"
-                android:text="wstaw"
-                android:textSize="10sp" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

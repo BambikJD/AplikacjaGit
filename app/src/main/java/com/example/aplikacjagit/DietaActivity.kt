@@ -48,9 +48,6 @@ class DietaActivity : ComponentActivity() {
     private lateinit var sumaWeglowodanowText: TextView
     private lateinit var sumaTluszczyText: TextView
 
-    private lateinit var WstawButton: Button
-    private lateinit var WstawioneButton: Button
-
     private lateinit var widokProdukty: RecyclerView
     private lateinit var widokDodane: LinearLayout
     private lateinit var sniadanie : RecyclerView
@@ -88,10 +85,8 @@ class DietaActivity : ComponentActivity() {
         Wyszukaj = findViewById(R.id.Wyszukiwanie)
         WyszukiwanieLayout = findViewById(R.id.WyszukiwanieLayout)
         DataLayout = findViewById(R.id.DataLayout)
-        WstawButton = findViewById(R.id.WstawButton)
         DataWLewo = findViewById(R.id.DataWLewo)
         DataWPrawo = findViewById(R.id.DataWPrawo)
-        WstawioneButton = findViewById(R.id.WstawioneButton)
 
         sumaKaloriiText = findViewById(R.id.sumaKaloriiText)
         sumaBialekText = findViewById(R.id.sumaBialekText)
@@ -116,11 +111,6 @@ class DietaActivity : ComponentActivity() {
 
         produktAdapter = ProduktAdapter { produkt, gramy ->
             val produktId = produkt.id
-            if (produktId == null) {
-                android.widget.Toast.makeText(this, "Produkt nie ma id, najpierw zapisz produkt", android.widget.Toast.LENGTH_SHORT).show()
-                return@ProduktAdapter
-            }
-
             val sumaKalorii = kotlin.math.round((produkt.kalorycznosc ?: 0).toDouble() * gramy / 100.0).toInt()
             val sumaBialek = kotlin.math.round((produkt.bialka ?: 0).toDouble() * gramy / 100.0)
             val sumaTluszczy = kotlin.math.round((produkt.tluszcze ?: 0).toDouble() * gramy / 100.0)
@@ -211,32 +201,12 @@ class DietaActivity : ComponentActivity() {
 
         DataDnia.text = selectedLocalDate.toString()
 
-        WstawButton.setOnClickListener {
-            widokDodane.visibility = View.GONE
-            widokProdukty.visibility = View.VISIBLE
-            WyszukiwanieLayout.visibility = View.VISIBLE
-            DataLayout.visibility = View.GONE
-            WstawButton.isEnabled = false
-            WstawioneButton.isEnabled = true
-        }
-        WstawioneButton.setOnClickListener {
-            updateSelectedDate(selectedLocalDate)
-            widokDodane.visibility = View.VISIBLE
-            DataLayout.visibility = View.VISIBLE
-            WyszukiwanieLayout.visibility = View.GONE
-            widokProdukty.visibility = View.GONE
-            WstawButton.isEnabled = true
-            WstawioneButton.isEnabled = false
-        }
-
         sniadanieDodaj.setOnClickListener {
             obecnaPora = 1
             widokDodane.visibility = View.GONE
             widokProdukty.visibility = View.VISIBLE
             WyszukiwanieLayout.visibility = View.VISIBLE
             DataLayout.visibility = View.GONE
-            WstawButton.isEnabled = false
-            WstawioneButton.isEnabled = true
         }
 
         obiadDodaj.setOnClickListener {
@@ -245,8 +215,6 @@ class DietaActivity : ComponentActivity() {
             widokProdukty.visibility = View.VISIBLE
             WyszukiwanieLayout.visibility = View.VISIBLE
             DataLayout.visibility = View.GONE
-            WstawButton.isEnabled = false
-            WstawioneButton.isEnabled = true
         }
 
         kolacjaDodaj.setOnClickListener {
@@ -255,8 +223,6 @@ class DietaActivity : ComponentActivity() {
             widokProdukty.visibility = View.VISIBLE
             WyszukiwanieLayout.visibility = View.VISIBLE
             DataLayout.visibility = View.GONE
-            WstawButton.isEnabled = false
-            WstawioneButton.isEnabled = true
         }
 
         // przyciski przesuwające datę

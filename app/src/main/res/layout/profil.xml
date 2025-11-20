@@ -16,16 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
 
-        <Button
-            android:id="@+id/PowrotButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/teal_700"
-            android:text="Powrót"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -67,18 +57,16 @@
 
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/WylogujButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/teal_700"
-            android:text="Wyloguj"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
     </LinearLayout>
-
+    <Button
+        android:id="@+id/WylogujButton"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@color/teal_700"
+        android:text="Wyloguj"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/opcje" />
     <TextView
         android:id="@+id/DaneLogowania"
         android:layout_width="match_parent"
@@ -196,6 +184,7 @@
             android:layout_width="200dp"
             android:textColor="@color/white"
             android:hint="Waga"
+            android:textColorHint="@color/white"
             android:backgroundTint="@color/white"
             android:layout_height="50dp">
         </EditText>
@@ -204,6 +193,7 @@
             android:id="@+id/wzrost"
             android:backgroundTint="@color/white"
             android:layout_width="200dp"
+            android:textColorHint="@color/white"
             android:textColor="@color/white"
             android:hint="Wzrost"
             android:layout_height="50dp">
@@ -213,6 +203,7 @@
             android:id="@+id/wiek"
             android:backgroundTint="@color/white"
             android:layout_width="200dp"
+            android:textColorHint="@color/white"
             android:textColor="@color/white"
             android:hint="Wiek"
             android:layout_height="50dp">
@@ -230,6 +221,7 @@
                 android:textColor="@color/white"
                 android:layout_width="100dp"
                 android:layout_gravity="center"
+                android:textColorHint="@color/white"
                 android:textSize="12sp"
                 android:layout_height="50dp"
                 android:text="Mężczyzna" />
@@ -237,6 +229,7 @@
             <RadioButton
                 android:id="@+id/kobieta"
                 android:layout_width="100dp"
+                android:textColorHint="@color/white"
                 android:textSize="12sp"
                 android:layout_gravity="center"
                 android:layout_height="50dp"
@@ -249,10 +242,12 @@
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:spinnerMode="dropdown"
+            android:textColor="@color/white"
             android:prompt="@string/WybierzAktywnosc" />
 
         <Spinner
             android:id="@+id/cel"
+            android:textColor="@color/white"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:spinnerMode="dropdown"
