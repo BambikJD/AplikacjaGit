@@ -240,12 +240,10 @@ class ProfilActivity : ComponentActivity() {
     }
 
     fun policzKalorie(){
-        // 1) walidacja i parsowanie wejścia
         val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
         val edycjaPreferencji = danePreferencje.edit()
 
         val app = application as DaneGlobalne
-        var aktualnyUzytkownik = app.aktualnyUzytkownik
 
         val wagaE = findViewById<EditText>(R.id.waga)
         val wzrostE = findViewById<EditText>(R.id.wzrost)

@@ -119,7 +119,7 @@ class  DodaneAdapter(
 class PrzepisyAdapter : androidx.recyclerview.widget.ListAdapter<PrzepisWynik, PrzepisyAdapter.PrzepisyViewHolder>(PrzepisDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrzepisyViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.dodane_item, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.przepis_item, parent, false)
         return PrzepisyViewHolder(v)
     }
 
@@ -128,15 +128,15 @@ class PrzepisyAdapter : androidx.recyclerview.widget.ListAdapter<PrzepisWynik, P
     }
 
     inner class PrzepisyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val nazwaPrzepisu: TextView = view.findViewById(R.id.nazwa)
-        private val bialka: TextView = view.findViewById(R.id.bialka)
-        private val tluszcze: TextView = view.findViewById(R.id.tluszcze)
-        private val weglowodany: TextView = view.findViewById(R.id.weglowodany)
-        private val kalorycznoscPrzepisu: TextView = view.findViewById(R.id.kalorycznosc)
-        private val opis: TextView = view.findViewById(R.id.opis)
-        private val waga: TextView = view.findViewById(R.id.iloscGram)
-        private val produktyRecycler: RecyclerView = view.findViewById(R.id.produktyPotrzebne)
-        private var produktyAdapter: ProduktyPotrzebneAdapter? = null
+        val nazwaPrzepisu: TextView = view.findViewById(R.id.nazwa)
+        val bialka: TextView = view.findViewById(R.id.bialka)
+        val tluszcze: TextView = view.findViewById(R.id.tluszcze)
+        val weglowodany: TextView = view.findViewById(R.id.weglowodany)
+        val kalorycznoscPrzepisu: TextView = view.findViewById(R.id.kalorycznosc)
+        val opis: TextView = view.findViewById(R.id.opis)
+        val waga: TextView = view.findViewById(R.id.iloscGram)
+        val produktyRecycler: RecyclerView = view.findViewById(R.id.produktyPotrzebne)
+        var produktyAdapter: ProduktyPotrzebneAdapter? = null
 
         fun bind(przepis: PrzepisWynik) {
             nazwaPrzepisu.text = przepis.nazwa ?: "-"

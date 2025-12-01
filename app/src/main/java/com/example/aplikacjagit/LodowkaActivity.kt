@@ -21,13 +21,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikacjagit.adaptery.DodaneAdapter
 import com.example.aplikacjagit.adaptery.ProduktAdapter
 import com.example.aplikacjagit.adaptery.PrzepisyAdapter
+import com.example.aplikacjagit.room.DAO
 import com.example.aplikacjagit.room.DaneGlobalne
 import com.example.aplikacjagit.room.DaneViewModel
 import com.example.aplikacjagit.room.Dodane
+import com.example.aplikacjagit.room.Przepis
+import com.example.aplikacjagit.room.PrzepisProdukt
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
+import kotlin.Int
+import kotlin.String
 
 class LodowkaActivity : ComponentActivity() {
     private lateinit var ProfilButton: ImageButton
@@ -52,6 +57,9 @@ class LodowkaActivity : ComponentActivity() {
     private lateinit var gornyNapisPrzepisy: LinearLayout
     private lateinit var gornyNapisDodawanie: LinearLayout
 
+    private lateinit var nazwa: EditText
+    private lateinit var opis: EditText
+
     private lateinit var Wyszukaj: EditText
 
     private lateinit var daneViewModel: DaneViewModel
@@ -64,7 +72,7 @@ class LodowkaActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.lodowka)
 
-        val listaDodanychDoPrzepisu: MutableList<Dodane>  = emptyList<Dodane>().toMutableList()
+        var listaDodanychDoPrzepisu: MutableList<Dodane>  = mutableListOf<Dodane>()
 
         val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
 
@@ -97,10 +105,13 @@ class LodowkaActivity : ComponentActivity() {
         gornyNapisPrzepisy = findViewById(R.id.gornynapisPrzepisy)
         gornyNapisDodawanie = findViewById(R.id.gornynapisDodajPrzepis)
 
+        nazwa = findViewById(R.id.nazwa)
+        opis = findViewById(R.id.opis)
+
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
 
         widokPrzepisy.adapter = przepisyAdapter
-        widokPrzepisy.setHasFixedSize(true)
+        widokPrzepisy.layoutManager = LinearLayoutManager(this)
 
         daneViewModel.wyswietlPrzepisy.observe(this){ lista ->
             przepisyAdapter.submitList(lista.toList())
@@ -210,9 +221,56 @@ class LodowkaActivity : ComponentActivity() {
             gornyNapisPrzepisy.visibility = View.GONE
             gornyNapisDodawanie.visibility = View.VISIBLE
         }
+        var ID = 1
+        daneViewModel.getOstatniPrzepisId.observe(this){ id ->
+            if(id != null) {
+                ID = id
+            }
+        }
 
         dodajPrzepisButton.setOnClickListener {
+            var sumakcal = 0
+            var sumab = 0.0
+            var sumaw = 0.0
+            var sumat = 0.0
+            var waga = 0
+            for(element in listaDodanychDoPrzepisu){
+                if(element.sumaBialek!= null && element.sumaKalorii!= null && element.sumaTluszczy!= null && element.sumaWeglowodanow != null && element.ilosc != null) {
+                    sumakcal += element.sumaKalorii
+                    sumab += element.sumaBialek
+                    sumaw += element.sumaWeglowodanow
+                    sumat += element.sumaTluszczy
+                    waga += element.ilosc
+                }
+                var przepisProdukt = PrzepisProdukt(0, 0, 0)
 
+                if(element.idProduktu != null) {
+                    przepisProdukt = PrzepisProdukt(
+                        przepisId = ID + 1,
+                        produktId = element.idProduktu,
+                        iloscPotrzebna = element.ilosc
+                    )
+                }
+                daneViewModel.insertPrzepisProdukt(przepisProdukt)
+            }
+            val przepis = Przepis(
+                nazwa = nazwa.text.toString(),
+                opis = opis.text.toString(),
+                kalorycznosc = sumakcal / waga * 100,
+                bialka = sumab/waga * 100,
+                weglowodany = sumaw/waga * 100,
+                tluszcze = sumat/waga * 100
+            )
+            daneViewModel.insertPrzepis(przepis)
+
+            listaDodanychDoPrzepisu = mutableListOf<Dodane>()
+            adapterDodane.stworzDodane(listaDodanychDoPrzepisu)
+            opis.setText("")
+            nazwa.setText("")
+            widokPrzepisyLayout.visibility = View.VISIBLE
+            widokDodawanieLayout.visibility = View.GONE
+            gornyNapisPrzepisy.visibility = View.VISIBLE
+            gornyNapisDodawanie.visibility = View.GONE
         }
 
     }

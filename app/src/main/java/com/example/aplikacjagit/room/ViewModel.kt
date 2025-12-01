@@ -12,6 +12,7 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
     val nazwyProduktow: LiveData<MutableList<String>>
     val zczytajDodane: LiveData<MutableList<ProduktyDodaneWynik>>
     val wyswietlPrzepisy: LiveData<MutableList<PrzepisWynik>>  // finalne, uzupełnione o nazwy
+    val getOstatniPrzepisId: LiveData<Int>
 
     private val repozytorium: Repozytorium
 
@@ -37,6 +38,7 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
         wszystkieProdukty = repozytorium.wszystkieProdukty
         nazwyProduktow = repozytorium.nazwyProduktow
         zczytajDodane = repozytorium.zczytajDodane
+        getOstatniPrzepisId = repozytorium.getOstatniePrzepisID
 
         szukajProdukty = _szukajProduktyQuery.switchMap { q ->
             val text = q ?: ""
@@ -104,6 +106,9 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteProdukt(produkt: Produkt) = viewModelScope.launch { repozytorium.deleteProdukt(produkt) }
     fun updateProdukt(produkt: Produkt) = viewModelScope.launch { repozytorium.updateProdukt(produkt) }
     fun insertProdukt(produkt: Produkt) = viewModelScope.launch { repozytorium.insertProdukt(produkt) }
+
+    fun insertPrzepis(przepis: Przepis) = viewModelScope.launch { repozytorium.insertPrzepis(przepis) }
+    fun insertPrzepisProdukt(przepisProdukt: PrzepisProdukt) = viewModelScope.launch { repozytorium.insertPrzepisProdukt(przepisProdukt) }
 
     fun deleteDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.deleteDodane(dodane) }
     fun updateDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.updateDodane(dodane) }

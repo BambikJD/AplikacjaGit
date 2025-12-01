@@ -57,6 +57,15 @@ interface DAO{
     @Query("SELECT * FROM ProduktyLodowka")
     fun getProduktyWLodowce(): LiveData<MutableList<Lodowka>>
 
+    @Insert
+    suspend fun insertPrzepis(przepis: Przepis)
+
+    @Insert
+    suspend fun insertPrzepisProdukt(przepis: PrzepisProdukt)
+
+    @Query("SELECT id from Przepisy ORDER BY id DESC LIMIT 1 ")
+    fun getOstatniPrzepisId() : LiveData<Int>
+
     @Query("""SELECT p.id AS id,p.nazwa AS nazwa,p.opis AS opis,p.kalorycznosc AS kalorycznosc,p.bialka AS bialka,p.weglowodany AS weglowodany,p.tluszcze AS tluszcze,GROUP_CONCAT(pp.produktId) AS produktIdsCsv,GROUP_CONCAT(COALESCE(pp.iloscPotrzebna, 0)) AS ilosciCsv FROM Przepisy p LEFT JOIN PrzepisProdukt pp ON p.id = pp.przepisId GROUP BY p.id""")
     fun getPrzepisyWynikRaw(): LiveData<MutableList<PrzepisWynikRaw>>
 }

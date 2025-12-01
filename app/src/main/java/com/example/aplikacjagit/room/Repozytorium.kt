@@ -7,6 +7,7 @@ class Repozytorium(private val DAO: DAO){
     val wszystkieProdukty : LiveData<MutableList<Produkt>> = DAO.wyswietlProdukty()
     val nazwyProduktow : LiveData<MutableList<String>> = DAO.nazwyProduktow()
     val zczytajDodane : LiveData<MutableList<ProduktyDodaneWynik>> = DAO.zczytajDodane()
+    val getOstatniePrzepisID: LiveData<Int> = DAO.getOstatniPrzepisId()
 
     // zwraca surowe LiveData z DAO (CSV itd.)
     fun getPrzepisyWynikRaw(): LiveData<MutableList<PrzepisWynikRaw>> =
@@ -25,6 +26,9 @@ class Repozytorium(private val DAO: DAO){
     suspend fun insertDodane(dodane: Dodane){ DAO.insertDodane(dodane) }
     suspend fun deleteDodane(dodane: Dodane){ DAO.deleteDodane(dodane) }
     suspend fun updateDodane(dodane: Dodane){ DAO.updateDodane(dodane) }
+    suspend fun insertPrzepis(przepis: Przepis){ DAO.insertPrzepis(przepis) }
+    suspend fun insertPrzepisProdukt(przepisProdukt: PrzepisProdukt){ DAO.insertPrzepisProdukt(przepisProdukt) }
+
 
     fun szukajProdukty(query: String): LiveData<MutableList<Produkt>> = DAO.szukajProdukty(query)
     fun wyswietlDodane(data: Date): LiveData<MutableList<Dodane>> = DAO.wyswietlDodane(data)
