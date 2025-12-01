@@ -8,10 +8,16 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikacjagit.room.Produkt
 import com.example.aplikacjagit.R
 import com.example.aplikacjagit.room.Dodane
+import com.example.aplikacjagit.room.Przepis
+import com.example.aplikacjagit.room.PrzepisWynik
+import com.example.aplikacjagit.room.ProduktPotrzebny
 
 class ProduktAdapter(
     private val addOnClick: (Produkt, Int) -> Unit = { _, _ -> }
@@ -108,5 +114,91 @@ class  DodaneAdapter(
         val kalorycznoscProduktu: TextView = view.findViewById(R.id.kalorycznosc)
         val iloscGram: TextView = view.findViewById(R.id.iloscGram)
         val UsunButton: ImageButton = view.findViewById(R.id.UsunButton)
+    }
+}
+class PrzepisyAdapter : androidx.recyclerview.widget.ListAdapter<PrzepisWynik, PrzepisyAdapter.PrzepisyViewHolder>(PrzepisDiff()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrzepisyViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.dodane_item, parent, false)
+        return PrzepisyViewHolder(v)
+    }
+
+    override fun onBindViewHolder(holder: PrzepisyViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    inner class PrzepisyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val nazwaPrzepisu: TextView = view.findViewById(R.id.nazwa)
+        private val bialka: TextView = view.findViewById(R.id.bialka)
+        private val tluszcze: TextView = view.findViewById(R.id.tluszcze)
+        private val weglowodany: TextView = view.findViewById(R.id.weglowodany)
+        private val kalorycznoscPrzepisu: TextView = view.findViewById(R.id.kalorycznosc)
+        private val opis: TextView = view.findViewById(R.id.opis)
+        private val waga: TextView = view.findViewById(R.id.iloscGram)
+        private val produktyRecycler: RecyclerView = view.findViewById(R.id.produktyPotrzebne)
+        private var produktyAdapter: ProduktyPotrzebneAdapter? = null
+
+        fun bind(przepis: PrzepisWynik) {
+            nazwaPrzepisu.text = przepis.nazwa ?: "-"
+            kalorycznoscPrzepisu.text = przepis.kalorycznosc?.let { "${it}kcal" } ?: "-"
+            bialka.text = przepis.bialka?.let { "B: ${formatNumber(it)}" } ?: "B:-"
+            tluszcze.text = przepis.tluszcze?.let { "T: ${formatNumber(it)}" } ?: "T:-"
+            weglowodany.text = przepis.weglowodany?.let { "W: ${formatNumber(it)}" } ?: "W:-"
+            opis.text = przepis.opis ?: ""
+            waga.text = przepis.listaIlosci.sum().toString()
+
+            if (produktyAdapter == null) {
+                produktyAdapter = ProduktyPotrzebneAdapter()
+                produktyRecycler.apply {
+                    layoutManager =
+                        LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
+                    adapter = produktyAdapter
+                    isNestedScrollingEnabled = false
+                }
+            }
+
+            // ustaw listę produktów (już z nazwami i ilościami)
+            produktyAdapter?.submitList(przepis.produktyPotrzebne)
+        }
+
+        private fun formatNumber(d: Double?): String {
+            if (d == null) return "-"
+            return if (d % 1.0 == 0.0) d.toInt().toString() else String.format("%.1f", d)
+        }
+    }
+
+    class PrzepisDiff : androidx.recyclerview.widget.DiffUtil.ItemCallback<PrzepisWynik>() {
+        override fun areItemsTheSame(oldItem: PrzepisWynik, newItem: PrzepisWynik): Boolean = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: PrzepisWynik, newItem: PrzepisWynik): Boolean = oldItem == newItem
+    }
+}
+
+class ProduktyPotrzebneAdapter :
+    ListAdapter<ProduktPotrzebny, ProduktyPotrzebneAdapter.Holder>(Diff) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        val v = LayoutInflater.from(parent.context)
+            .inflate(R.layout.produkt_potrzebny_item, parent, false)
+        return Holder(v)
+    }
+
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    inner class Holder(view: View) : RecyclerView.ViewHolder(view) {
+        private val nazwaTv: TextView = view.findViewById(R.id.nazwaProduktPotrzebny)
+        private val iloscTv: TextView = view.findViewById(R.id.iloscProduktPotrzebny)
+        fun bind(p: ProduktPotrzebny) {
+            nazwaTv.text = p.nazwa
+            iloscTv.text = "${p.ilosc} g"
+        }
+    }
+
+    object Diff : DiffUtil.ItemCallback<ProduktPotrzebny>() {
+        override fun areItemsTheSame(oldItem: ProduktPotrzebny, newItem: ProduktPotrzebny) =
+            oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: ProduktPotrzebny, newItem: ProduktPotrzebny) =
+            oldItem == newItem
     }
 }

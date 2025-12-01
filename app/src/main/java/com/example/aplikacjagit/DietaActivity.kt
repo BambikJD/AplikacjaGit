@@ -42,6 +42,7 @@ class DietaActivity : ComponentActivity() {
     private lateinit var WyszukiwanieLayout: LinearLayout
     private lateinit var DataWLewo: ImageButton
     private lateinit var DataWPrawo: ImageButton
+    private lateinit var PowrotButton: ImageButton
 
     private lateinit var sumaKaloriiText: TextView
     private lateinit var sumaBialekText: TextView
@@ -87,6 +88,7 @@ class DietaActivity : ComponentActivity() {
         DataLayout = findViewById(R.id.DataLayout)
         DataWLewo = findViewById(R.id.DataWLewo)
         DataWPrawo = findViewById(R.id.DataWPrawo)
+        PowrotButton = findViewById(R.id.PowrotButton)
 
         sumaKaloriiText = findViewById(R.id.sumaKaloriiText)
         sumaBialekText = findViewById(R.id.sumaBialekText)
@@ -225,6 +227,12 @@ class DietaActivity : ComponentActivity() {
             DataLayout.visibility = View.GONE
         }
 
+        PowrotButton.setOnClickListener {
+            widokDodane.visibility = View.VISIBLE
+            widokProdukty.visibility = View.GONE
+            WyszukiwanieLayout.visibility = View.GONE
+            DataLayout.visibility = View.VISIBLE
+        }
         // przyciski przesuwające datę
         DataWLewo.setOnClickListener {
             updateSelectedDate(selectedLocalDate.minusDays(1))

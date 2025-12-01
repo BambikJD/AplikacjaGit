@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:id="@+id/nazwaProduktPotrzebny"
+        android:layout_height="match_parent">
+    </TextView>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:id="@+id/iloscProduktPotrzebny"
+        android:layout_height="match_parent">
+    </TextView>
+</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

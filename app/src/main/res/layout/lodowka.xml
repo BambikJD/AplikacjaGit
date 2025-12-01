@@ -6,6 +6,116 @@
     android:background="@color/background_color"
     android:layout_height="match_parent">
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokPrzepisyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="85dp"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/widokPrzepisy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/przepis_item">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokDodawaniePrzepisowLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="85dp"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/white"
+                android:hint="Nazwa"
+                android:id="@+id/nazwa"
+                android:textColorHint="@color/white">
+            </EditText>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:hint="Opis"
+                android:id="@+id/opis"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:scrollHorizontally="false"
+                android:textColor="@color/white"
+                android:maxLines="10"
+                android:minLines="3"
+                android:overScrollMode="always"
+                android:textColorHint="@color/white">
+            </EditText>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/widokDodane"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:itemCount="3"
+                tools:listitem="@layout/dodane_item" />
+
+            <LinearLayout
+                android:id="@+id/WyszukiwanieLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/Wyszukiwanie"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:backgroundTint="@color/white"
+                    android:layout_weight="3">
+
+                </EditText>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/szukaj">
+
+                </ImageView>
+            </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/widokProdukty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/produkt_item" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/NawigacjaLayout"
         style="?android:attr/buttonBarStyle"
@@ -75,25 +185,93 @@
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="center"
         android:id="@+id/gornyNapis"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/green_400"
-            android:text="L O D O W K A"
             android:gravity="center"
-            android:textStyle="bold"
+            android:text="L O D O W K A"
+            android:textColor="@color/black"
             android:textSize="30sp"
-            android:textColor="@color/black">
+            android:textStyle="bold">
+
         </TextView>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/gornynapisPrzepisy"
+        android:layout_height="35dp"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:text="P R Z E P I S Y"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+        </TextView>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/dodajPrzepisOtworzOkno"
+            android:background="@color/green_400"
+            android:src="@drawable/ikonadodaj">
+
+        </ImageButton>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:id="@+id/gornynapisDodajPrzepis"
+        android:visibility="gone"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/PowrotPrzepisButton"
+            android:background="@color/green_400"
+            android:src="@drawable/strzalka">
+
+        </ImageButton>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:text="D O D A J      P R Z E P I S"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+        </TextView>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:id="@+id/dodajPrzepisButton"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:src="@drawable/ikonadodaj">
+
+        </ImageButton>
     </LinearLayout>
 
     <LinearLayout

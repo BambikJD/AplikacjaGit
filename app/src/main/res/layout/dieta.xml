@@ -70,9 +70,10 @@
 
                     <ImageButton
                         android:layout_width="0dp"
+                        android:id="@+id/PowrotButton"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:rotationY="180"
+                        android:background="@color/green_400"
                         android:src="@drawable/strzalka">
 
                     </ImageButton>

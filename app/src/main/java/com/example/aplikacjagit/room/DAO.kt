@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import java.util.Date
 
@@ -34,6 +35,8 @@ interface DAO{
     @Query("SELECT * FROM ListaProduktow WHERE kodKreskowy = :kod LIMIT 1")
     suspend fun getProduktByBarcode(kod: String): Produkt?
 
+    @Query("SELECT * FROM ListaProduktow WHERE id IN (:ids)")
+    suspend fun getProduktyByIds(ids: List<Int>): List<Produkt>
 
     // Dodane
     @Insert
@@ -51,4 +54,9 @@ interface DAO{
     @Query("SELECT  * from ProduktyDodane where data == :data")
     fun wyswietlDodane(data: Date) : LiveData<MutableList<Dodane>>
 
+    @Query("SELECT * FROM ProduktyLodowka")
+    fun getProduktyWLodowce(): LiveData<MutableList<Lodowka>>
+
+    @Query("""SELECT p.id AS id,p.nazwa AS nazwa,p.opis AS opis,p.kalorycznosc AS kalorycznosc,p.bialka AS bialka,p.weglowodany AS weglowodany,p.tluszcze AS tluszcze,GROUP_CONCAT(pp.produktId) AS produktIdsCsv,GROUP_CONCAT(COALESCE(pp.iloscPotrzebna, 0)) AS ilosciCsv FROM Przepisy p LEFT JOIN PrzepisProdukt pp ON p.id = pp.przepisId GROUP BY p.id""")
+    fun getPrzepisyWynikRaw(): LiveData<MutableList<PrzepisWynikRaw>>
 }

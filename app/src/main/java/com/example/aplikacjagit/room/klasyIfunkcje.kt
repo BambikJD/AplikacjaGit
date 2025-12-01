@@ -1,10 +1,15 @@
 package com.example.aplikacjagit.room
 
+import android.R
 import android.app.Application
 import androidx.core.app.ComponentActivity
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.Companion.CASCADE
+import androidx.room.Junction
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import androidx.room.TypeConverter
 import java.util.Date
 
@@ -65,6 +70,70 @@ data class Dodane(
     var id = 0
 }
 
+@Entity(tableName = "ProduktyLodowka")
+data class Lodowka(
+    val idProduktu: Int?,
+    val nazwa: String?,
+
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
+
+@Entity(tableName = "Przepisy")
+data class Przepis(
+    val nazwa: String?,
+    val opis: String?,
+    val kalorycznosc: Int?,
+    val bialka: Double?,
+    val weglowodany: Double?,
+    val tluszcze: Double?,
+    ) {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
+
+data class ProduktPotrzebny(
+    val id: Int,
+    val nazwa: String,
+    val ilosc: Int
+)
+
+@Entity(tableName = "PrzepisProdukt")
+data class PrzepisProdukt(
+    val przepisId: Int,
+    val produktId: Int,
+    val iloscPotrzebna: Int? = null
+){
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
+
+data class PrzepisWynikRaw(
+    val id: Int,
+    val nazwa: String?,
+    val opis: String?,
+    val kalorycznosc: Int?,
+    val bialka: Double?,
+    val weglowodany: Double?,
+    val tluszcze: Double?,
+    val produktIdsCsv: String?,   // np. "3,7,12"
+    val ilosciCsv: String?        // np. "2,1,1"
+)
+
+data class PrzepisWynik(
+    val id: Int,
+    val listaProduktow: List<Int>,
+    val listaIlosci: List<Int>,
+    val nazwa: String?,
+    val opis: String?,
+    val kalorycznosc: Int?,
+    val bialka: Double?,
+    val weglowodany: Double?,
+    val tluszcze: Double?,
+    // nowe pole: lista z nazwami i ilościami; ViewModel wypełni to pole
+    val produktyPotrzebne: List<ProduktPotrzebny> = emptyList()
+)
 class DaneGlobalne : Application() {
     var aktualnyUzytkownik: Uzytkownik? = null
 
