@@ -8,10 +8,14 @@ class Repozytorium(private val DAO: DAO){
     val nazwyProduktow : LiveData<MutableList<String>> = DAO.nazwyProduktow()
     val zczytajDodane : LiveData<MutableList<ProduktyDodaneWynik>> = DAO.zczytajDodane()
     val getOstatniePrzepisID: LiveData<Int> = DAO.getOstatniPrzepisId()
+    val wyswietlLodowka: LiveData<MutableList<Lodowka>> = DAO.wyswietlLodowka()
 
     // zwraca surowe LiveData z DAO (CSV itd.)
     fun getPrzepisyWynikRaw(): LiveData<MutableList<PrzepisWynikRaw>> =
         DAO.getPrzepisyWynikRaw()
+
+    fun getPrzepisyZLodowkiRaw(): LiveData<MutableList<PrzepisWynikRaw>> =
+        DAO.getPrzepisyZLodowkiRaw()
 
     // suspend helper - pobiera listę Produkt dla podanych id
     suspend fun fetchProduktyByIds(ids: List<Int>): List<Produkt> {
@@ -26,6 +30,9 @@ class Repozytorium(private val DAO: DAO){
     suspend fun insertDodane(dodane: Dodane){ DAO.insertDodane(dodane) }
     suspend fun deleteDodane(dodane: Dodane){ DAO.deleteDodane(dodane) }
     suspend fun updateDodane(dodane: Dodane){ DAO.updateDodane(dodane) }
+    suspend fun insertLodowka(Lodowka: Lodowka){ DAO.insertLodowka(Lodowka) }
+    suspend fun deleteLodowka(Lodowka: Lodowka){ DAO.deleteLodowka(Lodowka) }
+    suspend fun updateLodowka(Lodowka : Lodowka){ DAO.updateLodowka(Lodowka) }
     suspend fun insertPrzepis(przepis: Przepis){ DAO.insertPrzepis(przepis) }
     suspend fun insertPrzepisProdukt(przepisProdukt: PrzepisProdukt){ DAO.insertPrzepisProdukt(przepisProdukt) }
 

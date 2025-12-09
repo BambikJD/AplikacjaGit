@@ -73,6 +73,7 @@ data class Dodane(
 @Entity(tableName = "ProduktyLodowka")
 data class Lodowka(
     val idProduktu: Int?,
+    val ilosc:  Int?,
     val nazwa: String?,
 
 ) {

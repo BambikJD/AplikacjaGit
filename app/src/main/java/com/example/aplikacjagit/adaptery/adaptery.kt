@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikacjagit.room.Produkt
 import com.example.aplikacjagit.R
 import com.example.aplikacjagit.room.Dodane
+import com.example.aplikacjagit.room.Lodowka
 import com.example.aplikacjagit.room.Przepis
 import com.example.aplikacjagit.room.PrzepisWynik
 import com.example.aplikacjagit.room.ProduktPotrzebny
@@ -116,6 +117,8 @@ class  DodaneAdapter(
         val UsunButton: ImageButton = view.findViewById(R.id.UsunButton)
     }
 }
+
+
 class PrzepisyAdapter : androidx.recyclerview.widget.ListAdapter<PrzepisWynik, PrzepisyAdapter.PrzepisyViewHolder>(PrzepisDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrzepisyViewHolder {
@@ -200,5 +203,43 @@ class ProduktyPotrzebneAdapter :
             oldItem.id == newItem.id
         override fun areContentsTheSame(oldItem: ProduktPotrzebny, newItem: ProduktPotrzebny) =
             oldItem == newItem
+    }
+}
+
+
+class  LodowkaAdapter(
+    private val deleteOnClick: (Lodowka) -> Unit = {}
+) : RecyclerView.Adapter<LodowkaAdapter.LodowkaViewHolder>() {
+
+    private var listaLodowka: MutableList<Lodowka> = mutableListOf()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LodowkaViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.lodowka_item, parent, false)
+        return LodowkaViewHolder(v)
+    }
+
+    override fun onBindViewHolder(holder: LodowkaViewHolder, position: Int) {
+        val produkt = listaLodowka[position]
+        holder.nazwaProduktu.text = produkt.nazwa
+        holder.iloscGram.text = "${produkt.ilosc?.toString()}g"
+
+        holder.UsunButton.setOnClickListener {
+            holder.UsunButton.isEnabled = false
+            deleteOnClick(produkt)
+            holder.UsunButton.postDelayed({ holder.UsunButton.isEnabled = true }, 600)
+        }
+    }
+
+    override fun getItemCount(): Int = listaLodowka.size
+
+    fun stworzLodowka(Lodowka: MutableList<Lodowka>) {
+        listaLodowka = Lodowka
+        notifyDataSetChanged()
+    }
+
+    inner class LodowkaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val nazwaProduktu: TextView = view.findViewById(R.id.nazwa)
+        val iloscGram: TextView = view.findViewById(R.id.iloscGram)
+        val UsunButton: ImageButton = view.findViewById(R.id.UsunButton)
     }
 }

@@ -13,6 +13,8 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
     val zczytajDodane: LiveData<MutableList<ProduktyDodaneWynik>>
     val wyswietlPrzepisy: LiveData<MutableList<PrzepisWynik>>  // finalne, uzupełnione o nazwy
     val getOstatniPrzepisId: LiveData<Int>
+    val wyswietlLodowka: LiveData<MutableList<Lodowka>>
+    val wyswietlPrzepisyZLodowki: LiveData<MutableList<PrzepisWynik>>
 
     private val repozytorium: Repozytorium
 
@@ -26,10 +28,12 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
 
     // we will expose final LiveData via MediatorLiveData
     private val _wyswietlPrzepisy = MediatorLiveData<MutableList<PrzepisWynik>>()
+    private val _wyswietlPrzepisyZLodowki = MediatorLiveData<MutableList<PrzepisWynik>>()
     override fun onCleared() {
         super.onCleared()
         // nothing extra to cleanup here
     }
+
 
     init {
         val dao = BazaDanych.getInstance(application).DAO()
@@ -39,6 +43,7 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
         nazwyProduktow = repozytorium.nazwyProduktow
         zczytajDodane = repozytorium.zczytajDodane
         getOstatniPrzepisId = repozytorium.getOstatniePrzepisID
+        wyswietlLodowka = repozytorium.wyswietlLodowka
 
         szukajProdukty = _szukajProduktyQuery.switchMap { q ->
             val text = q ?: ""
@@ -97,6 +102,46 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
                 _wyswietlPrzepisy.postValue(enriched)
             }
         }
+
+        val rawLiveZLodowki = repozytorium.getPrzepisyZLodowkiRaw()
+        wyswietlPrzepisyZLodowki = _wyswietlPrzepisyZLodowki
+
+        _wyswietlPrzepisyZLodowki.value = mutableListOf() // initial
+
+        // mediator obserwuje surowe LiveData
+        _wyswietlPrzepisyZLodowki.addSource(rawLiveZLodowki) { rawList ->
+            // rawList: MutableList<PrzepisWynikRaw>
+            viewModelScope.launch {
+                // mapowanie i wzbogacanie nazw
+                val enriched = mutableListOf<PrzepisWynik>()
+                // przetwarzaj po kolei, ale pobieraj nazwy w jednym zapytaniu dla każdego przepisu
+                for (raw in rawList) {
+                    val base = repozytorium.mapRawToPrzepisWynik(raw)
+                    if (base.listaProduktow.isEmpty()) {
+                        enriched.add(base)
+                        continue
+                    }
+
+                    // pobierz produkty odpowiadające id (suspend)
+                    val produkty = withContext(Dispatchers.IO) {
+                        repozytorium.fetchProduktyByIds(base.listaProduktow)
+                    }
+
+                    // zbuduj listę ProduktPotrzebny w tej samej kolejności co listaProduktow
+                    val produktyPotrzebne = base.listaProduktow.mapIndexed { idx, pid ->
+                        val nazwa = produkty.firstOrNull { it.id == pid }?.nazwa ?: "Produkt#$pid"
+                        val ilosc = base.listaIlosci.getOrNull(idx) ?: 0
+                        ProduktPotrzebny(id = pid, nazwa = nazwa ?: "Brak nazwy", ilosc = ilosc)
+                    }
+
+                    // dodaj kopię obiektu z wypełnionym polem produktyPotrzebne
+                    val enrichedItem = base.copy(produktyPotrzebne = produktyPotrzebne)
+                    enriched.add(enrichedItem)
+                }
+
+                _wyswietlPrzepisyZLodowki.postValue(enriched)
+            }
+        }
     }
 
     // ... reszta metod (setQuery, insert/delete/update) - zostaw bez zmian ...
@@ -113,4 +158,8 @@ class DaneViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.deleteDodane(dodane) }
     fun updateDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.updateDodane(dodane) }
     fun insertDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.insertDodane(dodane) }
+
+    fun deleteLodowka(Lodowka: Lodowka) = viewModelScope.launch { repozytorium.deleteLodowka(Lodowka) }
+    fun updateLodowka(Lodowka: Lodowka) = viewModelScope.launch { repozytorium.updateLodowka(Lodowka) }
+    fun insertLodowka(Lodowka: Lodowka) = viewModelScope.launch { repozytorium.insertLodowka(Lodowka) }
 }

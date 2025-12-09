@@ -68,4 +68,42 @@ interface DAO{
 
     @Query("""SELECT p.id AS id,p.nazwa AS nazwa,p.opis AS opis,p.kalorycznosc AS kalorycznosc,p.bialka AS bialka,p.weglowodany AS weglowodany,p.tluszcze AS tluszcze,GROUP_CONCAT(pp.produktId) AS produktIdsCsv,GROUP_CONCAT(COALESCE(pp.iloscPotrzebna, 0)) AS ilosciCsv FROM Przepisy p LEFT JOIN PrzepisProdukt pp ON p.id = pp.przepisId GROUP BY p.id""")
     fun getPrzepisyWynikRaw(): LiveData<MutableList<PrzepisWynikRaw>>
+
+    @Query("""
+        SELECT 
+            p.id AS id,
+            p.nazwa AS nazwa,
+            p.opis AS opis,
+            p.kalorycznosc AS kalorycznosc,
+            p.bialka AS bialka,
+            p.weglowodany AS weglowodany,
+            p.tluszcze AS tluszcze,
+            GROUP_CONCAT(pp.produktId) AS produktIdsCsv,
+            GROUP_CONCAT(COALESCE(pp.iloscPotrzebna, 0)) AS ilosciCsv 
+        FROM Przepisy p 
+        LEFT JOIN PrzepisProdukt pp ON p.id = pp.przepisId 
+        WHERE NOT EXISTS (
+            -- Podzapytanie sprawdzające braki
+            SELECT 1 
+            FROM PrzepisProdukt pp_check
+            LEFT JOIN ProduktyLodowka pl ON pp_check.produktId = pl.idProduktu
+            WHERE pp_check.przepisId = p.id
+            AND pl.idProduktu IS NULL -- Jeśli tutaj jest NULL, to znaczy, że składnika nie ma w lodówce
+        )
+        GROUP BY p.id
+    """)
+    fun getPrzepisyZLodowkiRaw(): LiveData<MutableList<PrzepisWynikRaw>>
+
+    @Query("SELECT * from produktylodowka")
+    fun wyswietlLodowka(): LiveData<MutableList<Lodowka>>
+
+    @Insert
+    suspend fun insertLodowka(lodowka: Lodowka)
+
+    @Delete
+    suspend fun deleteLodowka(lodowka: Lodowka)
+
+    @Update
+    suspend fun updateLodowka(lodowka: Lodowka)
+
 }
