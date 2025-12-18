@@ -331,17 +331,17 @@ class LodowkaActivity : ComponentActivity() {
                         )
                     }
                 }
-                    daneViewModel.insertPrzepisProdukt(przepisProdukt)
-                    val przepis = Przepis(
-                        nazwa = nazwa.text.toString(),
-                        opis = opis.text.toString(),
-                        kalorycznosc = sumakcal / waga * 100,
-                        bialka = sumab / waga * 100,
-                        weglowodany = sumaw / waga * 100,
-                        tluszcze = sumat / waga * 100
-                    )
+                daneViewModel.insertPrzepisProdukt(przepisProdukt)
+                val przepis = Przepis(
+                    nazwa = nazwa.text.toString(),
+                    opis = opis.text.toString(),
+                    kalorycznosc = sumakcal / waga * 100,
+                    bialka = sumab / waga * 100,
+                    weglowodany = sumaw / waga * 100,
+                    tluszcze = sumat / waga * 100
+                )
 
-                    daneViewModel.insertPrzepis(przepis)
+                daneViewModel.insertPrzepis(przepis)
 
             }
 
@@ -376,4 +376,3 @@ class LodowkaActivity : ComponentActivity() {
         startActivity(intent)
     }
 }
-

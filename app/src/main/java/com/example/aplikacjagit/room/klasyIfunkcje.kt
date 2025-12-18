@@ -76,7 +76,7 @@ data class Lodowka(
     val ilosc:  Int?,
     val nazwa: String?,
 
-) {
+    ) {
     @PrimaryKey(autoGenerate = true)
     var id = 0
 }
@@ -89,7 +89,7 @@ data class Przepis(
     val bialka: Double?,
     val weglowodany: Double?,
     val tluszcze: Double?,
-    ) {
+) {
     @PrimaryKey(autoGenerate = true)
     var id = 0
 }

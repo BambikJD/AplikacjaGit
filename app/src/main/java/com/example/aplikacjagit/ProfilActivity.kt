@@ -362,4 +362,3 @@ class ProfilActivity : ComponentActivity() {
         startActivity(intent)
     }
 }
-

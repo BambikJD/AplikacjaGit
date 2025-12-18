@@ -75,7 +75,7 @@ class ProduktAdapter(
 
 class  DodaneAdapter(
     private val deleteOnClick: (Dodane) -> Unit = {}
-    ) : RecyclerView.Adapter<DodaneAdapter.DodaneViewHolder>() {
+) : RecyclerView.Adapter<DodaneAdapter.DodaneViewHolder>() {
 
     private var listaDodanych: MutableList<Dodane> = mutableListOf()
 
@@ -148,7 +148,7 @@ class PrzepisyAdapter : androidx.recyclerview.widget.ListAdapter<PrzepisWynik, P
             tluszcze.text = przepis.tluszcze?.let { "T: ${formatNumber(it)}" } ?: "T:-"
             weglowodany.text = przepis.weglowodany?.let { "W: ${formatNumber(it)}" } ?: "W:-"
             opis.text = przepis.opis ?: ""
-            waga.text = przepis.listaIlosci.sum().toString()
+            waga.text = "${przepis.listaIlosci.sum().toString()}g"
 
             if (produktyAdapter == null) {
                 produktyAdapter = ProduktyPotrzebneAdapter()

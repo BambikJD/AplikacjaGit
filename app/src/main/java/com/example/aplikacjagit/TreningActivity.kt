@@ -110,4 +110,3 @@ class TreningActivity : ComponentActivity() {
         startActivity(intent)
     }
 }
-

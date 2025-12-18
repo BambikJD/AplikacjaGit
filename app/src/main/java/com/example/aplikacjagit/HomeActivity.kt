@@ -269,4 +269,3 @@ class HomeActivity : ComponentActivity() {
         startActivity(intent)
     }
 }
-
