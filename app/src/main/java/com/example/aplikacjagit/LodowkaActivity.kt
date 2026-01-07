@@ -69,6 +69,12 @@ class LodowkaActivity : ComponentActivity() {
     private lateinit var PowrotProduktButton: ImageButton
     private lateinit var gornynapisDodajProdukt: LinearLayout
 
+    private lateinit var OpcjaWLewo: ImageButton
+    private lateinit var OpcjaWPrawo: ImageButton
+    private lateinit var widokWszystkiePrzepisyLayout: ConstraintLayout
+    private lateinit var widokWszystkiePrzepisy: RecyclerView
+    private lateinit var tekstOpcji: TextView // Do zmiany napisu "TWOJA LODÓWKA" na inny (opcjonalnie)
+
     private lateinit var nazwa: EditText
     private lateinit var opis: EditText
 
@@ -93,6 +99,7 @@ class LodowkaActivity : ComponentActivity() {
         var aktualnyUzytkownik = app.aktualnyUzytkownik
 
         val przepisyAdapter = PrzepisyAdapter()
+        val wszystkiePrzepisyAdapter = PrzepisyAdapter()
 
         ProfilButton =  findViewById(R.id.ProfilButton)
         HomeButton =  findViewById(R.id.HomeButton)
@@ -127,6 +134,12 @@ class LodowkaActivity : ComponentActivity() {
         widokProduktyLodowka = findViewById(R.id.widokProduktyLodowka)
         gornyNapisProdukty = findViewById(R.id.gornynapisProdukty)
         widokProduktyLayout = findViewById(R.id.widokProduktyLayout)
+
+        OpcjaWLewo = findViewById(R.id.OpcjaWLewo)
+        OpcjaWPrawo = findViewById(R.id.OpcjaWPrawo)
+        widokWszystkiePrzepisyLayout = findViewById(R.id.widokWszystkiePrzepisyLayout)
+        widokWszystkiePrzepisy = findViewById(R.id.widokWszystkiePrzepisy)
+        tekstOpcji = findViewById(R.id.tekstOpcji)
 
         nazwa = findViewById(R.id.nazwa)
         opis = findViewById(R.id.opis)
@@ -200,6 +213,9 @@ class LodowkaActivity : ComponentActivity() {
         widokProduktyLodowka.adapter = LodowkaAdapter
         widokProduktyLodowka.layoutManager = LinearLayoutManager(this)
 
+        widokWszystkiePrzepisy.adapter = wszystkiePrzepisyAdapter
+        widokWszystkiePrzepisy.layoutManager = LinearLayoutManager(this)
+
         updateSelectedDate(selectedLocalDate)
 
         var sumakalorii = 0.0
@@ -225,6 +241,9 @@ class LodowkaActivity : ComponentActivity() {
             LodowkaAdapter.stworzLodowka(lista)
         }
 
+        daneViewModel.wyswietlPrzepisy.observe(this) { lista ->
+            wszystkiePrzepisyAdapter.submitList(lista)
+        }
         daneViewModel.wyswietlDodane.observe(this) { lista ->
             sumakalorii = 0.0
             sumabialek = 0.0
@@ -298,6 +317,26 @@ class LodowkaActivity : ComponentActivity() {
 
             widokDodawanieProduktowLayout.visibility = View.VISIBLE
             gornynapisDodajProdukt.visibility = View.VISIBLE
+        }
+
+        OpcjaWPrawo.setOnClickListener {
+            gornyNapisProdukty.visibility = View.GONE
+            widokProduktyLayout.visibility = View.GONE
+            gornyNapisPrzepisy.visibility = View.GONE
+            widokPrzepisyLayout.visibility = View.GONE
+
+            widokWszystkiePrzepisyLayout.visibility = View.VISIBLE
+            tekstOpcji.text = "W S Z Y S T K I E   P R Z E P I S Y"
+        }
+
+        OpcjaWLewo.setOnClickListener {
+            widokWszystkiePrzepisyLayout.visibility = View.GONE
+
+            gornyNapisProdukty.visibility = View.VISIBLE
+            widokProduktyLayout.visibility = View.VISIBLE
+            gornyNapisPrzepisy.visibility = View.VISIBLE
+            widokPrzepisyLayout.visibility = View.VISIBLE
+            tekstOpcji.text = "T W O J A   L O D Ó W K A"
         }
 
         var ID = 0

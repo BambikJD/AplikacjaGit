@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/widokProduktyLayout"
         android:layout_width="match_parent"
+        android:layout_marginTop="2dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/gornynapisProdukty">
 
@@ -23,6 +24,7 @@
                 android:id="@+id/widokProduktyLodowka"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                tools:itemCount="2"
                 tools:listitem="@layout/lodowka_item">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -47,6 +49,7 @@
                 android:id="@+id/widokPrzepisy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                tools:itemCount="1"
                 tools:listitem="@layout/przepis_item">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -126,14 +129,14 @@
                 </ImageView>
             </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/widokProdukty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/produkt_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/widokProdukty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/produkt_item" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -186,6 +189,21 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokWszystkiePrzepisyLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/zmienOpcje"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/widokWszystkiePrzepisy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/przepis_item" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/NawigacjaLayout"
@@ -280,16 +298,56 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/gornynapisProdukty"
+        android:id="@+id/zmienOpcje"
         android:layout_height="35dp"
         android:background="@color/green_400"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
 
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/OpcjaWLewo"
+            android:background="@color/green_400"
+            android:src="@drawable/strzalka">
+
+        </ImageButton>
+
         <TextView
             android:layout_width="0dp"
             android:layout_weight="3"
-            android:text="L O D O W K A"
+            android:id="@+id/tekstOpcji"
+            android:text="T W O J A   L O D Ó W K A"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+        </TextView>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/OpcjaWPrawo"
+            android:background="@color/green_400"
+            android:rotation="180"
+            android:src="@drawable/strzalka">
+
+        </ImageButton>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/gornynapisProdukty"
+        android:layout_height="35dp"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/zmienOpcje">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:text="Z A W A R T O Ś Ć"
             android:gravity="center"
             android:layout_height="match_parent">
 
@@ -337,6 +395,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/gornynapisPrzepisy"
+        android:layout_marginTop="2dp"
         android:layout_height="35dp"
         android:background="@color/green_400"
         android:orientation="horizontal"
@@ -345,7 +404,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_weight="3"
-            android:text="P R Z E P I S Y"
+            android:text="D O S T Ę P N E   P R Z E P I S Y"
             android:gravity="center"
             android:layout_height="match_parent">
 
