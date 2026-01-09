@@ -149,8 +149,8 @@ class LodowkaActivity : ComponentActivity() {
 
         // Zapisywanie przepisu
         findViewById<ImageButton>(R.id.dodajPrzepisButton).setOnClickListener {
-            val nazwaET = findViewById<EditText>(R.id.nazwa)
-            val opisET = findViewById<EditText>(R.id.opis)
+            val nazwaET = findViewById<EditText>(R.id.etNazwaPrzepisu)
+            val opisET = findViewById<EditText>(R.id.etOpisPrzepisu)
             if (nazwaET.text.isNotEmpty() && listaDodanychDoPrzepisu.isNotEmpty()) {
                 val wagaTotal = listaDodanychDoPrzepisu.sumOf { it.ilosc ?: 0 }
                 val kcalTotal = listaDodanychDoPrzepisu.sumOf { it.sumaKalorii ?: 0 }

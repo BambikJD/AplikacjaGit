@@ -28,7 +28,7 @@ import java.util.*
 
 class HomeActivity : ComponentActivity() {
     private lateinit var daneViewModel: DaneViewModel
-    private lateinit var proprozycjeAdapter: PrzepisyAdapter
+    private lateinit var propozycjeAdapter: PrzepisyAdapter
     private var sumakcal = 0
     private var celKcal = 0
 
@@ -37,94 +37,72 @@ class HomeActivity : ComponentActivity() {
         setContentView(R.layout.home)
 
         val app = application as DaneGlobalne
+        celKcal = app.celKalorii
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
 
-        loadPreferences(app)
-        celKcal = app.celKalorii
-
-        // Inicjalizacja Adaptera dla propozycji przepisów
-        proprozycjeAdapter = PrzepisyAdapter { przepis ->
-            // Możesz tu dodać przejście do szczegółów przepisu
+        // Konfiguracja list propozycji
+        propozycjeAdapter = PrzepisyAdapter { przepis ->
             Toast.makeText(this, "Polecane: ${przepis.nazwa}", Toast.LENGTH_SHORT).show()
         }
         findViewById<RecyclerView>(R.id.rvPropozycje).apply {
-            adapter = proprozycjeAdapter
+            adapter = propozycjeAdapter
             layoutManager = LinearLayoutManager(this@HomeActivity)
         }
 
         setupObservers(app)
         setupNavigation()
-
-        // Wywołaj synchronizację
-        syncDatabase()
+        syncDatabase() // Twoja logika synchronizacji
     }
 
     private fun setupObservers(app: DaneGlobalne) {
-        // 1. Obserwator Diety (Podsumowanie + Kalkulator "Zostało")
+        // 1. DZISIEJSZA DIETA I KALORIE
         daneViewModel.wyswietlDodane.observe(this) { lista ->
             sumakcal = lista.sumOf { it.sumaKalorii ?: 0 }
-            val sb = lista.sumOf { it.sumaBialek ?: 0.0 }
-            val sw = lista.sumOf { it.sumaWeglowodanow ?: 0.0 }
-            val st = lista.sumOf { it.sumaTluszczy ?: 0.0 }
-
-            // Główny licznik na środku
             val pozostalo = celKcal - sumakcal
-            val textPozostalo = findViewById<TextView>(R.id.pozostaloKcal)
-            textPozostalo.text = "$pozostalo kcal"
-            if(pozostalo < 0) textPozostalo.setTextColor(resources.getColor(R.color.red_400, null))
 
-            // Dolny pasek (zaokrąglony)
-            findViewById<TextView>(R.id.sumaKaloriiText).text = "Kalorie\n$sumakcal / $celKcal"
-            findViewById<TextView>(R.id.sumaBialekText).text = String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
-            findViewById<TextView>(R.id.sumaWeglowodanowText).text = String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
-            findViewById<TextView>(R.id.sumaTluszczyText).text = String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
+            // UI Główne
+            val tvPozostalo = findViewById<TextView>(R.id.pozostaloKcal)
+            tvPozostalo.text = "$pozostalo kcal"
+            if (pozostalo < 0) tvPozostalo.setTextColor(getColor(R.color.red_400))
+
+            val pasek = findViewById<ProgressBar>(R.id.pasekPostepuKcal)
+            pasek.max = celKcal
+            pasek.progress = sumakcal
+
+            // Dolny pasek podsumowania (zaokrąglony)
+            findViewById<TextView>(R.id.sumaKaloriiText).text = "Kcal: $sumakcal / $celKcal"
+            findViewById<TextView>(R.id.sumaBialekText).text = String.format(Locale.US, "B: %.1f", lista.sumOf { it.sumaBialek ?: 0.0 })
+            findViewById<TextView>(R.id.sumaWeglowodanowText).text = String.format(Locale.US, "W: %.1f", lista.sumOf { it.sumaWeglowodanow ?: 0.0 })
+            findViewById<TextView>(R.id.sumaTluszczyText).text = String.format(Locale.US, "T: %.1f", lista.sumOf { it.sumaTluszczy ?: 0.0 })
+
+            // AKTUALIZUJ PROPOZYCJE po zmianie kalorii
+            odswiezPropozycje(pozostalo)
         }
 
-        // 2. Obserwator Treningu (Status)
+        // 2. STATUS TRENINGU
         daneViewModel.wyswietlWykonane.observe(this) { lista ->
-            val statusTekst = findViewById<TextView>(R.id.treningStatusTekst)
-            val ikona = findViewById<ImageView>(R.id.treningStatusIkona)
-
+            val tvStatus = findViewById<TextView>(R.id.statusTreninguTekst)
+            val ivStatus = findViewById<ImageView>(R.id.statusTreninguIkona)
             if (lista.isNotEmpty()) {
-                statusTekst.text = "Brawo! Wykonałeś dzisiaj trening."
-                statusTekst.setTextColor(resources.getColor(R.color.green_400, null))
-                ikona.setColorFilter(resources.getColor(R.color.green_400, null))
-            } else {
-                statusTekst.text = "Nie zapomnij o dzisiejszym treningu!"
-                statusTekst.setTextColor(resources.getColor(R.color.white, null))
-                ikona.setColorFilter(resources.getColor(R.color.white_50, null))
+                tvStatus.text = "Trening wykonany! Dobra robota!"
+                tvStatus.setTextColor(getColor(R.color.green_400))
+                ivStatus.setColorFilter(getColor(R.color.green_400))
             }
-        }
-
-        // 3. INTELIGENTNE PROPOZYCJE (Filtrowanie przepisów)
-        daneViewModel.wyswietlPrzepisy.observe(this) { listaPrzepisow ->
-            val limit = celKcal - sumakcal
-            // Filtrujemy przepisy, które mają mniej kalorii niż nam zostało (minimum 100 kcal)
-            val propozycje = listaPrzepisow.filter {
-                val kcal = it.kalorycznosc ?: 0
-                kcal in 100..limit
-            }.shuffled().take(3) // Bierzemy 3 losowe pasujące przepisy
-
-            proprozycjeAdapter.submitList(propozycje)
         }
     }
 
-    private fun loadPreferences(app: DaneGlobalne) {
-        val pref = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
-        app.celBialek = pref.getInt("celBialek", 0)
-        app.celWeglowodanow = pref.getInt("celWeglowodanow", 0)
-        app.celTluszczy = pref.getInt("celTluszczy", 0)
-        app.celKalorii = pref.getInt("celKalorii", 0)
-        app.waga = pref.getFloat("waga", 0.0F)
-        app.wiek = pref.getInt("wiek", 0)
-        app.wzrost = pref.getFloat("wzrost", 0.0F)
+    private fun odswiezPropozycje(pozostalo: Int) {
+        daneViewModel.wyswietlPrzepisy.observe(this) { przepisy ->
+            // Tolerancja 5% – pokaże przepisy o 5% większe niż limit, żeby nie być zbyt surowym
+            val maxDopuszczalne = pozostalo * 1.05
 
-        // Kolor tła
-        // Zdefiniowana przez "K"
-        val zapisanyKolor = pref.getInt("wybranyKolor", -1)
+            val propozycje = przepisy.filter {
+                val k = it.kalorycznosc ?: 0
+                k in 150..(maxDopuszczalne.toInt())
+            }.shuffled().take(2) // Losuj 2 pasujące przepisy
 
-// Użyta przez "K"
-        if (zapisanyKolor != -1) findViewById<View>(R.id.mainLayout).setBackgroundColor(zapisanyKolor)
+            propozycjeAdapter.submitList(propozycje)
+        }
     }
 
     private fun syncDatabase() {
