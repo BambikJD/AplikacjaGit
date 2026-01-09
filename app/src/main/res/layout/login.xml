@@ -4,72 +4,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200">
+    android:background="@color/background_color">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="729dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp">
+        android:padding="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_marginBottom="30dp"
-            android:src="@drawable/loginicon" />
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/loginicon"
+            app:tint="@color/green_400" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WITAJ Z POWROTEM"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Zaloguj się, aby kontynuować"
+            android:textColor="@color/white_50"
+            android:gravity="center"
+            android:layout_marginBottom="30dp"/>
 
         <EditText
             android:id="@+id/WprowadzLogin"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:hint="Wprowadź login"
-            android:inputType="text"
-            android:textSize="16sp" />
+            style="@style/ProfileEditText"
+            android:layout_width="match_parent"
+            android:hint="Login lub Email"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/WprowadzHaslo"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:hint="Wprowadź hasło"
-            android:inputType="textPassword"
-            android:textSize="16sp" />
+            style="@style/ProfileEditText"
+            android:layout_width="match_parent"
+            android:hint="Hasło"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/ZalogujButton"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/green_400"
+            android:text="ZALOGUJ SIĘ"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/ZalogujButton"
-                android:layout_width="110dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="1dp"
-                android:text="Zaloguj" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nie masz konta? "
+                android:textColor="@color/white_50" />
 
-            <Button
+            <TextView
                 android:id="@+id/RejestracjaButton"
-                android:layout_width="110dp"
-                android:layout_height="50dp"
-                android:textSize="12sp"
-                android:text="Rejestracja" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Zarejestruj się"
+                android:textColor="@color/green_400"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/WiadomoscLogowania"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:text="TextView"
-            android:textColor="@android:color/holo_red_dark"
-            android:visibility="invisible" />
+            android:layout_marginTop="20dp"
+            android:textColor="@color/red_400"
+            android:visibility="gone"
+            tools:text="Błędne dane logowania" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

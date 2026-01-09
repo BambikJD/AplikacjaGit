@@ -2,4 +2,21 @@
 <resources>
 
     <style name="Theme.AplikacjaGit" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="ProfileEditText">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:background">@color/grey_850</item>
+        <item name="android:paddingHorizontal">15dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white_50</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ColorButton">
+        <item name="android:layout_width">220dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

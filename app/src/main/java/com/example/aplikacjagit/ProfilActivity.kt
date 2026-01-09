@@ -23,7 +23,7 @@ class ProfilActivity : ComponentActivity() {
 
     // tworzenie zmiennych elementów na stronie
     private lateinit var DaneLogowania: TextView
-    private lateinit var WylogujButton: Button
+    private lateinit var WylogujButton: TextView
     private lateinit var ZatwierdzButton: Button
     private lateinit var EdytujButton: Button
     private lateinit var EdytujImie: EditText
@@ -249,26 +249,46 @@ class ProfilActivity : ComponentActivity() {
             val aktIdx = findViewById<Spinner>(R.id.aktywnosc).selectedItemPosition
             val celIdx = findViewById<Spinner>(R.id.cel).selectedItemPosition
 
+            // 1. Obliczanie BMR i TDEE (Wzór Mifflin-St Jeor)
             val s = if (isM) 5.0 else -161.0
             val bmr = 10.0 * w + 6.25 * wz - 5.0 * wie + s
             val wsp = listOf(1.2, 1.375, 1.55, 1.725, 1.9)[aktIdx]
-            val delta = listOf(-1000.0, -500.0, 0.0, 300.0, 700.0)[celIdx]
-
             val tdee = bmr * wsp
-            var kcal = tdee + delta
-            if (kcal < (if(isM) 1500.0 else 1200.0)) kcal = if(isM) 1500.0 else 1200.0
 
+            // 2. Korekta pod cel
+            val delta = listOf(-1000.0, -500.0, 0.0, 300.0, 700.0)[celIdx]
+            var kcal = (tdee + delta).toInt()
+
+            // Bezpieczne granice
+            val minKcal = if(isM) 1500 else 1200
+            if (kcal < minKcal) kcal = minKcal
+
+            // 3. Obliczanie Makroskładników (procentowo)
+            // Białko: 20%, Tłuszcze: 30%, Węglowodany: 50%
+            val b = (kcal * 0.20 / 4).toInt()
+            val t = (kcal * 0.30 / 9).toInt()
+            val wgl = (kcal * 0.50 / 4).toInt()
+
+            // 4. ZAPIS DO PREFERENCJI (Kluczowe dla zapamiętywania!)
             edytor.apply {
-                putInt("celKalorii", kcal.toInt())
+                putInt("celKalorii", kcal)
+                putInt("celBialek", b)
+                putInt("celTluszczy", t)
+                putInt("celWeglowodanow", wgl)
                 putFloat("waga", w.toFloat())
                 putFloat("wzrost", wz.toFloat())
                 putInt("wiek", wie)
                 putBoolean("plec", isM)
                 putInt("aktywnosc", aktIdx)
                 putInt("cel", celIdx)
-            }.apply()
+                apply() // To musi tu być!
+            }
 
-            app.celKalorii = kcal.toInt()
+            // 5. AKTUALIZACJA ZMIENNYCH GLOBALNYCH
+            app.celKalorii = kcal
+            app.celBialek = b
+            app.celTluszczy = t
+            app.celWeglowodanow = wgl
             app.waga = w.toFloat()
             app.wzrost = wz.toFloat()
             app.wiek = wie
@@ -276,9 +296,9 @@ class ProfilActivity : ComponentActivity() {
             app.aktywnosc = aktIdx
             app.cel = celIdx
 
-            Toast.makeText(this, "Nowy cel: ${kcal.toInt()} kcal", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Nowe cele: $kcal kcal (B:$b T:$t W:$wgl)", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
-            Toast.makeText(this, "Błędne dane", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Wypełnij poprawnie wszystkie pola!", Toast.LENGTH_SHORT).show()
         }
     }
 

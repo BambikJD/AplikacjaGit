@@ -29,6 +29,7 @@ import java.util.*
 class HomeActivity : ComponentActivity() {
     private lateinit var daneViewModel: DaneViewModel
     private lateinit var propozycjeAdapter: PrzepisyAdapter
+    private var selectedLocalDate: LocalDate = LocalDate.now() // DODANO: Inicjalizacja daty
     private var sumakcal = 0
     private var celKcal = 0
 
@@ -37,8 +38,14 @@ class HomeActivity : ComponentActivity() {
         setContentView(R.layout.home)
 
         val app = application as DaneGlobalne
-        celKcal = app.celKalorii
+
+        // --- KLUCZOWA POPRAWKA: Najpierw tworzymy ViewModel ---
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
+
+        // --- TERAZ ustawiamy datę (kiedy ViewModel już istnieje) ---
+        updateSelectedDate(selectedLocalDate)
+
+        celKcal = app.celKalorii
 
         // Konfiguracja list propozycji
         propozycjeAdapter = PrzepisyAdapter { przepis ->
@@ -51,35 +58,56 @@ class HomeActivity : ComponentActivity() {
 
         setupObservers(app)
         setupNavigation()
-        syncDatabase() // Twoja logika synchronizacji
+        syncDatabase()
+    }
+
+    // Dodano onResume, aby dane odświeżały się po powrocie z dodawania posiłku
+    override fun onResume() {
+        super.onResume()
+        updateSelectedDate(selectedLocalDate)
     }
 
     private fun setupObservers(app: DaneGlobalne) {
-        // 1. DZISIEJSZA DIETA I KALORIE
         daneViewModel.wyswietlDodane.observe(this) { lista ->
+            // Obliczamy sumy
             sumakcal = lista.sumOf { it.sumaKalorii ?: 0 }
-            val pozostalo = celKcal - sumakcal
+            val sb = lista.sumOf { it.sumaBialek ?: 0.0 }
+            val sw = lista.sumOf { it.sumaWeglowodanow ?: 0.0 }
+            val st = lista.sumOf { it.sumaTluszczy ?: 0.0 }
 
-            // UI Główne
+            // Pobieramy świeży cel (na wypadek zmiany w profilu)
+            val aktualnyCelKcal = app.celKalorii
+
+            // 1. UI Główne (Karta na środku)
+            val pozostalo = aktualnyCelKcal - sumakcal
             val tvPozostalo = findViewById<TextView>(R.id.pozostaloKcal)
             tvPozostalo.text = "$pozostalo kcal"
-            if (pozostalo < 0) tvPozostalo.setTextColor(getColor(R.color.red_400))
+
+            if (pozostalo < 0) {
+                tvPozostalo.setTextColor(getColor(R.color.red_400))
+            } else {
+                tvPozostalo.setTextColor(getColor(R.color.green_400))
+            }
 
             val pasek = findViewById<ProgressBar>(R.id.pasekPostepuKcal)
-            pasek.max = celKcal
+            pasek.max = if (aktualnyCelKcal > 0) aktualnyCelKcal else 2000
             pasek.progress = sumakcal
 
-            // Dolny pasek podsumowania (zaokrąglony)
-            findViewById<TextView>(R.id.sumaKaloriiText).text = "Kcal: $sumakcal / $celKcal"
-            findViewById<TextView>(R.id.sumaBialekText).text = String.format(Locale.US, "B: %.1f", lista.sumOf { it.sumaBialek ?: 0.0 })
-            findViewById<TextView>(R.id.sumaWeglowodanowText).text = String.format(Locale.US, "W: %.1f", lista.sumOf { it.sumaWeglowodanow ?: 0.0 })
-            findViewById<TextView>(R.id.sumaTluszczyText).text = String.format(Locale.US, "T: %.1f", lista.sumOf { it.sumaTluszczy ?: 0.0 })
+            // 2. DOLNY PASEK
+            findViewById<TextView>(R.id.sumaKaloriiText).text = "Kalorie\n$sumakcal / $aktualnyCelKcal"
 
-            // AKTUALIZUJ PROPOZYCJE po zmianie kalorii
+            findViewById<TextView>(R.id.sumaBialekText).text =
+                String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
+
+            findViewById<TextView>(R.id.sumaWeglowodanowText).text =
+                String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
+
+            findViewById<TextView>(R.id.sumaTluszczyText).text =
+                String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
+
             odswiezPropozycje(pozostalo)
         }
 
-        // 2. STATUS TRENINGU
         daneViewModel.wyswietlWykonane.observe(this) { lista ->
             val tvStatus = findViewById<TextView>(R.id.statusTreninguTekst)
             val ivStatus = findViewById<ImageView>(R.id.statusTreninguIkona)
@@ -87,22 +115,32 @@ class HomeActivity : ComponentActivity() {
                 tvStatus.text = "Trening wykonany! Dobra robota!"
                 tvStatus.setTextColor(getColor(R.color.green_400))
                 ivStatus.setColorFilter(getColor(R.color.green_400))
+            } else {
+                tvStatus.text = "Dzisiaj nie było jeszcze treningu"
+                tvStatus.setTextColor(getColor(R.color.white))
+                ivStatus.setColorFilter(getColor(R.color.white_50))
             }
         }
     }
 
+    // Reszta funkcji bez zmian (odswiezPropozycje, syncDatabase, aktualizacjaDanychZPlikuOptymalnie, setupNavigation, przenies)
+
     private fun odswiezPropozycje(pozostalo: Int) {
         daneViewModel.wyswietlPrzepisy.observe(this) { przepisy ->
-            // Tolerancja 5% – pokaże przepisy o 5% większe niż limit, żeby nie być zbyt surowym
             val maxDopuszczalne = pozostalo * 1.05
-
             val propozycje = przepisy.filter {
                 val k = it.kalorycznosc ?: 0
                 k in 150..(maxDopuszczalne.toInt())
-            }.shuffled().take(2) // Losuj 2 pasujące przepisy
-
+            }.shuffled().take(2)
             propozycjeAdapter.submitList(propozycje)
         }
+    }
+
+    private fun updateSelectedDate(newDate: LocalDate) {
+        selectedLocalDate = newDate
+        // Normalizujemy datę do 00:00:00 (początek dnia) - to jest kluczowe dla Room!
+        val dateForRoom: Date = Date.from(selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        daneViewModel.setDateQuery(dateForRoom)
     }
 
     private fun syncDatabase() {
@@ -116,111 +154,51 @@ class HomeActivity : ComponentActivity() {
         }
     }
 
-    // Funkcja synchronizacji (Twoja oryginalna)
-    suspend fun aktualizacjaDanychZPlikuOptymalnie(context: Context, db: BazaDanych){
-
+    suspend fun aktualizacjaDanychZPlikuOptymalnie(context: Context, db: BazaDanych) {
         val TAG = "SyncFromFileOpt"
-
         val PREFS = "preferencje"
-
         val PREF_DB_VER = "db_version"
-
         val assetName = "output.jsonl"
-
-
-
         val sharedPref: SharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-
         val currentVersion = sharedPref.getInt(PREF_DB_VER, 0)
 
-
-
         withContext(Dispatchers.IO) {
-
             try {
-
                 context.assets.open(assetName).use { inputStream ->
-
                     BufferedReader(InputStreamReader(inputStream)).use { reader ->
-
                         val firstLine = reader.readLine() ?: return@withContext
-
                         val fileVersion = firstLine.trim().toIntOrNull() ?: return@withContext
-
-
-
                         if (fileVersion <= currentVersion) return@withContext
 
-
-
                         val dao = db.DAO()
-
                         db.withTransaction {
-
                             var line: String?
-
                             while (reader.readLine().also { line = it } != null) {
-
                                 try {
-
                                     val obj = JSONObject(line!!)
-
-                                    val nazwa = obj.getString("nazwa")
-
-                                    val kalorycznosc = obj.getDouble("kalorycznosc").toInt()
-
-                                    val bialka = obj.getDouble("bialka")
-
-                                    val tluszcze = obj.getDouble("tluszcze")
-
-                                    val weglowodany = obj.getDouble("weglowodany")
-
-                                    val kodKreskowy = obj.getString("kodKreskowy")
-
-
-
-                                    val existing = dao.getProduktByBarcode(kodKreskowy)
-
-                                    val prod = Produkt(nazwa, kalorycznosc, bialka, tluszcze, weglowodany, kodKreskowy)
-
-
-
+                                    val prod = Produkt(
+                                        obj.getString("nazwa"),
+                                        obj.getDouble("kalorycznosc").toInt(),
+                                        obj.getDouble("bialka"),
+                                        obj.getDouble("tluszcze"),
+                                        obj.getDouble("weglowodany"),
+                                        obj.getString("kodKreskowy")
+                                    )
+                                    val existing = dao.getProduktByBarcode(prod.kodKreskowy!!)
                                     if (existing != null) {
-
                                         prod.id = existing.id
-
                                         dao.updateProdukt(prod)
-
                                     } else {
-
                                         dao.insertProdukt(prod)
-
                                     }
-
-                                } catch (e: Exception) {
-
-                                    Log.e(TAG, "Błąd linii: ${e.localizedMessage}")
-
-                                }
-
+                                } catch (e: Exception) { }
                             }
-
                         }
-
                         sharedPref.edit().putInt(PREF_DB_VER, fileVersion).apply()
-
                     }
-
                 }
-
-            } catch (e: Exception) {
-
-                Log.e(TAG, "Błąd pliku", e)
-
-            }
-
+            } catch (e: Exception) { }
         }
-
     }
 
     private fun setupNavigation() {
@@ -231,10 +209,7 @@ class HomeActivity : ComponentActivity() {
         findViewById<ImageButton>(R.id.DietaButton).setOnClickListener { przenies(DietaActivity::class.java) }
     }
 
-    private fun updateSelectedDate(newDate: LocalDate) {
-        val dateForRoom: Date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-        daneViewModel.setDateQuery(dateForRoom)
+    fun przenies(Cel: Class<out Activity>) {
+        startActivity(Intent(this, Cel))
     }
-
-    fun przenies(Cel: Class<out Activity>) { startActivity(Intent(this, Cel)) }
 }

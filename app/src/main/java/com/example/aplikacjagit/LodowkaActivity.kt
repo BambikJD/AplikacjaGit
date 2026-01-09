@@ -64,6 +64,7 @@ class LodowkaActivity : ComponentActivity() {
 
         // Ustawienie widoku startowego
         aktualizujWidokGłówny()
+        updateSelectedDate(selectedLocalDate)
     }
 
     private fun setupAdapters() {
@@ -273,4 +274,11 @@ class LodowkaActivity : ComponentActivity() {
     }
 
     fun przenies(Cel: Class<out Activity>) { startActivity(Intent(this, Cel)) }
+
+    private fun updateSelectedDate(newDate: LocalDate) {
+        selectedLocalDate = newDate
+        // Normalizujemy datę do początku dnia (tak samo jak przy zapisywaniu w DietaActivity)
+        val dateForRoom: Date = Date.from(selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        daneViewModel.setDateQuery(dateForRoom)
+    }
 }

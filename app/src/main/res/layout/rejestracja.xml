@@ -3,109 +3,92 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/purple_200"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
+        android:background="@color/green_400"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"
-        tools:layout_editor_absoluteX="89dp">
+        android:paddingHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Button
+        <ImageButton
             android:id="@+id/PowrotButton"
-            android:layout_width="wrap_content"
-            android:background="@color/teal_700"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/strzalka"
+            app:tint="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Powrót" />
+            android:gravity="center"
+            android:paddingEnd="40dp"
+            android:text="R E J E S T R A C J A"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="409dp"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="1dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingTop="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header">
 
-        <EditText
-            android:id="@+id/WprowadzLogin"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:hint="Utwórz login"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/WprowadzHaslo"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:hint="Utwórz hasło"
-            android:inputType="text"
-            android:password="true" />
-
-        <EditText
-            android:id="@+id/WprowadzImie"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:hint="Wprowadź imie"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/WprowadzNazwisko"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:hint="Wprowadź nazwisko"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/WprowadzEmail"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:hint="Wprowadź email"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/WprowadzTelefon"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:hint="Wprowadz Telefon"
-            android:inputType="phone" />
-
-        <EditText
-            android:id="@+id/WprowadzAdres"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:hint="Wprowadź adres"
-            android:inputType="text" />
-
-        <Button
-            android:id="@+id/ZarejestrujButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@color/teal_700"
-            android:padding="3dp"
-            android:text="Zajerestruj" />
-    </LinearLayout>
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="30dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="STWÓRZ NOWE KONTO"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Wypełnij poniższe dane, aby dołączyć"
+                android:textColor="@color/white_50"
+                android:gravity="center"
+                android:layout_marginBottom="30dp"/>
+
+            <EditText android:id="@+id/WprowadzLogin" style="@style/ProfileEditText" android:layout_width="match_parent" android:hint="Utwórz login" android:inputType="text" />
+            <EditText android:id="@+id/WprowadzHaslo" style="@style/ProfileEditText" android:layout_width="match_parent" android:hint="Utwórz hasło" android:inputType="textPassword" />
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/grey_600" android:layout_marginVertical="15dp" />
+
+            <EditText android:id="@+id/WprowadzImie" style="@style/ProfileEditText" android:layout_width="match_parent" android:hint="Imię" android:inputType="textPersonName" />
+            <EditText android:id="@+id/WprowadzNazwisko" style="@style/ProfileEditText" android:layout_width="match_parent" android:hint="Nazwisko" android:inputType="textPersonName" />
+            <EditText android:id="@+id/WprowadzEmail" style="@style/ProfileEditText" android:layout_width="match_parent" android:hint="Adres Email" android:inputType="textEmailAddress" />
+            <EditText android:id="@+id/WprowadzTelefon" style="@style/ProfileEditText" android:layout_width="match_parent" android:hint="Numer telefonu" android:inputType="phone" />
+            <EditText android:id="@+id/WprowadzAdres" style="@style/ProfileEditText" android:layout_width="match_parent" android:hint="Adres zamieszkania" android:inputType="text" />
+
+            <Button
+                android:id="@+id/ZarejestrujButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/green_400"
+                android:text="ZAŁÓŻ KONTO"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
