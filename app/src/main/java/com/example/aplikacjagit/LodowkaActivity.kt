@@ -1,417 +1,276 @@
 package com.example.aplikacjagit
 
-import android.R.attr.text
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.aplikacjagit.adaptery.DodaneAdapter
-import com.example.aplikacjagit.adaptery.LodowkaAdapter
-import com.example.aplikacjagit.adaptery.ProduktAdapter
-import com.example.aplikacjagit.adaptery.PrzepisyAdapter
-import com.example.aplikacjagit.room.DAO
-import com.example.aplikacjagit.room.DaneGlobalne
-import com.example.aplikacjagit.room.DaneViewModel
-import com.example.aplikacjagit.room.Dodane
-import com.example.aplikacjagit.room.Lodowka
-import com.example.aplikacjagit.room.Przepis
-import com.example.aplikacjagit.room.PrzepisProdukt
-import kotlinx.coroutines.delay
+import com.example.aplikacjagit.adaptery.*
+import com.example.aplikacjagit.room.*
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
-import kotlin.Int
-import kotlin.String
+import java.util.Locale
 
 class LodowkaActivity : ComponentActivity() {
-    private lateinit var ProfilButton: ImageButton
-    private lateinit var HomeButton: ImageButton
-    private lateinit var LodowkaButton: ImageButton
-    private lateinit var TreningButton: ImageButton
-    private lateinit var DietaButton: ImageButton
+    private lateinit var daneViewModel: DaneViewModel
+    private var selectedLocalDate: LocalDate = LocalDate.now()
+    private var listaDodanychDoPrzepisu = mutableListOf<Dodane>()
+    private var ID_PRZEPISU = 0
+    private var numerOpcji = 0 // 0: Lodówka, 1: Wszystkie przepisy
 
-    private lateinit var sumaKaloriiText: TextView
-    private lateinit var sumaBialekText: TextView
-    private lateinit var sumaWeglowodanowText: TextView
-    private lateinit var sumaTluszczyText: TextView
-
-    private lateinit var widokPrzepisy: RecyclerView
-    private lateinit var widokProdukty: RecyclerView
-    private lateinit var widokDodane: RecyclerView
-    private lateinit var widokPrzepisyLayout : ConstraintLayout
-    private lateinit var widokDodawanieLayout : ConstraintLayout
-    private lateinit var dodajPrzepisOknoButton : ImageButton
-    private lateinit var dodajPrzepisButton : ImageButton
-    private lateinit var wrocPrzepisyButton : ImageButton
-    private lateinit var gornyNapisPrzepisy: LinearLayout
-    private lateinit var gornyNapisDodawanie: LinearLayout
+    // Elementy widoku
+    private lateinit var widokPrzepisyLayout: ConstraintLayout
+    private lateinit var widokDodawanieLayout: ConstraintLayout
     private lateinit var widokProduktyLayout: ConstraintLayout
-    private lateinit var gornyNapisProdukty: LinearLayout
-    private lateinit var widokProduktyLodowka: RecyclerView
-    private lateinit var dodajProduktButton: ImageButton
-    private lateinit var widokDodawanieProduktowLayout : ConstraintLayout
-    private lateinit var widokProduktyDoLodowki: RecyclerView
-    private lateinit var WyszukiwanieProduktowDoLodowki: EditText
-    private lateinit var PowrotProduktButton: ImageButton
-    private lateinit var gornynapisDodajProdukt: LinearLayout
-
+    private lateinit var widokDodawanieProduktowLayout: ConstraintLayout
+    private lateinit var widokWszystkiePrzepisyLayout: ConstraintLayout
+    private lateinit var tekstOpcji: TextView
     private lateinit var OpcjaWLewo: ImageButton
     private lateinit var OpcjaWPrawo: ImageButton
-    private lateinit var widokWszystkiePrzepisyLayout: ConstraintLayout
-    private lateinit var widokWszystkiePrzepisy: RecyclerView
-    private lateinit var tekstOpcji: TextView // Do zmiany napisu "TWOJA LODÓWKA" na inny (opcjonalnie)
 
-    private lateinit var nazwa: EditText
-    private lateinit var opis: EditText
-
-    private lateinit var Wyszukaj: EditText
-
-    private lateinit var daneViewModel: DaneViewModel
-
+    private lateinit var adapterDodane: DodaneAdapter
+    private lateinit var lodowkaAdapter: LodowkaAdapter
     private lateinit var produktAdapter: ProduktAdapter
-    private lateinit var produktLodowkaAdapter : ProduktAdapter
-
-    private var selectedLocalDate: LocalDate = LocalDate.now()
+    private lateinit var produktLodowkaAdapter: ProduktAdapter
+    private lateinit var przepisyAdapter: PrzepisyAdapter
+    private lateinit var wszystkiePrzepisyAdapter: PrzepisyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.lodowka)
 
-        var listaDodanychDoPrzepisu: MutableList<Dodane>  = mutableListOf<Dodane>()
-
         val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
+        val mainLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
+        val zapisanyKolor = danePreferencje.getInt("wybranyKolor", -1)
+        if (zapisanyKolor != -1) mainLayout.setBackgroundColor(zapisanyKolor)
 
         val app = application as DaneGlobalne
-        var aktualnyUzytkownik = app.aktualnyUzytkownik
-
-        val przepisyAdapter = PrzepisyAdapter()
-        val wszystkiePrzepisyAdapter = PrzepisyAdapter()
-
-        ProfilButton =  findViewById(R.id.ProfilButton)
-        HomeButton =  findViewById(R.id.HomeButton)
-        LodowkaButton =  findViewById(R.id.LodowkaButton)
-        TreningButton =  findViewById(R.id.TreningButton)
-        DietaButton =  findViewById(R.id.DietaButton)
-
-        sumaKaloriiText = findViewById(R.id.sumaKaloriiText)
-        sumaBialekText = findViewById(R.id.sumaBialekText)
-        sumaWeglowodanowText = findViewById(R.id.sumaWeglowodanowText)
-        sumaTluszczyText = findViewById(R.id.sumaTluszczyText)
-
-        widokPrzepisy = findViewById(R.id.widokPrzepisy)
-
-        Wyszukaj = findViewById(R.id.Wyszukiwanie)
-        widokProdukty = findViewById(R.id.widokProdukty)
-        widokDodane = findViewById(R.id.widokDodane)
-
-        widokPrzepisyLayout = findViewById(R.id.widokPrzepisyLayout)
-        widokDodawanieLayout = findViewById(R.id.widokDodawaniePrzepisowLayout)
-        dodajPrzepisButton = findViewById(R.id.dodajPrzepisButton)
-        dodajPrzepisOknoButton = findViewById(R.id.dodajPrzepisOtworzOkno)
-        wrocPrzepisyButton = findViewById(R.id.PowrotPrzepisButton)
-        gornyNapisPrzepisy = findViewById(R.id.gornynapisPrzepisy)
-        gornyNapisDodawanie = findViewById(R.id.gornynapisDodajPrzepis)
-        dodajProduktButton = findViewById(R.id.dodajProdukt)
-        widokDodawanieProduktowLayout = findViewById(R.id.widokDodawanieProduktowLayout)
-        widokProduktyDoLodowki = findViewById(R.id.widokProduktyDoLodowki)
-        WyszukiwanieProduktowDoLodowki = findViewById(R.id.WyszukiwanieProduktowDoLodowki)
-        PowrotProduktButton = findViewById(R.id.PowrotProduktButton)
-        gornynapisDodajProdukt = findViewById(R.id.gornynapisDodajProdukt)
-        widokProduktyLodowka = findViewById(R.id.widokProduktyLodowka)
-        gornyNapisProdukty = findViewById(R.id.gornynapisProdukty)
-        widokProduktyLayout = findViewById(R.id.widokProduktyLayout)
-
-        OpcjaWLewo = findViewById(R.id.OpcjaWLewo)
-        OpcjaWPrawo = findViewById(R.id.OpcjaWPrawo)
-        widokWszystkiePrzepisyLayout = findViewById(R.id.widokWszystkiePrzepisyLayout)
-        widokWszystkiePrzepisy = findViewById(R.id.widokWszystkiePrzepisy)
-        tekstOpcji = findViewById(R.id.tekstOpcji)
-
-        nazwa = findViewById(R.id.nazwa)
-        opis = findViewById(R.id.opis)
-
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
 
+        initViews()
+        setupAdapters()
+        setupObservers(app)
+        setupClickListeners()
+        setupNavigation()
 
-        var adapterDodane = DodaneAdapter()
-        adapterDodane = DodaneAdapter { dodane ->
-            listaDodanychDoPrzepisu.remove(dodane)
-            adapterDodane.stworzDodane(listaDodanychDoPrzepisu)
+        // Ustawienie widoku startowego
+        aktualizujWidokGłówny()
+    }
+
+    private fun setupAdapters() {
+        adapterDodane = DodaneAdapter { item ->
+            listaDodanychDoPrzepisu.remove(item)
+            adapterDodane.stworzDodane(listaDodanychDoPrzepisu.toList())
+        }
+        findViewById<RecyclerView>(R.id.widokDodane).apply {
+            adapter = adapterDodane
+            layoutManager = LinearLayoutManager(this@LodowkaActivity)
         }
 
-        produktAdapter = ProduktAdapter { produkt, gramy ->
-            val produktId = produkt.id
-            val sumaKalorii = kotlin.math.round((produkt.kalorycznosc ?: 0).toDouble() * gramy / 100.0).toInt()
-            val sumaBialek = kotlin.math.round((produkt.bialka ?: 0).toDouble() * gramy / 100.0)
-            val sumaTluszczy = kotlin.math.round((produkt.tluszcze ?: 0).toDouble() * gramy / 100.0)
-            val sumaWeglowodanow = kotlin.math.round((produkt.weglowodany ?: 0).toDouble() * gramy / 100.0)
-
-            // używamy selectedLocalDate (to jest data wybrana przez użytkownika)
-            val dateForRoom: Date = Date.from(
-                selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
-            )
-
-            val dodane = Dodane(
-                idProduktu = produktId,
-                nazwa = produkt.nazwa,
-                ilosc = gramy,
-                sumaKalorii = sumaKalorii,
-                sumaBialek = sumaBialek,
-                sumaTluszczy = sumaTluszczy,
-                sumaWeglowodanow = sumaWeglowodanow,
-                data = dateForRoom,
-                poraDnia = 1
-            )
-            listaDodanychDoPrzepisu.add(dodane)
-            android.widget.Toast.makeText(this, "Dodano ${produkt.nazwa} — ${gramy}g (${sumaKalorii} kcal)", android.widget.Toast.LENGTH_SHORT).show()
-            adapterDodane.stworzDodane(listaDodanychDoPrzepisu)
-
+        produktAdapter = ProduktAdapter { produkt -> pokazDialogGramy(produkt, "PRZEPIS") }
+        findViewById<RecyclerView>(R.id.widokProdukty).apply {
+            adapter = produktAdapter
+            layoutManager = LinearLayoutManager(this@LodowkaActivity)
         }
 
-        adapterDodane.stworzDodane(listaDodanychDoPrzepisu)
-
-        val LodowkaAdapter = LodowkaAdapter { produkt ->
-            daneViewModel.deleteLodowka(produkt)
+        produktLodowkaAdapter = ProduktAdapter { produkt -> pokazDialogGramy(produkt, "LODOWKA") }
+        findViewById<RecyclerView>(R.id.widokProduktyDoLodowki).apply {
+            adapter = produktLodowkaAdapter
+            layoutManager = LinearLayoutManager(this@LodowkaActivity)
         }
 
-        produktLodowkaAdapter = ProduktAdapter { produkt, gramy ->
-            val produktId = produkt.id
-            val lodowka = Lodowka(
-                idProduktu = produktId,
-                nazwa = produkt.nazwa,
-                ilosc = gramy,
-            )
-            daneViewModel.insertLodowka(lodowka)
+        lodowkaAdapter = LodowkaAdapter { item -> daneViewModel.deleteLodowka(item) }
+        findViewById<RecyclerView>(R.id.widokProduktyLodowka).apply {
+            adapter = lodowkaAdapter
+            layoutManager = LinearLayoutManager(this@LodowkaActivity)
         }
 
-        widokPrzepisy.adapter = przepisyAdapter
-        widokPrzepisy.layoutManager = LinearLayoutManager(this)
-
-        widokProduktyDoLodowki.adapter = produktLodowkaAdapter
-        widokProduktyDoLodowki.layoutManager = LinearLayoutManager(this)
-
-        widokProdukty.adapter = produktAdapter
-        widokProdukty.layoutManager = LinearLayoutManager(this)
-
-        widokDodane.adapter = adapterDodane
-        widokDodane.layoutManager = LinearLayoutManager(this)
-
-        widokProduktyLodowka.adapter = LodowkaAdapter
-        widokProduktyLodowka.layoutManager = LinearLayoutManager(this)
-
-        widokWszystkiePrzepisy.adapter = wszystkiePrzepisyAdapter
-        widokWszystkiePrzepisy.layoutManager = LinearLayoutManager(this)
-
-        updateSelectedDate(selectedLocalDate)
-
-        var sumakalorii = 0.0
-        var sumabialek = 0.0
-        var sumaweglowodanow = 0.0
-        var sumatluszczy = 0.0
-
-        sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
-        sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
-        sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
-        sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
-
-        daneViewModel.wyswietlPrzepisyZLodowki.observe(this){ lista ->
-            przepisyAdapter.submitList(lista.toList())
+        przepisyAdapter = PrzepisyAdapter { /* szczegóły */ }
+        findViewById<RecyclerView>(R.id.widokPrzepisy).apply {
+            adapter = przepisyAdapter
+            layoutManager = LinearLayoutManager(this@LodowkaActivity)
         }
 
-        daneViewModel.szukajProdukty.observe(this) { lista ->
-            produktAdapter.stworzProdukt(lista)
-            produktLodowkaAdapter.stworzProdukt(lista)
+        wszystkiePrzepisyAdapter = PrzepisyAdapter { /* szczegóły */ }
+        findViewById<RecyclerView>(R.id.widokWszystkiePrzepisy).apply {
+            adapter = wszystkiePrzepisyAdapter
+            layoutManager = LinearLayoutManager(this@LodowkaActivity)
         }
+    }
 
-        daneViewModel.wyswietlLodowka.observe(this){ lista ->
-            LodowkaAdapter.stworzLodowka(lista)
+    private fun setupObservers(app: DaneGlobalne) {
+        daneViewModel.wyswietlPrzepisyZLodowki.observe(this) { przepisyAdapter.submitList(it) }
+        daneViewModel.wyswietlPrzepisy.observe(this) { wszystkiePrzepisyAdapter.submitList(it) }
+        daneViewModel.wyswietlLodowka.observe(this) { lodowkaAdapter.stworzLodowka(it) }
+        daneViewModel.szukajProdukty.observe(this) {
+            produktAdapter.stworzProdukt(it)
+            produktLodowkaAdapter.stworzProdukt(it)
         }
+        daneViewModel.getOstatniPrzepisId.observe(this) { id -> if (id != null) ID_PRZEPISU = id }
 
-        daneViewModel.wyswietlPrzepisy.observe(this) { lista ->
-            wszystkiePrzepisyAdapter.submitList(lista)
-        }
         daneViewModel.wyswietlDodane.observe(this) { lista ->
-            sumakalorii = 0.0
-            sumabialek = 0.0
-            sumaweglowodanow = 0.0
-            sumatluszczy = 0.0
-            for(produkt in lista){
-                if(produkt.sumaKalorii != null && produkt.sumaBialek != null  && produkt.sumaTluszczy != null && produkt.sumaWeglowodanow != null) {
-                    sumakalorii += produkt.sumaKalorii
-                    sumabialek += produkt.sumaBialek
-                    sumatluszczy += produkt.sumaTluszczy
-                    sumaweglowodanow += produkt.sumaWeglowodanow
+            val sk = lista.sumOf { it.sumaKalorii ?: 0 }
+            val sb = lista.sumOf { it.sumaBialek ?: 0.0 }
+            val sw = lista.sumOf { it.sumaWeglowodanow ?: 0.0 }
+            val st = lista.sumOf { it.sumaTluszczy ?: 0.0 }
 
-                    sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
-                    sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
-                    sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
-                    sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
-
-                }
-            }
+            findViewById<TextView>(R.id.sumaKaloriiText).text = "Kalorie\n$sk / ${app.celKalorii}"
+            findViewById<TextView>(R.id.sumaBialekText).text = String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
+            findViewById<TextView>(R.id.sumaWeglowodanowText).text = String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
+            findViewById<TextView>(R.id.sumaTluszczyText).text = String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
         }
+    }
 
-        ProfilButton.setOnClickListener { przenies(ProfilActivity::class.java)}
-        HomeButton.setOnClickListener { przenies(HomeActivity::class.java)}
-        LodowkaButton.setOnClickListener { przenies(LodowkaActivity::class.java)}
-        TreningButton.setOnClickListener { przenies(TreningActivity::class.java)}
-        DietaButton.setOnClickListener { przenies(DietaActivity::class.java)}
-
-        Wyszukaj.addTextChangedListener{ text ->
-            daneViewModel.setQuery(text?.toString() ?: "")
-        }
-
-        WyszukiwanieProduktowDoLodowki.addTextChangedListener { text ->
-            daneViewModel.setQuery(text?.toString() ?: "")
-        }
-
-        wrocPrzepisyButton.setOnClickListener {
-            widokDodawanieLayout.visibility = View.GONE
-            gornyNapisDodawanie.visibility = View.GONE
-
-            gornyNapisProdukty.visibility = View.VISIBLE
-            gornyNapisPrzepisy.visibility = View.VISIBLE
-            widokProduktyLayout.visibility = View.VISIBLE
-            widokPrzepisyLayout.visibility = View.VISIBLE
-        }
-
-        dodajPrzepisOknoButton.setOnClickListener {
-            gornyNapisPrzepisy.visibility = View.GONE
-            widokProduktyLayout.visibility = View.GONE
-            gornyNapisProdukty.visibility = View.GONE
-            widokPrzepisyLayout.visibility = View.GONE
-
-            widokDodawanieLayout.visibility = View.VISIBLE
-            gornyNapisDodawanie.visibility = View.VISIBLE
-        }
-
-        PowrotProduktButton.setOnClickListener {
-            widokDodawanieProduktowLayout.visibility = View.GONE
-            gornynapisDodajProdukt.visibility = View.GONE
-
-            widokPrzepisyLayout.visibility = View.VISIBLE
-            gornyNapisPrzepisy.visibility = View.VISIBLE
-            widokProduktyLayout.visibility = View.VISIBLE
-            gornyNapisProdukty.visibility = View.VISIBLE
-        }
-
-        dodajProduktButton.setOnClickListener {
-            widokPrzepisyLayout.visibility = View.GONE
-            gornyNapisPrzepisy.visibility = View.GONE
-            gornyNapisProdukty.visibility = View.GONE
-            widokProduktyLayout.visibility = View.GONE
-
-            widokDodawanieProduktowLayout.visibility = View.VISIBLE
-            gornynapisDodajProdukt.visibility = View.VISIBLE
-        }
-
-        OpcjaWPrawo.setOnClickListener {
-            gornyNapisProdukty.visibility = View.GONE
-            widokProduktyLayout.visibility = View.GONE
-            gornyNapisPrzepisy.visibility = View.GONE
-            widokPrzepisyLayout.visibility = View.GONE
-
-            widokWszystkiePrzepisyLayout.visibility = View.VISIBLE
-            tekstOpcji.text = "W S Z Y S T K I E   P R Z E P I S Y"
-        }
-
+    private fun setupClickListeners() {
+        // Logika cyklicznych strzałek
         OpcjaWLewo.setOnClickListener {
-            widokWszystkiePrzepisyLayout.visibility = View.GONE
-
-            gornyNapisProdukty.visibility = View.VISIBLE
-            widokProduktyLayout.visibility = View.VISIBLE
-            gornyNapisPrzepisy.visibility = View.VISIBLE
-            widokPrzepisyLayout.visibility = View.VISIBLE
-            tekstOpcji.text = "T W O J A   L O D Ó W K A"
+            numerOpcji = if (numerOpcji == 0) 1 else 0
+            aktualizujWidokGłówny()
+        }
+        OpcjaWPrawo.setOnClickListener {
+            numerOpcji = if (numerOpcji == 1) 0 else 1
+            aktualizujWidokGłówny()
         }
 
-        var ID = 0
-        daneViewModel.getOstatniPrzepisId.observe(this){ id ->
-            if(id != null) {
-                ID = id
-            }
-        }
+        // Reszta listenerów dla przycisków dodawania (wyłączają widoki główne)
+        findViewById<ImageButton>(R.id.dodajPrzepisOtworzOkno).setOnClickListener { switchLayouts(recipeAdd = true) }
+        findViewById<ImageButton>(R.id.PowrotPrzepisButton).setOnClickListener { switchLayouts(recipeAdd = false) }
+        findViewById<ImageButton>(R.id.dodajProdukt).setOnClickListener { switchLayouts(productAdd = true) }
+        findViewById<ImageButton>(R.id.PowrotProduktButton).setOnClickListener { switchLayouts(productAdd = false) }
 
-        dodajPrzepisButton.setOnClickListener {
-            var sumakcal = 0
-            var sumab = 0.0
-            var sumaw = 0.0
-            var sumat = 0.0
-            var waga = 0
-            for(element in listaDodanychDoPrzepisu){
-                if(element.sumaBialek!= null && element.sumaKalorii!= null && element.sumaTluszczy!= null && element.sumaWeglowodanow != null && element.ilosc != null) {
-                    sumakcal += element.sumaKalorii
-                    sumab += element.sumaBialek
-                    sumaw += element.sumaWeglowodanow
-                    sumat += element.sumaTluszczy
-                    waga += element.ilosc
-                }
-                var przepisProdukt = PrzepisProdukt(0, 0, 0)
-                if(waga != 0) {
-                    if (element.idProduktu != null) {
-                        przepisProdukt = PrzepisProdukt(
-                            przepisId = ID + 1,
-                            produktId = element.idProduktu,
-                            iloscPotrzebna = element.ilosc
-                        )
-                    }
-                }
-                daneViewModel.insertPrzepisProdukt(przepisProdukt)
+        // Zapisywanie przepisu
+        findViewById<ImageButton>(R.id.dodajPrzepisButton).setOnClickListener {
+            val nazwaET = findViewById<EditText>(R.id.nazwa)
+            val opisET = findViewById<EditText>(R.id.opis)
+            if (nazwaET.text.isNotEmpty() && listaDodanychDoPrzepisu.isNotEmpty()) {
+                val wagaTotal = listaDodanychDoPrzepisu.sumOf { it.ilosc ?: 0 }
+                val kcalTotal = listaDodanychDoPrzepisu.sumOf { it.sumaKalorii ?: 0 }
+                val bTotal = listaDodanychDoPrzepisu.sumOf { it.sumaBialek ?: 0.0 }
+                val wTotal = listaDodanychDoPrzepisu.sumOf { it.sumaWeglowodanow ?: 0.0 }
+                val tTotal = listaDodanychDoPrzepisu.sumOf { it.sumaTluszczy ?: 0.0 }
+
                 val przepis = Przepis(
-                    nazwa = nazwa.text.toString(),
-                    opis = opis.text.toString(),
-                    kalorycznosc = sumakcal / waga * 100,
-                    bialka = sumab / waga * 100,
-                    weglowodany = sumaw / waga * 100,
-                    tluszcze = sumat / waga * 100
+                    nazwaET.text.toString(), opisET.text.toString(),
+                    (kcalTotal.toDouble() / wagaTotal * 100).toInt(),
+                    (bTotal / wagaTotal * 100), (wTotal / wagaTotal * 100), (tTotal / wagaTotal * 100)
                 )
-
                 daneViewModel.insertPrzepis(przepis)
 
+                listaDodanychDoPrzepisu.forEach {
+                    daneViewModel.insertPrzepisProdukt(PrzepisProdukt(ID_PRZEPISU + 1, it.idProduktu ?: 0, it.ilosc))
+                }
+
+                listaDodanychDoPrzepisu.clear()
+                adapterDodane.stworzDodane(emptyList())
+                nazwaET.setText(""); opisET.setText("")
+                switchLayouts(recipeAdd = false)
+                Toast.makeText(this, "Przepis zapisany!", Toast.LENGTH_SHORT).show()
             }
-
-
-            listaDodanychDoPrzepisu = mutableListOf<Dodane>()
-            adapterDodane.stworzDodane(listaDodanychDoPrzepisu)
-            opis.setText("")
-            nazwa.setText("")
-            widokDodawanieLayout.visibility = View.GONE
-            gornyNapisDodawanie.visibility = View.GONE
-
-            gornyNapisProdukty.visibility = View.VISIBLE
-            gornyNapisPrzepisy.visibility = View.VISIBLE
-            widokProduktyLayout.visibility = View.VISIBLE
-            widokPrzepisyLayout.visibility = View.VISIBLE
         }
 
+        findViewById<EditText>(R.id.Wyszukiwanie).addTextChangedListener { daneViewModel.setQuery(it?.toString() ?: "") }
+        findViewById<EditText>(R.id.WyszukiwanieProduktowDoLodowki).addTextChangedListener { daneViewModel.setQuery(it?.toString() ?: "") }
     }
 
-    private fun updateSelectedDate(newDate: LocalDate) {
-        selectedLocalDate = newDate
-        // konwertujemy LocalDate -> Date (start of day)
-        val dateForRoom: Date = Date.from(
-            selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
-        )
-        // ustawiamy query w ViewModelie
-        daneViewModel.setDateQuery(dateForRoom)
+    private fun aktualizujWidokGłówny() {
+        // Reset widoczności formularzy
+        widokDodawanieLayout.visibility = View.GONE
+        widokDodawanieProduktowLayout.visibility = View.GONE
+        findViewById<View>(R.id.gornynapisDodajPrzepis).visibility = View.GONE
+        findViewById<View>(R.id.gornynapisDodajProdukt).visibility = View.GONE
+
+        when (numerOpcji) {
+            0 -> {
+                tekstOpcji.text = "T W O J A   L O D Ó W K A"
+                widokPrzepisyLayout.visibility = View.VISIBLE
+                widokProduktyLayout.visibility = View.VISIBLE
+                widokWszystkiePrzepisyLayout.visibility = View.GONE
+            }
+            1 -> {
+                tekstOpcji.text = "W S Z Y S T K I E   P R Z E P I S Y"
+                widokPrzepisyLayout.visibility = View.GONE
+                widokProduktyLayout.visibility = View.GONE
+                widokWszystkiePrzepisyLayout.visibility = View.VISIBLE
+            }
+        }
     }
 
-    fun przenies(Cel : Class<out Activity>){
-        val intent = Intent(this@LodowkaActivity, Cel)
-        startActivity(intent)
+    private fun switchLayouts(recipeAdd: Boolean = false, productAdd: Boolean = false) {
+        // Jeśli zamykamy formularz, wracamy do widoku zależnego od numerOpcji
+        if (!recipeAdd && !productAdd) {
+            aktualizujWidokGłówny()
+            return
+        }
+
+        // Ukrywamy widoki główne przed pokazaniem formularza
+        widokPrzepisyLayout.visibility = View.GONE
+        widokProduktyLayout.visibility = View.GONE
+        widokWszystkiePrzepisyLayout.visibility = View.GONE
+
+        if (recipeAdd) {
+            widokDodawanieLayout.visibility = View.VISIBLE
+            findViewById<View>(R.id.gornynapisDodajPrzepis).visibility = View.VISIBLE
+        } else if (productAdd) {
+            widokDodawanieProduktowLayout.visibility = View.VISIBLE
+            findViewById<View>(R.id.gornynapisDodajProdukt).visibility = View.VISIBLE
+        }
     }
+
+    private fun initViews() {
+        widokPrzepisyLayout = findViewById(R.id.widokPrzepisyLayout)
+        widokDodawanieLayout = findViewById(R.id.widokDodawaniePrzepisowLayout)
+        widokProduktyLayout = findViewById(R.id.widokProduktyLayout)
+        widokDodawanieProduktowLayout = findViewById(R.id.widokDodawanieProduktowLayout)
+        widokWszystkiePrzepisyLayout = findViewById(R.id.widokWszystkiePrzepisyLayout)
+        tekstOpcji = findViewById(R.id.tekstOpcji)
+        OpcjaWLewo = findViewById(R.id.OpcjaWLewo)
+        OpcjaWPrawo = findViewById(R.id.OpcjaWPrawo)
+    }
+
+    private fun pokazDialogGramy(produkt: Produkt, target: String) {
+        val builder = AlertDialog.Builder(this)
+        val input = EditText(this).apply {
+            hint = "Ilość (g/szt)"
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER
+        }
+        builder.setTitle(produkt.nazwa).setView(input)
+        builder.setPositiveButton("Dodaj") { _, _ ->
+            val gramy = input.text.toString().toIntOrNull() ?: 0
+            if (gramy > 0) {
+                if (target == "PRZEPIS") {
+                    val ratio = gramy / 100.0
+                    listaDodanychDoPrzepisu.add(Dodane(
+                        produkt.id, produkt.nazwa, gramy, null, 0,
+                        ((produkt.kalorycznosc ?: 0) * ratio).toInt(),
+                        (produkt.bialka ?: 0.0) * ratio,
+                        (produkt.weglowodany ?: 0.0) * ratio,
+                        (produkt.tluszcze ?: 0.0) * ratio
+                    ))
+                    adapterDodane.stworzDodane(listaDodanychDoPrzepisu.toList())
+                } else {
+                    daneViewModel.insertLodowka(Lodowka(produkt.id, gramy, produkt.nazwa))
+                    switchLayouts(productAdd = false)
+                }
+            }
+        }
+        builder.show()
+    }
+
+    private fun setupNavigation() {
+        findViewById<ImageButton>(R.id.ProfilButton).setOnClickListener { przenies(ProfilActivity::class.java) }
+        findViewById<ImageButton>(R.id.HomeButton).setOnClickListener { przenies(HomeActivity::class.java) }
+        findViewById<ImageButton>(R.id.TreningButton).setOnClickListener { przenies(TreningActivity::class.java) }
+        findViewById<ImageButton>(R.id.DietaButton).setOnClickListener { przenies(DietaActivity::class.java) }
+    }
+
+    fun przenies(Cel: Class<out Activity>) { startActivity(Intent(this, Cel)) }
 }

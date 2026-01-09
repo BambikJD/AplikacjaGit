@@ -2,9 +2,119 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:background="@color/background_color"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+
+    <LinearLayout
+        android:id="@+id/gornyNapis"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/green_400"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="H O M E"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_850"
+                android:orientation="vertical"
+                android:padding="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ZOSTAŁO DO ZJEDZENIA"
+                    android:textColor="@color/white_50"
+                    android:textSize="12sp"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/pozostaloKcal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2000 kcal"
+                    android:textColor="@color/green_400"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/grey_850"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:id="@+id/treningStatusIkona"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/trening"
+                    app:tint="@color/white_50" />
+                <TextView
+                    android:id="@+id/treningStatusTekst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trening nie został jeszcze wykonany"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="15dp"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CO MOŻESZ TERAZ ZJEŚĆ?"
+                android:textColor="@color/white_50"
+                android:textSize="12sp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPropozycje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/przepis_item" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/podsumowanie"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/grey_850"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/NawigacjaLayout">
+        <TextView android:id="@+id/sumaKaloriiText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" android:gravity="center" android:text="Kcal:" android:textColor="@color/white_50" android:textSize="13sp" />
+        <TextView android:id="@+id/sumaBialekText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="B:" android:textColor="@color/white_50" />
+        <TextView android:id="@+id/sumaWeglowodanowText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="W:" android:textColor="@color/white_50" />
+        <TextView android:id="@+id/sumaTluszczyText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="T:" android:textColor="@color/white_50" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/NawigacjaLayout"
@@ -72,76 +182,6 @@
             android:textAlignment="center"
             android:textColor="#000000" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:gravity="center"
-        android:id="@+id/gornyNapis"
-        android:layout_width="match_parent"
-        android:background="@color/green_400"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="H O M E"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:textColor="@color/black">
-        </TextView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/podsumowanie"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/grey_850"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/sumaKaloriiText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:textColor="@color/white_50"
-            android:gravity="center"
-            android:text="Kcal:"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/sumaBialekText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="B:" />
-
-        <TextView
-            android:id="@+id/sumaWeglowodanowText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="W:" />
-
-        <TextView
-            android:id="@+id/sumaTluszczyText"
-            android:textColor="@color/white_50"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="T:" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

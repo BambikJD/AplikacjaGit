@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingVertical="2dp">
+    android:paddingVertical="1dp">
 
     <TextView
         android:id="@+id/nazwaProduktPotrzebny"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Składnik"
+        android:text="• Składnik"
         android:textColor="@color/white_50"
         android:textSize="12sp" />
 
@@ -19,6 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="100g"
-        android:textColor="@color/white_50"
+        android:textColor="@color/white"
         android:textSize="12sp" />
 </LinearLayout>

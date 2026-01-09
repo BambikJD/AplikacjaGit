@@ -2,463 +2,222 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:background="@color/background_color"
-    android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/widokProduktyLayout"
-        android:layout_width="match_parent"
-        android:layout_marginTop="2dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/gornynapisProdukty">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokProduktyLodowka"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:itemCount="2"
-                tools:listitem="@layout/lodowka_item">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/widokPrzepisyLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/gornynapisPrzepisy">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokPrzepisy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:itemCount="1"
-                tools:listitem="@layout/przepis_item">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/widokDodawaniePrzepisowLayout"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/gornynapisDodajPrzepis">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:textColor="@color/white"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/white"
-                android:hint="Nazwa"
-                android:id="@+id/nazwa"
-                android:textColorHint="@color/white">
-            </EditText>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:hint="Opis"
-                android:id="@+id/opis"
-                android:inputType="textMultiLine"
-                android:gravity="top|start"
-                android:scrollHorizontally="false"
-                android:textColor="@color/white"
-                android:maxLines="10"
-                android:minLines="3"
-                android:overScrollMode="always"
-                android:textColorHint="@color/white">
-            </EditText>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokDodane"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:itemCount="3"
-                tools:listitem="@layout/dodane_item" />
-
-            <LinearLayout
-                android:id="@+id/WyszukiwanieLayout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/Wyszukiwanie"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:backgroundTint="@color/white"
-                    android:layout_weight="3">
-
-                </EditText>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/szukaj">
-
-                </ImageView>
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokProdukty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/produkt_item" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/widokDodawanieProduktowLayout"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/gornynapisDodajProdukt">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:id="@+id/WyszukiwanieProduktowLayout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/WyszukiwanieProduktowDoLodowki"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:backgroundTint="@color/white"
-                    android:layout_weight="3">
-                </EditText>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/szukaj">
-
-                </ImageView>
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokProduktyDoLodowki"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="1dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/produkt_item" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/widokWszystkiePrzepisyLayout"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/zmienOpcje"
-        app:layout_constraintBottom_toTopOf="@id/podsumowanie">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/widokWszystkiePrzepisy"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/przepis_item" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/NawigacjaLayout"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageButton
-            android:id="@+id/ProfilButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/profil"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
-
-        <ImageButton
-            android:id="@+id/DietaButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:textAlignment="center"
-            android:src="@drawable/dieta"
-            android:textColor="#000000" />
-
-        <ImageButton
-            android:id="@+id/HomeButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/home"
-            android:textAlignment="center"
-            android:textColor="#000000" />
-
-        <ImageButton
-            android:id="@+id/TreningButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/trening"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
-
-        <ImageButton
-            android:id="@+id/LodowkaButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/lodowka"
-            android:textAlignment="center"
-            android:textColor="#000000" />
-
-    </LinearLayout>
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <LinearLayout
         android:id="@+id/gornyNapis"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/green_400"
             android:gravity="center"
-            android:text="L O D O W K A"
+            android:text="L O D Ó W K A"
             android:textColor="@color/black"
-            android:textSize="30sp"
-            android:textStyle="bold">
-
-        </TextView>
-
+            android:textSize="26sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:id="@+id/zmienOpcje"
+        android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@color/green_400"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
-
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
         <ImageButton
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
             android:id="@+id/OpcjaWLewo"
-            android:background="@color/green_400"
-            android:src="@drawable/strzalka">
-
-        </ImageButton>
-
-        <TextView
             android:layout_width="0dp"
-            android:layout_weight="3"
-            android:id="@+id/tekstOpcji"
-            android:text="T W O J A   L O D Ó W K A"
-            android:gravity="center"
-            android:layout_height="match_parent">
-
-        </TextView>
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/green_400"
+            android:src="@drawable/strzalka" />
+        <TextView
+            android:id="@+id/tekstOpcji"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="T W O J A   L O D Ó W K A"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+        <ImageButton
             android:id="@+id/OpcjaWPrawo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@color/green_400"
             android:rotation="180"
-            android:src="@drawable/strzalka">
-
-        </ImageButton>
+            android:src="@drawable/strzalka" />
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/mainScroll"
         android:layout_width="match_parent"
-        android:id="@+id/gornynapisProdukty"
-        android:layout_height="35dp"
-        android:background="@color/green_400"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/zmienOpcje">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/zmienOpcje">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:text="Z A W A R T O Ś Ć"
-            android:gravity="center"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </TextView>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/widokProduktyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/gornynapisProdukty"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@color/grey_850"
+                    android:paddingStart="15dp"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="Z A W A R T O Ś Ć"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+                    <ImageButton
+                        android:id="@+id/dodajProdukt"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ikonadodajbiala" />
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/widokProduktyLodowka"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintTop_toBottomOf="@id/gornynapisProdukty"
+                    tools:listitem="@layout/lodowka_item" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:id="@+id/dodajProdukt"
-            android:background="@color/green_400"
-            android:src="@drawable/ikonadodaj">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/widokPrzepisyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <LinearLayout
+                    android:id="@+id/gornynapisPrzepisy"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@color/grey_850"
+                    android:paddingStart="15dp"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="D O S T Ę P N E   P R Z E P I S Y"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+                    <ImageButton
+                        android:id="@+id/dodajPrzepisOtworzOkno"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ikonadodajbiala" />
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/widokPrzepisy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintTop_toBottomOf="@id/gornynapisPrzepisy"
+                    tools:listitem="@layout/przepis_item" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ImageButton>
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokWszystkiePrzepisyLayout"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:id="@+id/gornynapisDodajProdukt"
+        android:layout_height="0dp"
         android:visibility="gone"
-        android:background="@color/green_400"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/zmienOpcje">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/widokWszystkiePrzepisy"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/PowrotProduktButton"
-            android:background="@color/green_400"
-            android:src="@drawable/strzalka">
+            tools:listitem="@layout/przepis_item" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ImageButton>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:text="D O D A J      D O      L O D O W K I"
-            android:gravity="center"
-            android:layout_height="match_parent">
-        </TextView>
-    </LinearLayout>
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokDodawaniePrzepisowLayout"
         android:layout_width="match_parent"
-        android:id="@+id/gornynapisPrzepisy"
-        android:layout_marginTop="2dp"
-        android:layout_height="35dp"
-        android:background="@color/green_400"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/widokProduktyLayout">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:text="D O S T Ę P N E   P R Z E P I S Y"
-            android:gravity="center"
-            android:layout_height="match_parent">
-
-        </TextView>
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:id="@+id/dodajPrzepisOtworzOkno"
-            android:background="@color/green_400"
-            android:src="@drawable/ikonadodaj">
-
-        </ImageButton>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:id="@+id/gornynapisDodajPrzepis"
+        android:layout_height="0dp"
+        android:background="@color/background_color"
         android:visibility="gone"
-        android:background="@color/green_400"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:id="@+id/PowrotPrzepisButton"
+        <LinearLayout
+            android:id="@+id/gornynapisDodajPrzepis"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
             android:background="@color/green_400"
-            android:src="@drawable/strzalka">
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageButton android:id="@+id/PowrotPrzepisButton" android:layout_width="50dp" android:layout_height="match_parent" android:background="@android:color/transparent" android:src="@drawable/strzalka" />
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="NOWY PRZEPIS" android:textStyle="bold" />
+            <ImageButton android:id="@+id/dodajPrzepisButton" android:layout_width="50dp" android:layout_height="match_parent" android:background="@android:color/transparent" android:src="@drawable/ikonadodaj" />
+        </LinearLayout>
 
-        </ImageButton>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gornynapisDodajPrzepis">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="15dp">
+                <EditText android:id="@+id/nazwa" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nazwa przepisu" android:textColor="@color/white" android:textColorHint="@color/white_50" />
+                <EditText android:id="@+id/opis" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Sposób przygotowania..." android:textColor="@color/white" android:textColorHint="@color/white_50" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:text="D O D A J      P R Z E P I S"
-            android:gravity="center"
-            android:layout_height="match_parent">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SKŁADNIKI:" android:textColor="@color/green_400" android:layout_marginTop="15dp" android:textStyle="bold" />
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/widokDodane" android:layout_width="match_parent" android:layout_height="wrap_content" tools:listitem="@layout/dodane_item" />
 
-        </TextView>
+                <EditText android:id="@+id/Wyszukiwanie" android:layout_width="match_parent" android:layout_height="45dp" android:hint="Szukaj składnika..." android:background="@color/grey_850" android:paddingStart="10dp" android:textColor="@color/white" android:layout_marginTop="10dp" />
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/widokProdukty" android:layout_width="match_parent" android:layout_height="wrap_content" tools:listitem="@layout/produkt_item" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:id="@+id/dodajPrzepisButton"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokDodawanieProduktowLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/background_color"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
+
+        <LinearLayout
+            android:id="@+id/gornynapisDodajProdukt"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
             android:background="@color/green_400"
-            android:src="@drawable/ikonadodaj">
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageButton android:id="@+id/PowrotProduktButton" android:layout_width="50dp" android:layout_height="match_parent" android:background="@android:color/transparent" android:src="@drawable/strzalka" />
+            <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="DODAJ PRODUKTY" android:textStyle="bold" />
+        </LinearLayout>
 
-        </ImageButton>
-    </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:orientation="vertical" android:padding="10dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@id/gornynapisDodajProdukt">
+            <EditText android:id="@+id/WyszukiwanieProduktowDoLodowki" android:layout_width="match_parent" android:layout_height="45dp" android:hint="Szukaj w bazie..." android:background="@color/grey_850" android:paddingStart="10dp" android:textColor="@color/white" />
+            <androidx.recyclerview.widget.RecyclerView android:id="@+id/widokProduktyDoLodowki" android:layout_width="match_parent" android:layout_height="match_parent" tools:listitem="@layout/produkt_item" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/podsumowanie"
@@ -466,46 +225,27 @@
         android:layout_height="40dp"
         android:background="@color/grey_850"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/NawigacjaLayout">
+        <TextView android:id="@+id/sumaKaloriiText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" android:gravity="center" android:text="Kcal:" android:textColor="@color/white_50" android:textSize="13sp" />
+        <TextView android:id="@+id/sumaBialekText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="B:" android:textColor="@color/white_50" />
+        <TextView android:id="@+id/sumaWeglowodanowText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="W:" android:textColor="@color/white_50" />
+        <TextView android:id="@+id/sumaTluszczyText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="T:" android:textColor="@color/white_50" />
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/sumaKaloriiText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:textColor="@color/white_50"
-            android:gravity="center"
-            android:text="Kcal:"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/sumaBialekText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="B:" />
-
-        <TextView
-            android:id="@+id/sumaWeglowodanowText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="W:" />
-
-        <TextView
-            android:id="@+id/sumaTluszczyText"
-            android:textColor="@color/white_50"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="T:" />
+    <LinearLayout
+        android:id="@+id/NawigacjaLayout"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/button_color"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <ImageButton android:id="@+id/ProfilButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/profil" />
+        <ImageButton android:id="@+id/DietaButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/dieta" />
+        <ImageButton android:id="@+id/HomeButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/home" />
+        <ImageButton android:id="@+id/TreningButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/trening" />
+        <ImageButton android:id="@+id/LodowkaButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/lodowka" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

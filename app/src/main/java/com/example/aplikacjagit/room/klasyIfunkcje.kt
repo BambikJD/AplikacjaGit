@@ -135,6 +135,70 @@ data class PrzepisWynik(
     // nowe pole: lista z nazwami i ilościami; ViewModel wypełni to pole
     val produktyPotrzebne: List<ProduktPotrzebny> = emptyList()
 )
+
+@Entity(tableName = "ListaCwiczen")
+data class Cwiczenie(
+    val nazwa: String?,
+    val partiaMiesniowa: String?,
+    val opis: String?
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
+
+@Entity(tableName = "WykonaneCwiczenia")
+data class Wykonane(
+    val idCwiczenia: Int?,
+    val nazwa: String?,
+    val serie: Int?,
+    val powtorzenia: Int?,
+    val ciezar: Double?,
+    val data: Date?
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
+
+@Entity(tableName = "PlanyTreningowe")
+data class Plan(
+    val nazwa: String?,
+    val opis: String?
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
+
+@Entity(tableName = "PlanCwiczenie")
+data class PlanCwiczenie(
+    val planId: Int,
+    val cwiczenieId: Int,
+    val serie: Int?,
+    val powtorzenia: Int?
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
+
+// Model do przesyłania danych planu (analogicznie do PrzepisWynikRaw)
+data class PlanWynikRaw(
+    val id: Int,
+    val nazwa: String?,
+    val opis: String?,
+    val cwiczenieIdsCsv: String?,
+    val serieCsv: String?,      // DODANE
+    val powtorzeniaCsv: String? // DODANE
+)
+
+data class PlanWynik(
+    val id: Int,
+    val nazwa: String?,
+    val opis: String?,
+    val listaCwiczen: List<Int>,
+    val nazwyCwiczen: List<String> = emptyList(),
+    val serie: List<Int> = emptyList(),      // DODANE
+    val powtorzenia: List<Int> = emptyList() // DODANE
+)
+
 class DaneGlobalne : Application() {
     var aktualnyUzytkownik: Uzytkownik? = null
 

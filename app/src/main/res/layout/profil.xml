@@ -3,8 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/mainLayout"
     android:background="@color/background_color"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/Tlo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DaneLogowania">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WYBIERZ KOLOR TŁA"
+            android:textColor="@color/white"
+            android:layout_marginBottom="20dp"/>
+
+        <Button android:id="@+id/color1" android:layout_width="200dp" android:layout_height="wrap_content" android:text="Ciemny Szary" android:backgroundTint="@color/background_color" />
+        <Button android:id="@+id/color2" android:layout_width="200dp" android:layout_height="wrap_content" android:text="Odcień 1" android:backgroundTint="@color/grey_850" />
+        <Button android:id="@+id/color3" android:layout_width="200dp" android:layout_height="wrap_content" android:text="Odcień 2" android:backgroundTint="@color/grey_800" />
+        <Button android:id="@+id/color4" android:layout_width="200dp" android:layout_height="wrap_content" android:text="Odcień 3" android:backgroundTint="@color/grey_700" />
+        <Button android:id="@+id/color5" android:layout_width="200dp" android:layout_height="wrap_content" android:text="Odcień 4" android:backgroundTint="@color/grey_600" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/opcje"

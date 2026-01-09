@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="@color/black_26"
+    android:layout_marginBottom="1dp">
+
+    <TextView
+        android:id="@+id/nazwaWykonanego"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:text="Przysiady"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/seriePowtorzenia"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="4 x 12"
+        android:textColor="@color/green_400" />
+
+    <TextView
+        android:id="@+id/ciezar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="80 kg"
+        android:textColor="@color/white" />
+
+    <ImageButton
+        android:id="@+id/usunWykonane"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:src="@drawable/strzalka"
+        android:rotation="90"/> </LinearLayout>

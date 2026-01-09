@@ -3,10 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
+    android:padding="8dp"
     android:layout_marginBottom="2dp"
-    android:background="@color/black_26"
-    android:gravity="center_vertical">
+    android:background="@color/black_26">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -15,35 +14,28 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/nazwa"
+            android:id="@+id/nazwaCwiczenia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kurczak Pieczony"
+            android:text="Wyciskanie hantli"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/kalorycznosc"
+            android:id="@+id/partiaMiesniowa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="239 kcal / 100g"
+            android:text="Klatka piersiowa"
             android:textColor="@color/green_400"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/makro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="B: 25 | T: 12 | W: 0"
-            android:textColor="@color/white_50"
-            android:textSize="11sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/DodajButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:id="@+id/dodajDoTreningu"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@android:color/transparent"
         android:src="@drawable/ikonadodaj" />
 

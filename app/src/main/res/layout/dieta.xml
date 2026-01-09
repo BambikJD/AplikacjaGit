@@ -2,223 +2,336 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:background="@color/background_color"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <LinearLayout
-        android:id="@+id/ProduktyLayout"
+        android:id="@+id/gornyNapis"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:gravity="center"
+            android:text="D I E T A"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pasekNawigacjiDiety"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
+
+        <LinearLayout
+            android:id="@+id/DataLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/DataWLewo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/green_400"
+                android:src="@drawable/strzalka" />
+            <TextView
+                android:id="@+id/DataDnia"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="2026-01-09"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/DataWPrawo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/green_400"
+                android:rotation="180"
+                android:src="@drawable/strzalka" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/WyszukiwanieLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/PowrotButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/green_400"
+                android:src="@drawable/strzalka" />
+            <EditText
+                android:id="@+id/Wyszukiwanie"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@android:color/transparent"
+                android:hint="Szukaj produktu..."
+                android:paddingStart="10dp"
+                android:textColor="@color/black" />
+            <ImageButton
+                android:id="@+id/otworzDodawanieProduktu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/green_400"
+                android:src="@drawable/ikonadodaj" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/widokDodane"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/pasekNawigacjiDiety">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/green_400"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
-
-                <LinearLayout
-                    android:id="@+id/DataLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/DataWLewo"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@color/green_400"
-                        android:src="@drawable/strzalka" />
-
-                    <TextView
-                        android:id="@+id/DataDnia"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:text="2025-07-25"
-                        android:textSize="23sp" />
-
-                    <ImageButton
-                        android:id="@+id/DataWPrawo"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/green_400"
-                        android:rotation="180"
-                        android:src="@drawable/strzalka" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/WyszukiwanieLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:visibility="invisible">
-
-                    <ImageButton
-                        android:layout_width="0dp"
-                        android:id="@+id/PowrotButton"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/green_400"
-                        android:src="@drawable/strzalka">
-
-                    </ImageButton>
-
-                    <EditText
-                        android:id="@+id/Wyszukiwanie"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3">
-
-                    </EditText>
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:src="@drawable/szukaj">
-
-                    </ImageView>
-                </LinearLayout>
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/widokDodane"
-                android:layout_marginTop="1dp"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:id="@+id/sniadanieLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="6"
-                        android:layout_height="match_parent"
-                        android:textColor="@color/white"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20sp"
-                        android:gravity="center_vertical"
-                        android:text="Śniadanie">
-                    </TextView>
-                    <ImageButton
-                        android:id="@+id/sniadanieDodaj"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="2dp"
-                        android:background="@color/grey_950"
-                        android:src="@drawable/ikonadodajbiala"
-                        android:layout_weight="1">
-                    </ImageButton>
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/sniadanie"
-                    android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="5dp">
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/dodane_item" />
+                    android:layout_weight="1"
+                    android:text="ŚNIADANIE"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <ImageButton
+                    android:id="@+id/sniadanieDodaj"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ikonadodajbiala" />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sniadanie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="1"
+                tools:listitem="@layout/dodane_item" />
 
-                <LinearLayout
-                    android:id="@+id/obiadLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="6"
-                        android:layout_height="match_parent"
-                        android:textColor="@color/white"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20sp"
-                        android:gravity="center_vertical"
-                        android:text="Obiad">
-                    </TextView>
-                    <ImageButton
-                        android:id="@+id/obiadDodaj"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="2dp"
-                        android:background="@color/grey_950"
-                        android:src="@drawable/ikonadodajbiala"
-                        android:layout_weight="1">
-                    </ImageButton>
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/obiad"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="5dp">
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/dodane_item" />
+                    android:layout_weight="1"
+                    android:text="OBIAD"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <ImageButton
+                    android:id="@+id/obiadDodaj"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ikonadodajbiala" />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/obiad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="1"
+                tools:listitem="@layout/dodane_item" />
 
-                <LinearLayout
-                    android:id="@+id/kolacjaLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="6"
-                        android:layout_height="match_parent"
-                        android:textColor="@color/white"
-                        android:layout_marginStart="10dp"
-                        android:textSize="20sp"
-                        android:gravity="center_vertical"
-                        android:text="Kolacja">
-                    </TextView>
-                    <ImageButton
-                        android:id="@+id/kolacjaDodaj"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="2dp"
-                        android:background="@color/grey_950"
-                        android:src="@drawable/ikonadodajbiala"
-                        android:layout_weight="1">
-                    </ImageButton>
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/kolacja"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="5dp">
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/dodane_item" />
+                    android:layout_weight="1"
+                    android:text="KOLACJA"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <ImageButton
+                    android:id="@+id/kolacjaDodaj"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ikonadodajbiala" />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/kolacja"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="1"
+                tools:listitem="@layout/dodane_item" />
 
+        </LinearLayout>
+    </ScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/widokProdukty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/pasekNawigacjiDiety"
+        tools:listitem="@layout/produkt_item" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokDodawanieProduktuLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/background_color"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/pasekNawigacjiDiety">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:gravity="center"
+                android:text="DODAJ NOWY PRODUKT DO BAZY"
+                android:textColor="@color/green_400"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/nowaNazwaProduktu"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Nazwa produktu"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white_50" />
+
+            <EditText
+                android:id="@+id/noweKcalProduktu"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Kcal w 100g"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white_50" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/noweBialko"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:hint="Białko"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/white" />
+                <EditText
+                    android:id="@+id/noweTluszcze"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:hint="Tłuszcze"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/white" />
+                <EditText
+                    android:id="@+id/noweWegle"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:hint="Węgle"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/widokProdukty"
+            <Button
+                android:id="@+id/zapiszProduktButton"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="1dp"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/produkt_item" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/green_400"
+                android:text="ZAPISZ W BAZIE"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/podsumowanie"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/grey_850"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout">
+        <TextView
+            android:id="@+id/sumaKaloriiText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="Kcal:"
+            android:textColor="@color/white_50"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/sumaBialekText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="B:"
+            android:textColor="@color/white_50" />
+        <TextView
+            android:id="@+id/sumaWeglowodanowText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="W:"
+            android:textColor="@color/white_50" />
+        <TextView
+            android:id="@+id/sumaTluszczyText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="T:"
+            android:textColor="@color/white_50" />
     </LinearLayout>
 
     <LinearLayout
@@ -226,10 +339,9 @@
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:background="@color/button_color"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
@@ -238,125 +350,35 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/profil"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
-
+            android:src="@drawable/profil" />
         <ImageButton
             android:id="@+id/DietaButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/button_color"
-            android:textAlignment="center"
-            android:src="@drawable/dieta"
-            android:textColor="#000000" />
-
+            android:src="@drawable/dieta" />
         <ImageButton
             android:id="@+id/HomeButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/home"
-            android:textAlignment="center"
-            android:textColor="#000000" />
-
+            android:src="@drawable/home" />
         <ImageButton
             android:id="@+id/TreningButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/trening"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
-
+            android:src="@drawable/trening" />
         <ImageButton
             android:id="@+id/LodowkaButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/lodowka"
-            android:textAlignment="center"
-            android:textColor="#000000" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:gravity="center"
-        android:id="@+id/gornyNapis"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/green_400"
-            android:text="D I E T A"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:textColor="@color/black">
-        </TextView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/podsumowanie"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/grey_850"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/sumaKaloriiText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:textColor="@color/white_50"
-            android:gravity="center"
-            android:text="Kcal:"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/sumaBialekText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="B:" />
-
-        <TextView
-            android:id="@+id/sumaWeglowodanowText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="W:" />
-
-        <TextView
-            android:id="@+id/sumaTluszczyText"
-            android:textColor="@color/white_50"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="T:" />
+            android:src="@drawable/lodowka" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

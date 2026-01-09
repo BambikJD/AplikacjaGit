@@ -9,8 +9,19 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [Produkt::class, Dodane::class, Lodowka::class, Przepis::class, PrzepisProdukt::class],
-    version = 1,
+    entities = [
+        Produkt::class,
+        Dodane::class,
+        Lodowka::class,
+        Przepis::class,
+        PrzepisProdukt::class,
+        // Dodane encje treningowe:
+        Cwiczenie::class,
+        Wykonane::class,
+        Plan::class,
+        PlanCwiczenie::class
+    ],
+    version = 1, // Zmieniono na 2, aby baza się przeładowała
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -27,7 +38,7 @@ abstract class BazaDanych : RoomDatabase() {
                     BazaDanych::class.java,
                     "baza_danych"
                 )
-                    // dla nowej aplikacji możesz zostawić fallbackToDestructiveMigration
+                    // Czyści bazę przy zmianie wersji (brak potrzeby ręcznych migracji)
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = inst

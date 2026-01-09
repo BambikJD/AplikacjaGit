@@ -8,158 +8,161 @@ import kotlinx.coroutines.withContext
 
 class DaneViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val repozytorium: Repozytorium
+
+    // --- Produkty i Lodówka ---
     val wszystkieProdukty: LiveData<MutableList<Produkt>>
     val nazwyProduktow: LiveData<MutableList<String>>
     val zczytajDodane: LiveData<MutableList<ProduktyDodaneWynik>>
-    val wyswietlPrzepisy: LiveData<MutableList<PrzepisWynik>>  // finalne, uzupełnione o nazwy
-    val getOstatniPrzepisId: LiveData<Int>
     val wyswietlLodowka: LiveData<MutableList<Lodowka>>
-    val wyswietlPrzepisyZLodowki: LiveData<MutableList<PrzepisWynik>>
-
-    private val repozytorium: Repozytorium
 
     private val _szukajProduktyQuery = MutableLiveData<String>("")
-    val ProduktyQuery: LiveData<String> get() = _szukajProduktyQuery
     val szukajProdukty: LiveData<MutableList<Produkt>>
+
+    // --- Przepisy (z wzbogacaniem nazw) ---
+    private val _wyswietlPrzepisy = MediatorLiveData<MutableList<PrzepisWynik>>()
+    val wyswietlPrzepisy: LiveData<MutableList<PrzepisWynik>> = _wyswietlPrzepisy
+
+    private val _wyswietlPrzepisyZLodowki = MediatorLiveData<MutableList<PrzepisWynik>>()
+    val wyswietlPrzepisyZLodowki: LiveData<MutableList<PrzepisWynik>> = _wyswietlPrzepisyZLodowki
+
+    // --- Treningi i Ćwiczenia ---
+    private val _szukajCwiczeniaQuery = MutableLiveData<String>("")
+    val wyswietlCwiczenia: LiveData<MutableList<Cwiczenie>>
+    val wyswietlWykonane: LiveData<MutableList<Wykonane>>
+
+    // --- Plany (z wzbogacaniem nazw) ---
+    private val _wyswietlPlany = MediatorLiveData<MutableList<PlanWynik>>()
+    val wyswietlPlany: LiveData<MutableList<PlanWynik>> = _wyswietlPlany
+
+    // --- Zapytania o ID i Datę ---
+    val getOstatniPrzepisId: LiveData<Int>
+    val getOstatniPlanId: LiveData<Int>
 
     private val _dataQuery = MutableLiveData<java.util.Date?>(null)
     val dataQuery: LiveData<java.util.Date?> get() = _dataQuery
     val wyswietlDodane: LiveData<MutableList<Dodane>>
 
-    // we will expose final LiveData via MediatorLiveData
-    private val _wyswietlPrzepisy = MediatorLiveData<MutableList<PrzepisWynik>>()
-    private val _wyswietlPrzepisyZLodowki = MediatorLiveData<MutableList<PrzepisWynik>>()
-    override fun onCleared() {
-        super.onCleared()
-        // nothing extra to cleanup here
-    }
-
-
     init {
         val dao = BazaDanych.getInstance(application).DAO()
         repozytorium = Repozytorium(dao)
 
+        // Inicjalizacja podstawowych list
         wszystkieProdukty = repozytorium.wszystkieProdukty
         nazwyProduktow = repozytorium.nazwyProduktow
         zczytajDodane = repozytorium.zczytajDodane
-        getOstatniPrzepisId = repozytorium.getOstatniePrzepisID
         wyswietlLodowka = repozytorium.wyswietlLodowka
+        getOstatniPrzepisId = repozytorium.getOstatniePrzepisID
+        getOstatniPlanId = repozytorium.getOstatniePlanID
 
+        // Mechanizm wyszukiwania produktów
         szukajProdukty = _szukajProduktyQuery.switchMap { q ->
-            val text = q ?: ""
-            if (text.isBlank()) {
-                wszystkieProdukty
-            } else {
-                repozytorium.szukajProdukty("%$text%")
-            }
+            if (q.isNullOrBlank()) wszystkieProdukty
+            else repozytorium.szukajProdukty("%$q%")
         }
 
+        // Mechanizm wyszukiwania ćwiczeń
+        wyswietlCwiczenia = _szukajCwiczeniaQuery.switchMap { q ->
+            if (q.isNullOrBlank()) repozytorium.wszystkieCwiczenia
+            else repozytorium.szukajCwiczenia("%$q%")
+        }
+
+        // Pobieranie wykonanych rzeczy na dany dzień
         wyswietlDodane = _dataQuery.switchMap { date ->
-            if (date == null) {
-                MutableLiveData(mutableListOf())
-            } else {
-                repozytorium.wyswietlDodane(date)
-            }
+            if (date == null) MutableLiveData(mutableListOf())
+            else repozytorium.wyswietlDodane(date)
         }
 
-        // === OBSERWUJ surowe LiveData (z CSV) i wypełnij nazwy produktów asynchronicznie ===
-        val rawLive = repozytorium.getPrzepisyWynikRaw()
-        wyswietlPrzepisy = _wyswietlPrzepisy
+        wyswietlWykonane = _dataQuery.switchMap { date ->
+            if (date == null) MutableLiveData(mutableListOf())
+            else repozytorium.wyswietlWykonane(date)
+        }
 
-        _wyswietlPrzepisy.value = mutableListOf() // initial
-
-        // mediator obserwuje surowe LiveData
-        _wyswietlPrzepisy.addSource(rawLive) { rawList ->
-            // rawList: MutableList<PrzepisWynikRaw>
+        // --- WZBOGACANIE PLANÓW (ID -> Nazwy) ---
+        val rawPlany = repozytorium.getPlanyRaw()
+        _wyswietlPlany.addSource(rawPlany) { rawList ->
             viewModelScope.launch {
-                // mapowanie i wzbogacanie nazw
-                val enriched = mutableListOf<PrzepisWynik>()
-                // przetwarzaj po kolei, ale pobieraj nazwy w jednym zapytaniu dla każdego przepisu
+                val enriched = mutableListOf<PlanWynik>()
                 for (raw in rawList) {
-                    val base = repozytorium.mapRawToPrzepisWynik(raw)
-                    if (base.listaProduktow.isEmpty()) {
+                    val base = repozytorium.mapRawToPlanWynik(raw)
+                    if (base.listaCwiczen.isEmpty()) {
                         enriched.add(base)
                         continue
                     }
-
-                    // pobierz produkty odpowiadające id (suspend)
-                    val produkty = withContext(Dispatchers.IO) {
-                        repozytorium.fetchProduktyByIds(base.listaProduktow)
+                    val cwiczeniaZBase = withContext(Dispatchers.IO) {
+                        repozytorium.fetchCwiczeniaByIds(base.listaCwiczen)
                     }
-
-                    // zbuduj listę ProduktPotrzebny w tej samej kolejności co listaProduktow
-                    val produktyPotrzebne = base.listaProduktow.mapIndexed { idx, pid ->
-                        val nazwa = produkty.firstOrNull { it.id == pid }?.nazwa ?: "Produkt#$pid"
-                        val ilosc = base.listaIlosci.getOrNull(idx) ?: 0
-                        ProduktPotrzebny(id = pid, nazwa = nazwa ?: "Brak nazwy", ilosc = ilosc)
+                    val nazwy = base.listaCwiczen.map { id ->
+                        cwiczeniaZBase.find { it.id == id }?.nazwa ?: "Nieznane ćwiczenie"
                     }
-
-                    // dodaj kopię obiektu z wypełnionym polem produktyPotrzebne
-                    val enrichedItem = base.copy(produktyPotrzebne = produktyPotrzebne)
-                    enriched.add(enrichedItem)
+                    enriched.add(base.copy(nazwyCwiczen = nazwy))
                 }
+                _wyswietlPlany.postValue(enriched)
+            }
+        }
 
+        // --- WZBOGACANIE PRZEPISÓW (ID -> Nazwy) ---
+        val rawPrzepisy = repozytorium.getPrzepisyWynikRaw()
+        _wyswietlPrzepisy.addSource(rawPrzepisy) { rawList ->
+            viewModelScope.launch {
+                val enriched = wzbogacPrzepisy(rawList)
                 _wyswietlPrzepisy.postValue(enriched)
             }
         }
 
-        val rawLiveZLodowki = repozytorium.getPrzepisyZLodowkiRaw()
-        wyswietlPrzepisyZLodowki = _wyswietlPrzepisyZLodowki
-
-        _wyswietlPrzepisyZLodowki.value = mutableListOf() // initial
-
-        // mediator obserwuje surowe LiveData
-        _wyswietlPrzepisyZLodowki.addSource(rawLiveZLodowki) { rawList ->
-            // rawList: MutableList<PrzepisWynikRaw>
+        val rawPrzepisyLodowka = repozytorium.getPrzepisyZLodowkiRaw()
+        _wyswietlPrzepisyZLodowki.addSource(rawPrzepisyLodowka) { rawList ->
             viewModelScope.launch {
-                // mapowanie i wzbogacanie nazw
-                val enriched = mutableListOf<PrzepisWynik>()
-                // przetwarzaj po kolei, ale pobieraj nazwy w jednym zapytaniu dla każdego przepisu
-                for (raw in rawList) {
-                    val base = repozytorium.mapRawToPrzepisWynik(raw)
-                    if (base.listaProduktow.isEmpty()) {
-                        enriched.add(base)
-                        continue
-                    }
-
-                    // pobierz produkty odpowiadające id (suspend)
-                    val produkty = withContext(Dispatchers.IO) {
-                        repozytorium.fetchProduktyByIds(base.listaProduktow)
-                    }
-
-                    // zbuduj listę ProduktPotrzebny w tej samej kolejności co listaProduktow
-                    val produktyPotrzebne = base.listaProduktow.mapIndexed { idx, pid ->
-                        val nazwa = produkty.firstOrNull { it.id == pid }?.nazwa ?: "Produkt#$pid"
-                        val ilosc = base.listaIlosci.getOrNull(idx) ?: 0
-                        ProduktPotrzebny(id = pid, nazwa = nazwa ?: "Brak nazwy", ilosc = ilosc)
-                    }
-
-                    // dodaj kopię obiektu z wypełnionym polem produktyPotrzebne
-                    val enrichedItem = base.copy(produktyPotrzebne = produktyPotrzebne)
-                    enriched.add(enrichedItem)
-                }
-
+                val enriched = wzbogacPrzepisy(rawList)
                 _wyswietlPrzepisyZLodowki.postValue(enriched)
             }
         }
     }
 
-    // ... reszta metod (setQuery, insert/delete/update) - zostaw bez zmian ...
+    // Funkcja pomocnicza do wzbogacania przepisów (żeby nie powtarzać kodu)
+    private suspend fun wzbogacPrzepisy(rawList: List<PrzepisWynikRaw>): MutableList<PrzepisWynik> {
+        val enriched = mutableListOf<PrzepisWynik>()
+        for (raw in rawList) {
+            val base = repozytorium.mapRawToPrzepisWynik(raw)
+            if (base.listaProduktow.isEmpty()) {
+                enriched.add(base)
+                continue
+            }
+            val produkty = withContext(Dispatchers.IO) {
+                repozytorium.fetchProduktyByIds(base.listaProduktow)
+            }
+            val produktyPotrzebne = base.listaProduktow.mapIndexed { idx, pid ->
+                val nazwa = produkty.firstOrNull { it.id == pid }?.nazwa ?: "Produkt#$pid"
+                val ilosc = base.listaIlosci.getOrNull(idx) ?: 0
+                ProduktPotrzebny(id = pid, nazwa = nazwa, ilosc = ilosc)
+            }
+            enriched.add(base.copy(produktyPotrzebne = produktyPotrzebne))
+        }
+        return enriched
+    }
+
+    // --- METODY OBSŁUGI ---
     fun setQuery(q: String) { _szukajProduktyQuery.value = q }
+    fun setCwiczenieQuery(q: String) { _szukajCwiczeniaQuery.value = q }
     fun setDateQuery(date: java.util.Date?) { _dataQuery.value = date }
 
-    fun deleteProdukt(produkt: Produkt) = viewModelScope.launch { repozytorium.deleteProdukt(produkt) }
-    fun updateProdukt(produkt: Produkt) = viewModelScope.launch { repozytorium.updateProdukt(produkt) }
-    fun insertProdukt(produkt: Produkt) = viewModelScope.launch { repozytorium.insertProdukt(produkt) }
+    // Insert / Delete / Update
+    fun deleteProdukt(p: Produkt) = viewModelScope.launch { repozytorium.deleteProdukt(p) }
+    fun insertProdukt(p: Produkt) = viewModelScope.launch { repozytorium.insertProdukt(p) }
 
-    fun insertPrzepis(przepis: Przepis) = viewModelScope.launch { repozytorium.insertPrzepis(przepis) }
-    fun insertPrzepisProdukt(przepisProdukt: PrzepisProdukt) = viewModelScope.launch { repozytorium.insertPrzepisProdukt(przepisProdukt) }
+    fun insertPrzepis(p: Przepis) = viewModelScope.launch { repozytorium.insertPrzepis(p) }
+    fun insertPrzepisProdukt(pp: PrzepisProdukt) = viewModelScope.launch { repozytorium.insertPrzepisProdukt(pp) }
 
-    fun deleteDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.deleteDodane(dodane) }
-    fun updateDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.updateDodane(dodane) }
-    fun insertDodane(dodane: Dodane) = viewModelScope.launch { repozytorium.insertDodane(dodane) }
+    fun insertDodane(d: Dodane) = viewModelScope.launch { repozytorium.insertDodane(d) }
+    fun deleteDodane(d: Dodane) = viewModelScope.launch { repozytorium.deleteDodane(d) }
 
-    fun deleteLodowka(Lodowka: Lodowka) = viewModelScope.launch { repozytorium.deleteLodowka(Lodowka) }
-    fun updateLodowka(Lodowka: Lodowka) = viewModelScope.launch { repozytorium.updateLodowka(Lodowka) }
-    fun insertLodowka(Lodowka: Lodowka) = viewModelScope.launch { repozytorium.insertLodowka(Lodowka) }
+    fun insertLodowka(l: Lodowka) = viewModelScope.launch { repozytorium.insertLodowka(l) }
+    fun deleteLodowka(l: Lodowka) = viewModelScope.launch { repozytorium.deleteLodowka(l) }
+
+    fun insertCwiczenie(c: Cwiczenie) = viewModelScope.launch { repozytorium.insertCwiczenie(c) }
+    fun insertWykonane(w: Wykonane) = viewModelScope.launch { repozytorium.insertWykonane(w) }
+    fun deleteWykonane(w: Wykonane) = viewModelScope.launch { repozytorium.deleteWykonane(w) }
+
+    fun insertPlan(p: Plan) = viewModelScope.launch { repozytorium.insertPlan(p) }
+    fun insertPlanCwiczenie(pc: PlanCwiczenie) = viewModelScope.launch { repozytorium.insertPlanCwiczenie(pc) }
 }

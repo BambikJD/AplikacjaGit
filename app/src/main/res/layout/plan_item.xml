@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/grey_850">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nazwaPlanu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N A Z W A   P L A N U"
+                android:textColor="@color/green_400"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/opisPlanu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Krótki opis planu treningowego"
+                android:textColor="@color/white_50"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/startPlanButton"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:backgroundTint="@color/green_400"
+            android:text="START"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/listaCwiczenTekst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Ćwiczenia: Przysiady, Pompki..."
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:alpha="0.7" />
+
+</LinearLayout>

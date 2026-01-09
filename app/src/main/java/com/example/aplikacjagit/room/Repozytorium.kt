@@ -9,6 +9,7 @@ class Repozytorium(private val DAO: DAO){
     val zczytajDodane : LiveData<MutableList<ProduktyDodaneWynik>> = DAO.zczytajDodane()
     val getOstatniePrzepisID: LiveData<Int> = DAO.getOstatniPrzepisId()
     val wyswietlLodowka: LiveData<MutableList<Lodowka>> = DAO.wyswietlLodowka()
+    val getOstatniePlanID: LiveData<Int> = DAO.getOstatniPlanId()
 
     // zwraca surowe LiveData z DAO (CSV itd.)
     fun getPrzepisyWynikRaw(): LiveData<MutableList<PrzepisWynikRaw>> =
@@ -21,6 +22,28 @@ class Repozytorium(private val DAO: DAO){
     suspend fun fetchProduktyByIds(ids: List<Int>): List<Produkt> {
         if (ids.isEmpty()) return emptyList()
         return DAO.getProduktyByIds(ids)
+    }
+
+    fun mapRawToPlanWynik(raw: PlanWynikRaw): PlanWynik {
+        val cwiczenieIds = raw.cwiczenieIdsCsv?.split(",")?.mapNotNull { it.trim().toIntOrNull() } ?: emptyList()
+        val serie = raw.serieCsv?.split(",")?.mapNotNull { it.trim().toIntOrNull() } ?: emptyList()
+        val powtorzenia = raw.powtorzeniaCsv?.split(",")?.mapNotNull { it.trim().toIntOrNull() } ?: emptyList()
+
+        return PlanWynik(
+            id = raw.id,
+            nazwa = raw.nazwa,
+            opis = raw.opis,
+            listaCwiczen = cwiczenieIds,
+            serie = serie,
+            powtorzenia = powtorzenia
+        )
+    }
+
+    // Dodaj też funkcję do pobierania ćwiczeń po liście ID
+    suspend fun fetchCwiczeniaByIds(ids: List<Int>): List<Cwiczenie> {
+        if (ids.isEmpty()) return emptyList()
+        // Możesz użyć istniejącej metody w DAO, jeśli dopiszesz: @Query("SELECT * FROM ListaCwiczen WHERE id IN (:ids)")
+        return DAO.getCwiczeniaByIds(ids)
     }
 
     // pozostałe metody: insert/update/delete (jak wcześniej)
@@ -36,6 +59,18 @@ class Repozytorium(private val DAO: DAO){
     suspend fun insertPrzepis(przepis: Przepis){ DAO.insertPrzepis(przepis) }
     suspend fun insertPrzepisProdukt(przepisProdukt: PrzepisProdukt){ DAO.insertPrzepisProdukt(przepisProdukt) }
 
+    // --- Metody dla treningu ---
+    val wszystkieCwiczenia: LiveData<MutableList<Cwiczenie>> = DAO.wyswietlCwiczenia()
+
+    suspend fun insertCwiczenie(cwiczenie: Cwiczenie) { DAO.insertCwiczenie(cwiczenie) }
+    suspend fun insertWykonane(wykonane: Wykonane) { DAO.insertWykonane(wykonane) }
+    suspend fun deleteWykonane(wykonane: Wykonane) { DAO.deleteWykonane(wykonane) }
+    fun wyswietlWykonane(data: Date) = DAO.wyswietlWykonane(data)
+    fun szukajCwiczenia(q: String) = DAO.szukajCwiczenia(q)
+
+    suspend fun insertPlan(plan: Plan) { DAO.insertPlan(plan) }
+    suspend fun insertPlanCwiczenie(pc: PlanCwiczenie) { DAO.insertPlanCwiczenie(pc) }
+    fun getPlanyRaw() = DAO.getPlanyRaw()
 
     fun szukajProdukty(query: String): LiveData<MutableList<Produkt>> = DAO.szukajProdukty(query)
     fun wyswietlDodane(data: Date): LiveData<MutableList<Dodane>> = DAO.wyswietlDodane(data)

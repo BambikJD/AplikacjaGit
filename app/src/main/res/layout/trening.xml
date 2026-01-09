@@ -2,10 +2,304 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:background="@color/background_color"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
+    <LinearLayout
+        android:id="@+id/gornyNapis"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:gravity="center"
+            android:text="T R E N I N G"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/zmienOpcje"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
+        <ImageButton
+            android:id="@+id/OpcjaWLewo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/green_400"
+            android:src="@drawable/strzalka" />
+        <TextView
+            android:id="@+id/tekstOpcji"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="D Z I E N N I K"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/OpcjaWPrawo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/green_400"
+            android:rotation="180"
+            android:src="@drawable/strzalka" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gornynapisDodajPlan"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:visibility="gone"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+        <ImageButton
+            android:id="@+id/PowrotPlanButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:src="@drawable/strzalka" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:text="N O W Y   P L A N"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/zapiszPlanButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:src="@drawable/ikonadodajbiala" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gornynapisDodajCwiczenie"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:visibility="gone"
+        android:background="@color/green_400"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/gornyNapis">
+        <ImageButton
+            android:id="@+id/PowrotCwiczenieButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:src="@drawable/strzalka" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:text="N O W E   Ć W I C Z E N I E"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/zapiszCwiczenieButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/green_400"
+            android:src="@drawable/ikonadodajbiala" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokDziennik"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/zmienOpcje">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvWykonane"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/wykonane_item" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokPlany"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/zmienOpcje">
+        <ImageButton
+            android:id="@+id/dodajPlanPrzycisk"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ikonadodajbiala"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlany"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dodajPlanPrzycisk" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokBazaCwiczen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/zmienOpcje">
+        <LinearLayout
+            android:id="@+id/pasekSzukaniaCwiczen"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+            <EditText
+                android:id="@+id/szukajCwiczenia"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:hint="Szukaj ćwiczenia..."
+                android:paddingStart="10dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white_50" />
+            <ImageButton
+                android:id="@+id/otworzDodawanieCwiczenia"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ikonadodajbiala" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBazaCwiczen"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pasekSzukaniaCwiczen" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokDodawaniePlanuLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
+        app:layout_constraintTop_toBottomOf="@id/gornynapisDodajPlan">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <EditText
+                android:id="@+id/nowaNazwaPlanu"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Nazwa planu (np. FBW A)"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white" />
+            <EditText
+                android:id="@+id/nowyOpisPlanu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Opis planu"
+                android:minLines="2"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ĆWICZENIA W PLANIE:"
+                android:textColor="@color/green_400"
+                android:layout_marginTop="10dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDodaneDoPlanu"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                tools:listitem="@layout/wykonane_item" />
+            <EditText
+                android:id="@+id/szukajDoPlanu"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Dodaj ćwiczenie do planu..."
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBazaDoPlanu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:listitem="@layout/cwiczenie_item" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widokDodawanieCwiczeniaLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/gornynapisDodajCwiczenie">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            tools:ignore="MissingConstraints">
+            <EditText
+                android:id="@+id/nowaNazwaCwiczenia"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Nazwa ćwiczenia"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white" />
+            <EditText
+                android:id="@+id/nowaPartiaCwiczenia"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Partia mięśniowa"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white" />
+            <EditText
+                android:id="@+id/nowyOpisCwiczenia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Opis"
+                android:minLines="3"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/podsumowanie"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/grey_850"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout">
+        <TextView android:id="@+id/sumaKaloriiText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" android:textColor="@color/white_50" android:gravity="center" android:text="Kcal:" android:textSize="14sp" />
+        <TextView android:id="@+id/sumaBialekText" android:layout_width="0dp" android:layout_height="match_parent" android:textColor="@color/white_50" android:layout_weight="2" android:gravity="center" android:text="B:" />
+        <TextView android:id="@+id/sumaWeglowodanowText" android:layout_width="0dp" android:layout_height="match_parent" android:textColor="@color/white_50" android:layout_weight="2" android:gravity="center" android:text="W:" />
+        <TextView android:id="@+id/sumaTluszczyText" android:layout_width="0dp" android:layout_height="match_parent" android:textColor="@color/white_50" android:layout_weight="2" android:gravity="center" android:text="T:" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/NawigacjaLayout"
@@ -14,8 +308,6 @@
         android:layout_height="35dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
@@ -25,9 +317,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/button_color"
-            android:src="@drawable/profil"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
+            android:src="@drawable/profil" />
 
         <ImageButton
             android:id="@+id/DietaButton"
@@ -36,9 +326,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/button_color"
-            android:textAlignment="center"
-            android:src="@drawable/dieta"
-            android:textColor="#000000" />
+            android:src="@drawable/dieta" />
 
         <ImageButton
             android:id="@+id/HomeButton"
@@ -47,9 +335,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/button_color"
-            android:src="@drawable/home"
-            android:textAlignment="center"
-            android:textColor="#000000" />
+            android:src="@drawable/home" />
 
         <ImageButton
             android:id="@+id/TreningButton"
@@ -58,9 +344,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/button_color"
-            android:src="@drawable/trening"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
+            android:src="@drawable/trening" />
 
         <ImageButton
             android:id="@+id/LodowkaButton"
@@ -69,80 +353,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/button_color"
-            android:src="@drawable/lodowka"
-            android:textAlignment="center"
-            android:textColor="#000000" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:gravity="center"
-        android:id="@+id/gornyNapis"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/green_400"
-            android:text="T R E N I N G"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:textColor="@color/black">
-        </TextView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/podsumowanie"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/grey_850"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/sumaKaloriiText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:textColor="@color/white_50"
-            android:gravity="center"
-            android:text="Kcal:"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/sumaBialekText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="B:" />
-
-        <TextView
-            android:id="@+id/sumaWeglowodanowText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white_50"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="W:" />
-
-        <TextView
-            android:id="@+id/sumaTluszczyText"
-            android:textColor="@color/white_50"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="T:" />
+            android:src="@drawable/lodowka" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

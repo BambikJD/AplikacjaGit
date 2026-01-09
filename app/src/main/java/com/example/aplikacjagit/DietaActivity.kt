@@ -1,272 +1,189 @@
 package com.example.aplikacjagit
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikacjagit.adaptery.DodaneAdapter
 import com.example.aplikacjagit.adaptery.ProduktAdapter
-import com.example.aplikacjagit.room.DaneGlobalne
-import com.example.aplikacjagit.room.DaneViewModel
-import com.example.aplikacjagit.room.Dodane
+import com.example.aplikacjagit.room.*
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
-import kotlin.math.round
+import java.util.Locale // DODANO
 
 class DietaActivity : ComponentActivity() {
 
-    private lateinit var ProfilButton: ImageButton
-    private lateinit var HomeButton: ImageButton
-    private lateinit var LodowkaButton: ImageButton
-    private lateinit var TreningButton: ImageButton
-    private lateinit var DietaButton: ImageButton
-
-    private lateinit var DataDnia: TextView
-    private lateinit var Wyszukaj: EditText
-    private lateinit var DataLayout: LinearLayout
-    private lateinit var WyszukiwanieLayout: LinearLayout
-    private lateinit var DataWLewo: ImageButton
-    private lateinit var DataWPrawo: ImageButton
-    private lateinit var PowrotButton: ImageButton
-
-    private lateinit var sumaKaloriiText: TextView
-    private lateinit var sumaBialekText: TextView
-    private lateinit var sumaWeglowodanowText: TextView
-    private lateinit var sumaTluszczyText: TextView
-
-    private lateinit var widokProdukty: RecyclerView
-    private lateinit var widokDodane: LinearLayout
-    private lateinit var sniadanie : RecyclerView
-    private lateinit var obiad : RecyclerView
-    private lateinit var kolacja : RecyclerView
-    private lateinit var sniadanieDodaj : ImageButton
-    private lateinit var obiadDodaj :  ImageButton
-    private lateinit var kolacjaDodaj :  ImageButton
-
-    private lateinit var produktAdapter: ProduktAdapter
-    private lateinit var dodaneAdapter: DodaneAdapter
-
     private lateinit var daneViewModel: DaneViewModel
-
-    // pole przechowujące aktualnie wybraną datę (LocalDate dla wygody liczenia dni)
     private var selectedLocalDate: LocalDate = LocalDate.now()
+    private var obecnaPora = 1
+
+    // Layouty
+    private lateinit var widokDodane: View
+    private lateinit var widokProdukty: RecyclerView
+    private lateinit var widokDodawanieProduktuLayout: View
+    private lateinit var DataLayout: View
+    private lateinit var WyszukiwanieLayout: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dieta)
 
-        val danePreferencje = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
-
-        val app = application as DaneGlobalne
-        var aktualnyUzytkownik = app.aktualnyUzytkownik
-
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
+        val app = application as DaneGlobalne
 
-        ProfilButton = findViewById(R.id.ProfilButton)
-        HomeButton = findViewById(R.id.HomeButton)
-        LodowkaButton = findViewById(R.id.LodowkaButton)
-        TreningButton = findViewById(R.id.TreningButton)
-        DietaButton = findViewById(R.id.DietaButton)
-        DataDnia = findViewById(R.id.DataDnia)
-        Wyszukaj = findViewById(R.id.Wyszukiwanie)
-        WyszukiwanieLayout = findViewById(R.id.WyszukiwanieLayout)
-        DataLayout = findViewById(R.id.DataLayout)
-        DataWLewo = findViewById(R.id.DataWLewo)
-        DataWPrawo = findViewById(R.id.DataWPrawo)
-        PowrotButton = findViewById(R.id.PowrotButton)
-
-        sumaKaloriiText = findViewById(R.id.sumaKaloriiText)
-        sumaBialekText = findViewById(R.id.sumaBialekText)
-        sumaWeglowodanowText = findViewById(R.id.sumaWeglowodanowText)
-        sumaTluszczyText = findViewById(R.id.sumaTluszczyText)
-
-        widokProdukty = findViewById(R.id.widokProdukty)
+        // Inicjalizacja widoków
         widokDodane = findViewById(R.id.widokDodane)
-        sniadanie = findViewById(R.id.sniadanie)
-        obiad = findViewById(R.id.obiad)
-        kolacja = findViewById(R.id.kolacja)
-        sniadanieDodaj = findViewById(R.id.sniadanieDodaj)
-        obiadDodaj = findViewById(R.id.obiadDodaj)
-        kolacjaDodaj = findViewById(R.id.kolacjaDodaj)
+        widokProdukty = findViewById(R.id.widokProdukty)
+        widokDodawanieProduktuLayout = findViewById(R.id.widokDodawanieProduktuLayout)
+        DataLayout = findViewById(R.id.DataLayout)
+        WyszukiwanieLayout = findViewById(R.id.WyszukiwanieLayout)
 
-        val adapterSniadanie = DodaneAdapter { dodane -> daneViewModel.deleteDodane(dodane) }
-        val adapterObiad = DodaneAdapter { dodane -> daneViewModel.deleteDodane(dodane) }
-        val adapterKolacja = DodaneAdapter { dodane -> daneViewModel.deleteDodane(dodane) }
+        val sumaKcalText = findViewById<TextView>(R.id.sumaKaloriiText)
+        val sumaBText = findViewById<TextView>(R.id.sumaBialekText)
+        val sumaWText = findViewById<TextView>(R.id.sumaWeglowodanowText)
+        val sumaTText = findViewById<TextView>(R.id.sumaTluszczyText)
 
-        var obecnaPora = 1
-        updateSelectedDate(selectedLocalDate)
+        // Adaptery (onDeleteClick przekazuje obiekt do usunięcia)
+        val adapterSniadanie = DodaneAdapter { d -> daneViewModel.deleteDodane(d) }
+        val adapterObiad = DodaneAdapter { d -> daneViewModel.deleteDodane(d) }
+        val adapterKolacja = DodaneAdapter { d -> daneViewModel.deleteDodane(d) }
 
-        produktAdapter = ProduktAdapter { produkt, gramy ->
-            val produktId = produkt.id
-            val sumaKalorii = kotlin.math.round((produkt.kalorycznosc ?: 0).toDouble() * gramy / 100.0).toInt()
-            val sumaBialek = kotlin.math.round((produkt.bialka ?: 0).toDouble() * gramy / 100.0)
-            val sumaTluszczy = kotlin.math.round((produkt.tluszcze ?: 0).toDouble() * gramy / 100.0)
-            val sumaWeglowodanow = kotlin.math.round((produkt.weglowodany ?: 0).toDouble() * gramy / 100.0)
+        findViewById<RecyclerView>(R.id.sniadanie).apply { adapter = adapterSniadanie; layoutManager = LinearLayoutManager(this@DietaActivity) }
+        findViewById<RecyclerView>(R.id.obiad).apply { adapter = adapterObiad; layoutManager = LinearLayoutManager(this@DietaActivity) }
+        findViewById<RecyclerView>(R.id.kolacja).apply { adapter = adapterKolacja; layoutManager = LinearLayoutManager(this@DietaActivity) }
 
-            // używamy selectedLocalDate (to jest data wybrana przez użytkownika)
-            val dateForRoom: Date = Date.from(
-                selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
-            )
-
-            val dodane = Dodane(
-                idProduktu = produktId,
-                nazwa = produkt.nazwa,
-                ilosc = gramy,
-                sumaKalorii = sumaKalorii,
-                sumaBialek = sumaBialek,
-                sumaTluszczy = sumaTluszczy,
-                sumaWeglowodanow = sumaWeglowodanow,
-                data = dateForRoom,
-                poraDnia = obecnaPora
-            )
-
-            daneViewModel.insertDodane(dodane)
-            android.widget.Toast.makeText(this, "Dodano ${produkt.nazwa} — ${gramy}g (${sumaKalorii} kcal)", android.widget.Toast.LENGTH_SHORT).show()
+        val produktAdapter = ProduktAdapter { produkt ->
+            pokazDialogGramy(produkt)
         }
-        // adapter który dodaje każdemu polu listener do usuwania
-        dodaneAdapter = DodaneAdapter { produkt ->
-            daneViewModel.deleteDodane(produkt)
-        }
+        widokProdukty.apply { adapter = produktAdapter; layoutManager = LinearLayoutManager(this@DietaActivity) }
 
-        // Adaptery do wyświetlania listy produktów
-        widokProdukty.adapter = produktAdapter
-        widokProdukty.layoutManager = LinearLayoutManager(this)
-
-        sniadanie.adapter = adapterSniadanie
-        sniadanie.layoutManager = LinearLayoutManager(this)
-
-        obiad.adapter = adapterObiad
-        obiad.layoutManager = LinearLayoutManager(this)
-
-        kolacja.adapter = adapterKolacja
-        kolacja.layoutManager = LinearLayoutManager(this)
-
-        daneViewModel.szukajProdukty.observe(this) { lista ->
-            produktAdapter.stworzProdukt(lista)
-        }
-
-        // TEN KODZIK WYSZUKUJE DODANE PRODUKTY I LICZY KALORIE
-        var sumakalorii = 0.0
-        var sumabialek = 0.0
-        var sumaweglowodanow = 0.0
-        var sumatluszczy = 0.0
-        sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
-        sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
-        sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
-        sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
-
+        // --- OBSERWATORY ---
         daneViewModel.wyswietlDodane.observe(this) { lista ->
-            val sniadanieList = lista.filter { it.poraDnia == 1 }.toMutableList()
-            val obiadList = lista.filter { it.poraDnia == 2 }.toMutableList()
-            val kolacjaList = lista.filter { it.poraDnia == 3 }.toMutableList()
+            // Filtrowanie i aktualizacja list (naprawiony mismatch typów przez .toMutableList())
+            adapterSniadanie.stworzDodane(lista.filter { it.poraDnia == 1 }.toMutableList())
+            adapterObiad.stworzDodane(lista.filter { it.poraDnia == 2 }.toMutableList())
+            adapterKolacja.stworzDodane(lista.filter { it.poraDnia == 3 }.toMutableList())
 
-            sumakalorii = 0.0
-            sumabialek = 0.0
-            sumaweglowodanow = 0.0
-            sumatluszczy = 0.0
-            sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
-            sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
-            sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
-            sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
-            adapterSniadanie.stworzDodane(sniadanieList)
-            adapterObiad.stworzDodane(obiadList)
-            adapterKolacja.stworzDodane(kolacjaList)
+            // Obliczanie sum
+            val sk = lista.sumOf { it.sumaKalorii ?: 0 }
+            val sb = lista.sumOf { it.sumaBialek ?: 0.0 }
+            val sw = lista.sumOf { it.sumaWeglowodanow ?: 0.0 }
+            val st = lista.sumOf { it.sumaTluszczy ?: 0.0 }
 
-            for(produkt in lista){
-                if(produkt.sumaKalorii != null && produkt.sumaBialek != null  && produkt.sumaTluszczy != null && produkt.sumaWeglowodanow != null) {
-                    sumakalorii += produkt.sumaKalorii
-                    sumabialek += produkt.sumaBialek
-                    sumatluszczy += produkt.sumaTluszczy
-                    sumaweglowodanow += produkt.sumaWeglowodanow
-                    sumaKaloriiText.text = "Kalorie\n${sumakalorii} / ${app.celKalorii}"
-                    sumaBialekText.text = "B\n${sumabialek} / ${app.celBialek}"
-                    sumaWeglowodanowText.text = "W\n${sumaweglowodanow} / ${app.celWeglowodanow}"
-                    sumaTluszczyText.text = "T\n${sumatluszczy} / ${app.celTluszczy}"
-                }
+            // Formuła zaokrąglająca do 1 miejsca po przecinku (np. B: 40.5 / 150)
+            sumaKcalText.text = "Kalorie\n$sk / ${app.celKalorii}"
+            sumaBText.text = String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
+            sumaWText.text = String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
+            sumaTText.text = String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
+        }
+
+        daneViewModel.szukajProdukty.observe(this) { produktAdapter.stworzProdukt(it) }
+
+        // --- LISTENERY POSIŁKÓW ---
+        findViewById<ImageButton>(R.id.sniadanieDodaj).setOnClickListener { przełączNaSzukanie(1) }
+        findViewById<ImageButton>(R.id.obiadDodaj).setOnClickListener { przełączNaSzukanie(2) }
+        findViewById<ImageButton>(R.id.kolacjaDodaj).setOnClickListener { przełączNaSzukanie(3) }
+        findViewById<ImageButton>(R.id.PowrotButton).setOnClickListener { przełączNaDziennik() }
+
+        // Dodawanie Produktu do bazy (formularz)
+        findViewById<ImageButton>(R.id.otworzDodawanieProduktu).setOnClickListener {
+            widokProdukty.visibility = View.GONE
+            widokDodawanieProduktuLayout.visibility = View.VISIBLE
+        }
+
+        findViewById<Button>(R.id.zapiszProduktButton).setOnClickListener {
+            val nazwa = findViewById<EditText>(R.id.nowaNazwaProduktu).text.toString()
+            val kcal = findViewById<EditText>(R.id.noweKcalProduktu).text.toString().toIntOrNull() ?: 0
+            val b = findViewById<EditText>(R.id.noweBialko).text.toString().toDoubleOrNull() ?: 0.0
+            val t = findViewById<EditText>(R.id.noweTluszcze).text.toString().toDoubleOrNull() ?: 0.0
+            val w = findViewById<EditText>(R.id.noweWegle).text.toString().toDoubleOrNull() ?: 0.0
+
+            if(nazwa.isNotEmpty()){
+                daneViewModel.insertProdukt(Produkt(nazwa, kcal, b, t, w, ""))
+                findViewById<EditText>(R.id.nowaNazwaProduktu).setText("")
+                findViewById<EditText>(R.id.noweKcalProduktu).setText("")
+                przełączNaSzukanie(obecnaPora)
+                Toast.makeText(this, "Dodano produkt do bazy!", Toast.LENGTH_SHORT).show()
             }
         }
 
-        DataDnia.text = selectedLocalDate.toString()
+        findViewById<EditText>(R.id.Wyszukiwanie).addTextChangedListener { daneViewModel.setQuery(it.toString()) }
 
-        sniadanieDodaj.setOnClickListener {
-            obecnaPora = 1
-            widokDodane.visibility = View.GONE
-            widokProdukty.visibility = View.VISIBLE
-            WyszukiwanieLayout.visibility = View.VISIBLE
-            DataLayout.visibility = View.GONE
-        }
+        // Przyciski daty
+        findViewById<ImageButton>(R.id.DataWLewo).setOnClickListener { updateSelectedDate(selectedLocalDate.minusDays(1)) }
+        findViewById<ImageButton>(R.id.DataWPrawo).setOnClickListener { updateSelectedDate(selectedLocalDate.plusDays(1)) }
 
-        obiadDodaj.setOnClickListener {
-            obecnaPora = 2
-            widokDodane.visibility = View.GONE
-            widokProdukty.visibility = View.VISIBLE
-            WyszukiwanieLayout.visibility = View.VISIBLE
-            DataLayout.visibility = View.GONE
-        }
-
-        kolacjaDodaj.setOnClickListener {
-            obecnaPora = 3
-            widokDodane.visibility = View.GONE
-            widokProdukty.visibility = View.VISIBLE
-            WyszukiwanieLayout.visibility = View.VISIBLE
-            DataLayout.visibility = View.GONE
-        }
-
-        PowrotButton.setOnClickListener {
-            widokDodane.visibility = View.VISIBLE
-            widokProdukty.visibility = View.GONE
-            WyszukiwanieLayout.visibility = View.GONE
-            DataLayout.visibility = View.VISIBLE
-        }
-        // przyciski przesuwające datę
-        DataWLewo.setOnClickListener {
-            updateSelectedDate(selectedLocalDate.minusDays(1))
-        }
-        DataWPrawo.setOnClickListener {
-            updateSelectedDate(selectedLocalDate.plusDays(1))
-        }
-
-        Wyszukaj.addTextChangedListener{ text ->
-            daneViewModel.setQuery(text?.toString() ?: "")
-        }
-
-        ProfilButton.setOnClickListener { przenies(ProfilActivity::class.java)}
-        HomeButton.setOnClickListener { przenies(HomeActivity::class.java)}
-        LodowkaButton.setOnClickListener { przenies(LodowkaActivity::class.java)}
-        TreningButton.setOnClickListener { przenies(TreningActivity::class.java)}
-        DietaButton.setOnClickListener { przenies(DietaActivity::class.java)}
+        updateSelectedDate(selectedLocalDate)
+        setupNawigacja()
     }
 
-    // pomocnicza funkcja aktualizująca widok i ViewModel po zmianie daty
+    private fun pokazDialogGramy(produkt: Produkt) {
+        val builder = AlertDialog.Builder(this)
+        val input = EditText(this)
+        input.hint = "Ile gram?"
+        input.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+        builder.setTitle(produkt.nazwa).setView(input)
+        builder.setPositiveButton("Dodaj") { _, _ ->
+            val gramy = input.text.toString().toIntOrNull() ?: 0
+            if(gramy > 0) {
+                val ratio = gramy / 100.0
+                val dodane = Dodane(
+                    idProduktu = produkt.id,
+                    nazwa = produkt.nazwa,
+                    ilosc = gramy,
+                    sumaKalorii = ((produkt.kalorycznosc ?: 0) * ratio).toInt(),
+                    sumaBialek = (produkt.bialka ?: 0.0) * ratio,
+                    sumaTluszczy = (produkt.tluszcze ?: 0.0) * ratio,
+                    sumaWeglowodanow = (produkt.weglowodany ?: 0.0) * ratio,
+                    data = Date.from(selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                    poraDnia = obecnaPora
+                )
+                daneViewModel.insertDodane(dodane)
+                przełączNaDziennik()
+            }
+        }
+        builder.setNegativeButton("Anuluj", null)
+        builder.show()
+    }
+
+    private fun przełączNaSzukanie(pora: Int) {
+        obecnaPora = pora
+        widokDodane.visibility = View.GONE
+        widokProdukty.visibility = View.VISIBLE
+        widokDodawanieProduktuLayout.visibility = View.GONE
+        DataLayout.visibility = View.GONE
+        WyszukiwanieLayout.visibility = View.VISIBLE
+    }
+
+    private fun przełączNaDziennik() {
+        widokDodane.visibility = View.VISIBLE
+        widokProdukty.visibility = View.GONE
+        widokDodawanieProduktuLayout.visibility = View.GONE
+        DataLayout.visibility = View.VISIBLE
+        WyszukiwanieLayout.visibility = View.GONE
+    }
+
     private fun updateSelectedDate(newDate: LocalDate) {
         selectedLocalDate = newDate
-        // aktualizujemy tekst
-        DataDnia.text = selectedLocalDate.toString()
-        // konwertujemy LocalDate -> Date (start of day)
-        val dateForRoom: Date = Date.from(
-            selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
-        )
-        // ustawiamy query w ViewModelie
-        daneViewModel.setDateQuery(dateForRoom)
+        findViewById<TextView>(R.id.DataDnia).text = selectedLocalDate.toString()
+        daneViewModel.setDateQuery(Date.from(selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
     }
 
-    fun przenies(Cel : Class<out Activity>){
-        val intent = Intent(this@DietaActivity, Cel)
-        startActivity(intent)
+    private fun setupNawigacja() {
+        findViewById<ImageButton>(R.id.ProfilButton).setOnClickListener { przenies(ProfilActivity::class.java) }
+        findViewById<ImageButton>(R.id.HomeButton).setOnClickListener { przenies(HomeActivity::class.java) }
+        findViewById<ImageButton>(R.id.LodowkaButton).setOnClickListener { przenies(LodowkaActivity::class.java) }
+        findViewById<ImageButton>(R.id.TreningButton).setOnClickListener { przenies(TreningActivity::class.java) }
     }
+
+    fun przenies(Cel: Class<out Activity>) { startActivity(Intent(this, Cel)) }
 }
