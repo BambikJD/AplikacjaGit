@@ -184,20 +184,11 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <include
         android:id="@+id/NawigacjaLayout"
-        style="?android:attr/buttonBarStyle"
+        layout="@layout/layout_nawigacja"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/button_color"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <ImageButton android:id="@+id/ProfilButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/profil" />
-        <ImageButton android:id="@+id/DietaButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/dieta" />
-        <ImageButton android:id="@+id/HomeButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/home" />
-        <ImageButton android:id="@+id/TreningButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/trening" />
-        <ImageButton android:id="@+id/LodowkaButton" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:src="@drawable/lodowka" />
-    </LinearLayout>
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,6 +26,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import java.util.Locale // DODANO dla zaokrąglania
+import android.widget.ProgressBar // To naprawi błąd "Unresolved reference"
 
 class TreningActivity : ComponentActivity() {
     private lateinit var ProfilButton: ImageButton
@@ -182,22 +183,33 @@ class TreningActivity : ComponentActivity() {
 
         // POPRAWIONA LOGIKA PODLICZANIA MAKRO (ZAOKRĄGLANIE)
         daneViewModel.wyswietlDodane.observe(this) { lista ->
-            var sumak = 0
-            var sumab = 0.0
-            var sumaw = 0.0
-            var sumat = 0.0
-            for(p in lista){
-                sumak += p.sumaKalorii ?: 0
-                sumab += p.sumaBialek ?: 0.0
-                sumat += p.sumaTluszczy ?: 0.0
-                sumaw += p.sumaWeglowodanow ?: 0.0
-            }
+            val sumak = lista.sumOf { it.sumaKalorii ?: 0 }
+            val sumab = lista.sumOf { it.sumaBialek ?: 0.0 }
+            val sumaw = lista.sumOf { it.sumaWeglowodanow ?: 0.0 }
+            val sumat = lista.sumOf { it.sumaTluszczy ?: 0.0 }
 
-            // Formatowanie do 1 miejsca po przecinku (identycznie jak w Dieta/Home)
             sumaKaloriiText.text = "Kalorie\n$sumak / ${app.celKalorii}"
             sumaBialekText.text = String.format(Locale.US, "B\n%.1f / %d", sumab, app.celBialek)
             sumaWeglowodanowText.text = String.format(Locale.US, "W\n%.1f / %d", sumaw, app.celWeglowodanow)
             sumaTluszczyText.text = String.format(Locale.US, "T\n%.1f / %d", sumat, app.celTluszczy)
+
+            // POPRAWKA PASKÓW POSTĘPU
+            findViewById<ProgressBar>(R.id.pbSumaKcal).apply {
+                max = if(app.celKalorii > 0) app.celKalorii else 2000
+                progress = sumak
+            }
+            findViewById<ProgressBar>(R.id.pbSumaBialka).apply {
+                max = if(app.celBialek > 0) app.celBialek else 100
+                progress = sumab.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaWegle).apply {
+                max = if(app.celWeglowodanow > 0) app.celWeglowodanow else 100
+                progress = sumaw.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaTluszcze).apply {
+                max = if(app.celTluszczy > 0) app.celTluszczy else 100
+                progress = sumat.toInt()
+            }
         }
 
         daneViewModel.wyswietlWykonane.observe(this) { wykonaneAdapter.stworzWykonane(it) }

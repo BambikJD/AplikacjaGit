@@ -288,72 +288,18 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <include
         android:id="@+id/podsumowanie"
+        layout="@layout/layout_podsumowanie"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toTopOf="@id/NawigacjaLayout" />
+
+    <include
+        android:id="@+id/NawigacjaLayout"
+        layout="@layout/layout_nawigacja"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/grey_850"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/NawigacjaLayout">
-        <TextView android:id="@+id/sumaKaloriiText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" android:textColor="@color/white_50" android:gravity="center" android:text="Kcal:" android:textSize="14sp" />
-        <TextView android:id="@+id/sumaBialekText" android:layout_width="0dp" android:layout_height="match_parent" android:textColor="@color/white_50" android:layout_weight="2" android:gravity="center" android:text="B:" />
-        <TextView android:id="@+id/sumaWeglowodanowText" android:layout_width="0dp" android:layout_height="match_parent" android:textColor="@color/white_50" android:layout_weight="2" android:gravity="center" android:text="W:" />
-        <TextView android:id="@+id/sumaTluszczyText" android:layout_width="0dp" android:layout_height="match_parent" android:textColor="@color/white_50" android:layout_weight="2" android:gravity="center" android:text="T:" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/NawigacjaLayout"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageButton
-            android:id="@+id/ProfilButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/profil" />
-
-        <ImageButton
-            android:id="@+id/DietaButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/dieta" />
-
-        <ImageButton
-            android:id="@+id/HomeButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/home" />
-
-        <ImageButton
-            android:id="@+id/TreningButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/trening" />
-
-        <ImageButton
-            android:id="@+id/LodowkaButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/lodowka" />
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

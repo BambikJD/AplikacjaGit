@@ -24,10 +24,12 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/mainScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/podsumowanie"
-        app:layout_constraintTop_toBottomOf="@id/gornyNapis">
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/gornyNapis"
+        app:layout_constraintBottom_toTopOf="@id/podsumowanie">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,84 +117,18 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <include
         android:id="@+id/podsumowanie"
+        layout="@layout/layout_podsumowanie"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toTopOf="@id/NawigacjaLayout" />
+
+    <include
+        android:id="@+id/NawigacjaLayout"
+        layout="@layout/layout_nawigacja"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/grey_850"
-        app:layout_constraintBottom_toTopOf="@id/NawigacjaLayout">
-        <TextView android:id="@+id/sumaKaloriiText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" android:gravity="center" android:text="Kcal:" android:textColor="@color/white_50" android:textSize="13sp" />
-        <TextView android:id="@+id/sumaBialekText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="B:" android:textColor="@color/white_50" />
-        <TextView android:id="@+id/sumaWeglowodanowText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="W:" android:textColor="@color/white_50" />
-        <TextView android:id="@+id/sumaTluszczyText" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="2" android:gravity="center" android:text="T:" android:textColor="@color/white_50" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/NawigacjaLayout"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageButton
-            android:id="@+id/ProfilButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/profil"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
-
-        <ImageButton
-            android:id="@+id/DietaButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:textAlignment="center"
-            android:src="@drawable/dieta"
-            android:textColor="#000000" />
-
-        <ImageButton
-            android:id="@+id/HomeButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/home"
-            android:textAlignment="center"
-            android:textColor="#000000" />
-
-        <ImageButton
-            android:id="@+id/TreningButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/trening"
-            android:textAlignment="center"
-            android:textColor="#000000"/>
-
-        <ImageButton
-            android:id="@+id/LodowkaButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/button_color"
-            android:src="@drawable/lodowka"
-            android:textAlignment="center"
-            android:textColor="#000000" />
-
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

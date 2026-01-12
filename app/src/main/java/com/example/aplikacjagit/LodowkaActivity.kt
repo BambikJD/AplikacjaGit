@@ -128,6 +128,24 @@ class LodowkaActivity : ComponentActivity() {
             findViewById<TextView>(R.id.sumaBialekText).text = String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
             findViewById<TextView>(R.id.sumaWeglowodanowText).text = String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
             findViewById<TextView>(R.id.sumaTluszczyText).text = String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
+
+            // Obsługa nowych pasków postępu
+            findViewById<ProgressBar>(R.id.pbSumaKcal).apply {
+                max = app.celKalorii
+                progress = sk
+            }
+            findViewById<ProgressBar>(R.id.pbSumaBialka).apply {
+                max = app.celBialek
+                progress = sb.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaWegle).apply {
+                max = app.celWeglowodanow
+                progress = sw.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaTluszcze).apply {
+                max = app.celTluszczy
+                progress = st.toInt()
+            }
         }
     }
 

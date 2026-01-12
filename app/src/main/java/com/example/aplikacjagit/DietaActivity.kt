@@ -79,11 +79,30 @@ class DietaActivity : ComponentActivity() {
             val sw = lista.sumOf { it.sumaWeglowodanow ?: 0.0 }
             val st = lista.sumOf { it.sumaTluszczy ?: 0.0 }
 
+
             // Formuła zaokrąglająca do 1 miejsca po przecinku (np. B: 40.5 / 150)
             sumaKcalText.text = "Kalorie\n$sk / ${app.celKalorii}"
             sumaBText.text = String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
             sumaWText.text = String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
             sumaTText.text = String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
+
+            // Obsługa nowych pasków postępu
+            findViewById<ProgressBar>(R.id.pbSumaKcal).apply {
+                max = app.celKalorii
+                progress = sk
+            }
+            findViewById<ProgressBar>(R.id.pbSumaBialka).apply {
+                max = app.celBialek
+                progress = sb.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaWegle).apply {
+                max = app.celWeglowodanow
+                progress = sw.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaTluszcze).apply {
+                max = app.celTluszczy
+                progress = st.toInt()
+            }
         }
 
         daneViewModel.szukajProdukty.observe(this) { produktAdapter.stworzProdukt(it) }

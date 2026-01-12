@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -29,25 +28,22 @@ import java.util.*
 class HomeActivity : ComponentActivity() {
     private lateinit var daneViewModel: DaneViewModel
     private lateinit var propozycjeAdapter: PrzepisyAdapter
-    private var selectedLocalDate: LocalDate = LocalDate.now() // DODANO: Inicjalizacja daty
+    private var selectedLocalDate: LocalDate = LocalDate.now()
     private var sumakcal = 0
-    private var celKcal = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
 
-        val app = application as DaneGlobalne
-
-        // --- KLUCZOWA POPRAWKA: Najpierw tworzymy ViewModel ---
+        // 1. Inicjalizacja ViewModelu (MUSI BYĆ PRZED updateSelectedDate)
         daneViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DaneViewModel::class.java]
 
-        // --- TERAZ ustawiamy datę (kiedy ViewModel już istnieje) ---
+        // 2. Ustawienie daty i wczytanie celów
+        val app = application as DaneGlobalne
+        loadPreferences(app)
         updateSelectedDate(selectedLocalDate)
 
-        celKcal = app.celKalorii
-
-        // Konfiguracja list propozycji
+        // 3. Konfiguracja list propozycji
         propozycjeAdapter = PrzepisyAdapter { przepis ->
             Toast.makeText(this, "Polecane: ${przepis.nazwa}", Toast.LENGTH_SHORT).show()
         }
@@ -61,25 +57,35 @@ class HomeActivity : ComponentActivity() {
         syncDatabase()
     }
 
-    // Dodano onResume, aby dane odświeżały się po powrocie z dodawania posiłku
     override fun onResume() {
         super.onResume()
+        // Odświeżamy cele i datę przy każdym powrocie na ekran Home
+        val app = application as DaneGlobalne
+        loadPreferences(app)
         updateSelectedDate(selectedLocalDate)
+    }
+
+    private fun loadPreferences(app: DaneGlobalne) {
+        val pref = getSharedPreferences("preferencje", Context.MODE_PRIVATE)
+        app.celKalorii = pref.getInt("celKalorii", 2000)
+        app.celBialek = pref.getInt("celBialek", 0)
+        app.celWeglowodanow = pref.getInt("celWeglowodanow", 0)
+        app.celTluszczy = pref.getInt("celTluszczy", 0)
     }
 
     private fun setupObservers(app: DaneGlobalne) {
         daneViewModel.wyswietlDodane.observe(this) { lista ->
-            // Obliczamy sumy
+            // Obliczamy sumy spożycia
             sumakcal = lista.sumOf { it.sumaKalorii ?: 0 }
             val sb = lista.sumOf { it.sumaBialek ?: 0.0 }
             val sw = lista.sumOf { it.sumaWeglowodanow ?: 0.0 }
             val st = lista.sumOf { it.sumaTluszczy ?: 0.0 }
 
-            // Pobieramy świeży cel (na wypadek zmiany w profilu)
-            val aktualnyCelKcal = app.celKalorii
+            // Cele z obiektu globalnego
+            val celKcal = app.celKalorii
 
-            // 1. UI Główne (Karta na środku)
-            val pozostalo = aktualnyCelKcal - sumakcal
+            // UI Główne - Licznik pozostałych kalorii
+            val pozostalo = celKcal - sumakcal
             val tvPozostalo = findViewById<TextView>(R.id.pozostaloKcal)
             tvPozostalo.text = "$pozostalo kcal"
 
@@ -89,21 +95,34 @@ class HomeActivity : ComponentActivity() {
                 tvPozostalo.setTextColor(getColor(R.color.green_400))
             }
 
+            // Pasek Postępu
             val pasek = findViewById<ProgressBar>(R.id.pasekPostepuKcal)
-            pasek.max = if (aktualnyCelKcal > 0) aktualnyCelKcal else 2000
+            pasek.max = if (celKcal > 0) celKcal else 2000
             pasek.progress = sumakcal
 
-            // 2. DOLNY PASEK
-            findViewById<TextView>(R.id.sumaKaloriiText).text = "Kalorie\n$sumakcal / $aktualnyCelKcal"
+            // Dolny pasek podsumowania
+            findViewById<TextView>(R.id.sumaKaloriiText).text = "Kalorie\n$sumakcal / $celKcal"
+            findViewById<TextView>(R.id.sumaBialekText).text = String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
+            findViewById<TextView>(R.id.sumaWeglowodanowText).text = String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
+            findViewById<TextView>(R.id.sumaTluszczyText).text = String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
 
-            findViewById<TextView>(R.id.sumaBialekText).text =
-                String.format(Locale.US, "B\n%.1f / %d", sb, app.celBialek)
-
-            findViewById<TextView>(R.id.sumaWeglowodanowText).text =
-                String.format(Locale.US, "W\n%.1f / %d", sw, app.celWeglowodanow)
-
-            findViewById<TextView>(R.id.sumaTluszczyText).text =
-                String.format(Locale.US, "T\n%.1f / %d", st, app.celTluszczy)
+            // Obsługa nowych pasków postępu
+            findViewById<ProgressBar>(R.id.pbSumaKcal).apply {
+                max = app.celKalorii
+                progress = sumakcal
+            }
+            findViewById<ProgressBar>(R.id.pbSumaBialka).apply {
+                max = app.celBialek
+                progress = sb.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaWegle).apply {
+                max = app.celWeglowodanow
+                progress = sw.toInt()
+            }
+            findViewById<ProgressBar>(R.id.pbSumaTluszcze).apply {
+                max = app.celTluszczy
+                progress = st.toInt()
+            }
 
             odswiezPropozycje(pozostalo)
         }
@@ -123,8 +142,6 @@ class HomeActivity : ComponentActivity() {
         }
     }
 
-    // Reszta funkcji bez zmian (odswiezPropozycje, syncDatabase, aktualizacjaDanychZPlikuOptymalnie, setupNavigation, przenies)
-
     private fun odswiezPropozycje(pozostalo: Int) {
         daneViewModel.wyswietlPrzepisy.observe(this) { przepisy ->
             val maxDopuszczalne = pozostalo * 1.05
@@ -138,7 +155,6 @@ class HomeActivity : ComponentActivity() {
 
     private fun updateSelectedDate(newDate: LocalDate) {
         selectedLocalDate = newDate
-        // Normalizujemy datę do 00:00:00 (początek dnia) - to jest kluczowe dla Room!
         val dateForRoom: Date = Date.from(selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
         daneViewModel.setDateQuery(dateForRoom)
     }
@@ -156,15 +172,12 @@ class HomeActivity : ComponentActivity() {
 
     suspend fun aktualizacjaDanychZPlikuOptymalnie(context: Context, db: BazaDanych) {
         val TAG = "SyncFromFileOpt"
-        val PREFS = "preferencje"
-        val PREF_DB_VER = "db_version"
-        val assetName = "output.jsonl"
-        val sharedPref: SharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        val currentVersion = sharedPref.getInt(PREF_DB_VER, 0)
+        val sharedPref = context.getSharedPreferences("preferencje", Context.MODE_PRIVATE)
+        val currentVersion = sharedPref.getInt("db_version", 0)
 
         withContext(Dispatchers.IO) {
             try {
-                context.assets.open(assetName).use { inputStream ->
+                context.assets.open("output.jsonl").use { inputStream ->
                     BufferedReader(InputStreamReader(inputStream)).use { reader ->
                         val firstLine = reader.readLine() ?: return@withContext
                         val fileVersion = firstLine.trim().toIntOrNull() ?: return@withContext
@@ -191,13 +204,13 @@ class HomeActivity : ComponentActivity() {
                                     } else {
                                         dao.insertProdukt(prod)
                                     }
-                                } catch (e: Exception) { }
+                                } catch (e: Exception) {}
                             }
                         }
-                        sharedPref.edit().putInt(PREF_DB_VER, fileVersion).apply()
+                        sharedPref.edit().putInt("db_version", fileVersion).apply()
                     }
                 }
-            } catch (e: Exception) { }
+            } catch (e: Exception) {}
         }
     }
 

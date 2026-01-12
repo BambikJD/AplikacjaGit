@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/podsumowanie"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@color/grey_850"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:gravity="center_vertical">
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="3" android:orientation="vertical" android:padding="4dp">
+        <ProgressBar android:id="@+id/pbSumaKcal" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="6dp" android:progressDrawable="@drawable/pb_kcal" android:layout_marginBottom="4dp"/>
+        <TextView android:id="@+id/sumaKaloriiText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Kcal 0\n/ 0" android:textColor="@color/white_50" android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:orientation="vertical" android:padding="4dp">
+        <ProgressBar android:id="@+id/pbSumaBialka" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="6dp" android:progressDrawable="@drawable/pb_protein" android:layout_marginBottom="4dp"/>
+        <TextView android:id="@+id/sumaBialekText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="B 0\n/ 0" android:textColor="@color/white_50" android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:orientation="vertical" android:padding="4dp">
+        <ProgressBar android:id="@+id/pbSumaTluszcze" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="6dp" android:progressDrawable="@drawable/pb_fat" android:layout_marginBottom="4dp"/>
+        <TextView android:id="@+id/sumaTluszczyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="T 0\n/ 0" android:textColor="@color/white_50" android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:orientation="vertical" android:padding="4dp">
+        <ProgressBar android:id="@+id/pbSumaWegle" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="6dp" android:progressDrawable="@drawable/pb_carbs" android:layout_marginBottom="4dp"/>
+        <TextView android:id="@+id/sumaWeglowodanowText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="W 0\n/ 0" android:textColor="@color/white_50" android:textSize="10sp" />
+    </LinearLayout>
+
+</LinearLayout>
